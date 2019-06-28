@@ -1,0 +1,212 @@
+{% extends 'base.html' %} {% block page_title %}Member{% endblock %} {% block page_heading %}{{member.username}}'s Profile{% endblock %} {% block content %}
+<div class="profile-img-container">
+    <div class="icon-wink-form-container {% if current_user %}disabled-wink-container{% endif %}">
+        <button id="wink-receiver-input" {% if not current_user %}class="wink-enabled"{% endif %} data-receiver_id="{{ member.id }}"><i class="far fa-smile-wink"></i></button>
+</div>
+
+{% if request.user.id == member.id %}
+<div class="icon-edit-container">
+    <form action="{% url 'create_profile' %}">
+        <button><i class="far fa-edit"></i></button>
+    </form>
+</div>
+{% endif %}
+
+    <div class="profile-img-draggable">
+{% for image in member.profileimage_set.all %}
+<!--Better way for this?-->
+{% if image.is_verified == "APPROVED" %}
+<img class="profile-img" src="https://dating-app-mvd.s3.eu-west-2.amazonaws.com/media/{{image.image}}"> 
+{% endif %}
+{% endfor %}
+    </div>
+</div>
+<section class="profile-card-container container">
+    <div class="row">
+    <div class="col-sm-12 profile-username">
+        <h2>{{member.username}}</h2>
+        <h3>{{member.profile.age}}</h3>
+    </div>
+        <div class="col-sm-12 col-md-7">
+            <div class="card-container">
+                <div class="card">
+                    <!--<p>{{member.email}}</p>-->
+                    <p>{% if member.profile.is_verified == "APPROVED" %}{{member.profile.bio}}{% else %}Our verification team is currently vetting this profile. This user's bio will be visible soon.{%endif%}</p>
+                    <!--<p>{{member.profile.location}}</p>-->
+                    <!--Add error message if incorrect location is added, saying users cannot find you-->
+                    <!--<p>{{member.profile.birth_date}}</p>-->
+                    </div>
+                </div>
+            {% if member.profile.is_verified == "APPROVED" %}
+            <div class="card-container">
+                <div class="card">
+                    <table class="standard-table">
+                        <tr>
+                            <td>Gender:</td>
+                            <td class="standard-table-feature">{{member.profile.gender|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Hair Length:</td>
+                            <td class="standard-table-feature">{{member.profile.hair_length|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Hair Color:</td>
+                            <td class="standard-table-feature">{{member.profile.hair_colour|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ethnicity:</td>
+                            <td class="standard-table-feature">{{member.profile.ethnicity|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Relationship Status:</td>
+                            <td class="standard-table-feature">{{member.profile.relationship_status|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Education:</td>
+                            <td class="standard-table-feature">{{member.profile.education|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Height:</td>
+                            <td class="standard-table-feature">{{member.profile.height|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Body Type:</td>
+                            <td class="standard-table-feature">{{member.profile.body_type|title}}</td>
+                        </tr>
+                        <tr>
+                            <td>Children:</td>
+                            <td class="standard-table-feature">{% if member.profile.children %}Yes{%else%}No{%endif%}</td>
+                        </tr>
+                        <tr>
+                            <td>Looking For:</td>
+                            <td class="standard-table-feature">{{member.profile.looking_for|title}}</td>
+                        </tr>
+                    </table>
+                    <!--Add error message if incorrect location is added, saying users cannot find you-->
+                    </div>
+            </div>
+            {%endif%}
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <div class="card-container">
+                <div class="{% if current_user %}disabled-card{%endif%} card-form card">
+                <div class="card-form-container">
+                    <h3>Message {{member.username}}</h3>
+                    <hr>
+                        <form class="standard-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %} 
+                            {% if current_user %}
+                            <label for="id_message_content">Message content:</label>
+                            <textarea disabled="" cols="40" rows="10" id="id_message_content" maxlength="500"></textarea>
+                            <input type="submit" disabled value="SEND" class="disabled-button submit-wide submit-success" name="message_submit" />
+                            {% else %}
+                            {{ message_form }}
+                            <input type="submit" value="SEND" class="submit-wide submit-success" name="message_submit" />
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>        
+        </div>
+        
+        <!--<div class="card-container">-->
+        <!--        <div class="card-form card">-->
+        <!--        <div class="card-form-container">-->
+        <!--            <h3>Send a Message</h3>-->
+        <!--            <hr>-->
+        <!--            <p class="card-form-subtitle">This is a subtitle with more info</p>-->
+        <!--            <p class="card-form-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus suscipit massa ac neque lobortis, sed varius sapien pretium. Dolor sit amet, consectetur adipiscing elit.</p>-->
+        <!--                <form class="standard-form" method="POST">-->
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+        <!--                    <label for="text-input">First Name</label>-->
+        <!--                    <input type="text" id="text-input" name="text-input"/>-->
+        <!--                    <label for="id_message_content">Message</label>-->
+        <!--                    <textarea name="message_content" cols="40" rows="10" id="id_message_content" required="" maxlength="500"></textarea>-->
+                            <!--{% csrf_token %} {{ message_form }}-->
+        <!--                    <input type="submit" name="cancel"/>-->
+        <!--                    <input type="submit" class="submit-success" name="message_submit" />-->
+        <!--                </form>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>  -->
+    </div>
+</section>
+{% endblock %}
+<!--Shouldn't need-->
+<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+
+{% block js %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+<script>
+    // Carousel
+    $(window).bind("load", function() {
+       var draggable_profile_width = $('.profile-img-draggable')[0].scrollWidth
+       var window_width = parseInt($( window ).width(), 10)
+    
+       $('.profile-img-draggable').draggable({
+           axis: "x",
+           containment: [ window_width - draggable_profile_width, window_width - draggable_profile_width, 0, 0 ]
+       });
+       
+       $( window ).resize(function() {
+           var draggable_profile_width = $('.profile-img-draggable')[0].scrollWidth
+           var window_width = parseInt($( window ).width(), 10)
+           $( ".profile-img-draggable" ).css('left', '0px')
+           $( ".profile-img-draggable" ).draggable( "option", "containment", [ window_width - draggable_profile_width, window_width - draggable_profile_width, 0, 0 ] )
+       })  
+    })
+    
+
+    
+    
+    // Required for csrf token in ajax https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
+    $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+        } 
+    });
+    
+    function send_wink() {
+        $.ajax({
+            url: "/chat/ajax/winks/",
+            datatype: 'json',
+            data: {
+                receiver_id: $('#wink-receiver-input.wink-enabled').data('receiver_id')
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+
+    $('#wink-receiver-input.wink-enabled').on('click', send_wink);
+    
+</script>
+{% endblock %}
+

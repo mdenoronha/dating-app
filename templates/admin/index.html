@@ -1,0 +1,11 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<div>
+    <a href="/admin/profiles/profile/?is_verified__exact=TO+BE+APPROVED">To be approved (count)</a>
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+{{ block.super }}
+{% endblock %}

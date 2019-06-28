@@ -1,0 +1,418 @@
+{%extends 'base.html'%}
+{% load static from static %}
+{%block page_title%}Home{%endblock%}
+
+{%block content%}
+
+
+<div class="heading-hr">
+    <span>CLOSEST TO YOU</span>
+</div>
+
+<div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <div class="card-form-container">
+                    <h3 class="card-modal-title">Send Message</h3>
+                    <hr>
+                    <p class="card-form-subtitle">Start a conversation</p>
+                        <form class="standard-form not-profile-page-message-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %}
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+                            <input id="message-receiver-id" type="hidden" value="">
+                            <textarea cols="40" maxlength="500" rows="10" required="" id="message-input"></textarea>
+                            <input type="submit" class="submit-success" name="message_submit" />
+                        </form>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>  
+
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in closest_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url( {{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="quick-match-container">
+    <div class="left-quick-match-message">
+      <div class="text">DRAG LEFT TO IGNORE</div>
+    </div>
+    <div id="droppable-left" class="ui-widget-header" style="float: left; display: inline-block; width:3%; height:600px; overflow: hidden">
+</div>  
+    <h2 class="quick-match-heading">SWIPE MATCH FINDER</h2>
+    <h3 class="quick-match-subheading">Find love the quick and easy way with the swipe match finder</h3>
+    
+    {% for profile in card_profiles %}
+    <!--Change id (either with text to strip out or data-->
+            <div id="draggable-{{profile.user.id}}" class="card draggable-card draggable ui-widget-content" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
+                    <div class="card-img" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                        <div class="col-4 grid-three-link"><i onclick="send_wink_draggable({{profile.user.id}}, false)" class="far fa-times-circle grid-times"></i></div>
+                        <div class="col-4 grid-three-link"><a href="{% url 'member_profile' profile.user.id %}"><i class="far fa-user grid-view"></i></a></div>
+                        <div class="col-4 grid-three-link"><i onclick="send_wink_draggable({{profile.user.id}}, true)" class="far fa-smile-wink grid-wink"></i></div>
+                    </div>
+            </div>
+            
+    <div>
+    <a class="draggable-view-profile {{profile.user.id}}" href="{% url 'member_profile' profile.user.id %}"><p>VIEW {{profile.user.username | upper}}'S PROFILE</p></a>
+</div>
+    {%endfor%}
+<div class="right-quick-match-message">
+      <div class="text">DRAG RIGHT TO WINK</div>
+</div>
+<div id="droppable-right" class="ui-widget-header" style="float: right; display: inline-block; width:3%; height:600px">
+</div>
+</div>
+
+<div class="heading-hr">
+    <span>ACTIVE RECENTLY</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in active_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="heading-hr">
+    <span>NEWCOMERS</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in newest_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" href="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{%endblock%}
+
+{%block js%}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2 + 250) + 
+                                                $(window).scrollLeft()) + "px");
+    return this;
+    }
+    
+    $('.draggable-card').each(function() {
+            $(this).center()
+        }) 
+    
+    $( window ).resize(function() {
+       $('.draggable-card').each(function() {
+            $(this).center()
+        }) 
+    })
+    
+    $('.draggable-card').each(function() {
+        var random_number = Math.round(Math.random()) * 2 - 1
+        $(this).css("transform", "rotate(" + random_number + "deg)")
+    }) 
+  
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<script>
+    // Close modal
+    function close_modal() {
+        $('#modal').modal('hide')
+    }
+
+    // $('.card-container .grid-message').on('click', function() {
+    //     $('#message-modal').modal('show')
+    // })
+
+// Necessary backup for mobile as links do not work on Android Chrome
+// https://ctrlq.org/code/19616-detect-touch-screen-javascript
+function is_touch_device() {
+ return (('ontouchstart' in window)
+      || (navigator.MaxTouchPoints > 0)
+      || (navigator.msMaxTouchPoints > 0));
+}
+
+if (is_touch_device()) {
+    $('.draggable-card .interaction-container').css('display','none')
+    $('.draggable-view-profile').css('display', 'block')
+} else {
+    $('.draggable-view-profile').css('display', 'none')
+}
+// Set CSFR token for ajax 
+  $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+        } 
+    });
+  
+    function send_wink_draggable(receiver_id, wink=false) {
+        var left_length = $(window).width() / 2
+        if(wink==true) {
+            $("#draggable-" + receiver_id).animate({
+                left: "+=" + left_length,
+                top: "-=25"
+            }, 400, "easeOutQuart", function() {
+                $(this).css('display', 'none')
+            });
+        
+            $.ajax({
+            url: "/chat/ajax/winks/",
+            datatype: 'json',
+            data: {
+                receiver_id: receiver_id
+            },
+            // success: function(json) {
+                // 
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+            })
+        } else {
+            $("#draggable-" + receiver_id).animate({
+                left: "+=" + -left_length,
+                top: "-=25"
+            }, 400, "easeOutQuart", function() {
+                $(this).css('display', 'none')
+            });
+        }
+    }
+    
+    // Fix this!
+    // Make into one send_send function
+    function send_wink_grid_link(receiver_id) {
+        console.log(receiver_id)
+        $.ajax({
+            url: "/chat/ajax/winks/",
+            datatype: 'json',
+            data: {
+                receiver_id: receiver_id
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+    
+    function send_wink(ui) {
+        $.ajax({
+            url: "/chat/ajax/winks/",
+            datatype: 'json',
+            data: {
+                receiver_id: ui.draggable.attr('id')
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+    
+    function send_message() {
+        $.ajax({
+            url: "/chat/ajax/new_message/",
+            type: 'POST',
+            data: {
+                message_content: $('#message-input').val(),
+                message_receiver: $('#message-receiver-id').val()
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+    
+    $(".card-link-left").on('click', function(e) {
+        $('#message-modal').modal('toggle', $(this));
+    });
+
+    // https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content
+    $('#message-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var username = button.data('username')
+        var username_id = button.data('user-id')
+        var modal = $(this)
+
+        modal.find('.card-form-subtitle').text('Start a conversation with ' + username)
+        modal.find('#message-receiver-id').val(username_id)
+    })
+    
+    $('.not-profile-page-message-form').on('submit', function(event) {
+        $('#message-modal').modal('toggle')
+        event.preventDefault();
+        send_message();
+        $('#message-input').val('');
+    });
+    
+    
+    
+  $( function() {
+     
+    const messages = [$('.right-quick-match-message .text'), $('.left-quick-match-message .text')]
+    
+    function reset_quick_messages() {
+          $(messages).each(function () {
+                $(this).css({'border': '3px solid rgba(255, 255, 255, 0)', 'color': '3px solid rgba(255, 255, 255, 0)'})
+            })
+    }
+      
+    $( ".draggable" ).draggable({
+        containment: "parent",
+        // Because of jqueryUI bug, revert is not pixel perfect, this workaround
+        // from https://stackoverflow.com/questions/5603745/jquery-draggable-revert-is-not-pixel-perfect
+        // has been used instead
+        stop: function(event, ui) {
+            this._originalPosition = this._originalPosition || ui.originalPosition;
+            ui.helper.animate( this._originalPosition );
+            reset_quick_messages()
+        },
+        drag: function(event, ui) {
+            // Fade in for right message
+            var right_distance = (-1 * ( $( "#droppable-right" ).offset().left - ($(this).offset().left + parseInt($(this).css('width'), 10))) + 100) / 100
+            var left_distance = (-1 * ( $(this).offset().left) - $( "#droppable-left" ).offset().left + 100) / 100
+            $('.right-quick-match-message .text').css({'color': 'rgba(255, 255, 255,' +  right_distance + ')', 'border': '3px solid rgba(255, 255, 255,' + right_distance + ')'})  
+            $('.left-quick-match-message .text').css({'color': 'rgba(255, 255, 255,' +  left_distance + ')', 'border': '3px solid rgba(255, 255, 255,' + left_distance + ')'})  
+        },
+        scroll: false,
+    });
+    
+    $( "#droppable-right" ).droppable({
+        greedy: true,
+        tolerance: "touch",
+      drop: function(event, ui) {
+        send_wink(ui)
+        ui.draggable.draggable( "option", "revert", false );
+        ui.draggable.css("display", "none");
+        $('.' + ui.draggable.attr('id') + '.draggable-view-profile').css("display", "none");
+        reset_quick_messages()
+      }
+    });
+    
+    $( "#droppable-left" ).droppable({
+        greedy: true,
+        tolerance: "touch",
+      drop: function(event, ui) {
+          ui.draggable.draggable( "option", "revert", false );
+          ui.draggable.css("display", "none");
+          $('.' + ui.draggable.attr('id') + '.draggable-view-profile').css("display", "none");
+          reset_quick_messages()
+        //   Hide hints and set as session
+      }
+    });
+  } );
+  
+    //   https://stackoverflow.com/questions/210717/using-jquery-to-center-a-div-on-the-screen
+  </script>
+{%endblock%}
+
+

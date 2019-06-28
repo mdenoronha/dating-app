@@ -1,0 +1,42 @@
+{% extends 'base_preregister.html' %} {% block page_title %}Register{% endblock %} {% block page_heading %}Register{% endblock %} {% block content %}
+<section class="profile-card-container">
+  <div class="card-container card-margin-top">
+    <div class="card-form card">
+      <div class="card-form-container">
+        <h3>Register an Account</h3>
+        <hr>
+        <form class="standard-form" method="POST">
+          {% csrf_token %} {{ registration_form.as_p }}
+          <button class="submit-wide submit-success" type="submit">Register</button>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer-spacer">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+  $("#id_username").change(function() {
+    var username = $(this).val();
+
+    $.ajax({
+      url: '/accounts/ajax/validate_username/',
+      data: {
+        'username': username
+      },
+      dataType: 'json',
+      success: function(data) {
+        if (data.is_taken) {
+          alert("A user with this username already exists.");
+        }
+      }
+    });
+
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% load static from static %} {% load chatextras %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
+<div class="page-title">
+    <h1>Winks</h1>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% if winks_page %} 
+        {% for wink in winks_page %}
+        <div class="card-container col-sm-12">
+            <div class="card wide-card {%if not wink.is_read%} unread-wink {%endif%}">
+                <div class="row">
+                    <div class="wide-user-details col-xs-12 col-sm-6">
+                        <div class=" card-img" style="background-image: url({% static 'temp/maxresdefault.jpg' %})"></div>
+                        <div>
+                            <div class="username-container">
+                                <p class="card-username">{{wink.sender.username}}</p>
+                                <p class="card-distance">4 Miles Away</p>
+                                <p class="card-age">{{wink.sender.age}}69</p>
+                            </div>
+                            <div class="wide-date-container">
+                                <p>{{wink.created_on}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 wide-button-container">
+                        <a href="#" class="btn standard-button">WINK BACK</a>
+                        <a href="#" class="btn standard-button">VISIT USER</a>
+                    </div>
+                </div>
+                <!--Change from a link-->
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="card-container col-lg-12 message-box">
+            <div class="card">
+                <div class="message-box-content message-box-empty" style="overflow: auto;">
+                    <div>
+                        <h3>No Winks :(</h3>
+                        <a href="#" class="btn standard-button">START THE CONVERSATION YOURSELF</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div>
+    
+</div>
+<div class="pagination-links">
+{% if winks_page %}
+{% for wink in winks_page %}
+{% endfor %}
+{% if winks_page.has_previous %}
+<a href="?page={{ winks_page.previous_page_number }}">Previous</a> 
+{% endif %}
+
+<span data-page={{page}} class="current">
+    Page {{ winks_page.number }} of {{ winks_page.paginator.num_pages }}
+    </span> {% if winks_page.has_next %}
+<a href="?page={{ winks_page.next_page_number }}">Next ></a> {% endif %} {% endif %}
+</div>
+
+{% endblock %} {%block js%}
+
+<script>
+    function read_messages() {
+
+        var page = $('.current').data('page')
+
+        $.ajax({
+            url: "/chat/ajax/read-wink/",
+            datatype: 'json',
+            data: {
+                'page': page
+            }
+        });
+    }
+
+    read_messages()
+</script>
+{%endblock%}

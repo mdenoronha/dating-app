@@ -1,0 +1,61 @@
+{% extends 'base.html' %}  {% load static from static %} {% load chatextras %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
+
+<div class="message-page container">
+    <div class="row">
+
+{% if all_conversations.items %}
+<div class="card-container col-xs-12 col-lg-4 conversation-list">
+    <div class="card">
+        <ul>
+            {% for k, v in all_conversations.items %}
+
+            <li {% if conversation_id == k %}class="active-conversation" {% endif %} 
+            {% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">
+
+                <a  href="{% url 'chat' k %}">
+                    <div class="sender-container">
+                        {% if v.receiver == request.user %}
+                        <p class="message-sender">{{v.sender}}</p>
+                        {% else %}
+                        <p class="message-sender">{{v.receiver}}</p>
+                        {% endif %}
+                        <p class="last-message-date">{{v.created_on}}</p>
+                        <!--{{v.is_read}}-->
+                    </div>
+                    <div class="sender-photo" style="background-image: url({% static 'temp/maxresdefault.jpg' %})"></div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<div class="card-container col-lg-8 message-box">
+    <div class="card">
+        <div class="message-box-content message-box-empty" style="overflow: auto;">
+            <div>
+                <h3>Select a Conversation</h3>
+                <i class="far fa-comments"></i>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card-container col-lg-12 message-box">
+    <div class="card">
+        <div class="message-box-content message-box-empty" style="overflow: auto;">
+            <div>
+                <h3>No Conversations :(</h3>
+                <a href="#" class="btn standard-button">Start Something Special</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+    </div>
+</div>
+{%endblock%}
+
+

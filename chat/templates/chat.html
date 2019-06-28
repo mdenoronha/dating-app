@@ -1,0 +1,178 @@
+{% extends 'base.html' %}  {% load static from static %} {% load chatextras %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
+
+<div class="message-page container">
+    <div class="row">
+
+<div class="card-container col-xs-12 col-lg-4 conversation-list">
+    <div class="card">
+        <ul>
+            {% for k, v in all_conversations.items %}
+
+            <li {% if conversation_id == k %}class="active-conversation" {% endif %} 
+            {% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">
+            <!--<li {% if k == conversation_id %}class="active-conversation" {% endif %} -->
+            <!--{% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">-->
+
+                <a  href="{% url 'chat' k %}">
+                    <div class="sender-container">
+                        {% if v.receiver == request.user %}
+                        <p class="message-sender">{{v.sender}}</p>
+                        {% else %}
+                        <p class="message-sender">{{v.receiver}}</p>
+                        {% endif %}
+                        <p class="last-message-date">{{v.created_on}}</p>
+                        <!--{{v.is_read}}-->
+                    </div>
+                    <div class="sender-photo" style="background-image: url({% static 'temp/maxresdefault.jpg' %})"></div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="card-container col-lg-8 message-box">
+    <div class="card">
+        <div class="message-box-content" style="overflow: auto;">
+            {% for message in user_messages %}
+                {% if message.sender == request.user %}
+                <div class="message-sent message-container">
+                {% else %}
+                <div class="message-received message-container">
+                {% endif %}
+                <div class="{% if not message.is_read and message.sender != request.user %}unread-message{%endif%} message-bubble">
+                    <p>{{ message.message_content }}</p>
+                </div>
+                <p class="message-date">{{ message.created_on }}</p>
+                </div>
+            {% endfor %}
+        
+        </div>
+        <div class="message-box-form-container">
+            <div class="new_message_button">
+                <button onclick="location.reload();"><i class="fas fa-sync-alt"></i> New Message Received. Update.</button>
+        </div>
+        <form class="standard-form" method="POST">
+            {{ message_form.as_p }}
+            {% csrf_token %}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{% url 'member_profile' receiver %}">View Profile</a>
+                    <a class="dropdown-item" onclick="send_wink_grid_link({{receiver}})">Send a Wink</a>
+                </div>
+            </div>
+            
+            <input class="submit-success" type="submit" value="SEND"/>
+        </form>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+{%endblock%}
+
+{%block js%}
+<script>
+    // Duplicate of index
+    // Set CSFR token for ajax 
+  $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+        } 
+    });
+    
+    function send_wink_grid_link(receiver_id) {
+        $.ajax({
+            url: "/chat/ajax/winks/",
+            datatype: 'json',
+            data: {
+                receiver_id: receiver_id
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+
+    // Scroll message box to latest message
+    $('.message-box-content').scrollTop($('.message-box-content')[0].scrollHeight + parseInt($('.message-box-content').css("margin-bottom")));
+    // Scroll conversation list to current conversation
+    var url_id = /[^/]*$/.exec(window.location.pathname)[0]
+    $('li[data-id="' + url_id + '"]')[0].scrollIntoView()
+    // Scroll page to top
+    window.scrollTo(0, 0);
+    
+    function new_message_check() {
+      var url_id = /[^/]*$/.exec(window.location.pathname)[0]
+        // https://stackoverflow.com/questions/8376525/get-value-of-a-string-after-a-slash-in-javascript
+      $.ajax({
+        url: '/chat/ajax/new_message_check', 
+        data: {
+          'url_id': url_id
+        },
+        dataType: 'json',
+        success: function(data) {
+            if(data.conversation) {
+                $(".new_message_button").css("display", "flex");
+            }
+        },
+        complete: function(data) {
+          if(!data.conversation) {
+            setTimeout(new_message_check, 5000);
+          }
+        }
+      });
+    };
+    
+    function read_messages() {
+        var url_id = /[^/]*$/.exec(window.location.pathname)[0]
+        $.ajax({
+            url: "/chat/ajax/read/",
+            dataType: 'json',
+            data: {
+                'url_id' : url_id
+            },
+            success: function(data) {
+                if(data.conversation) {
+                    $(".new_message_button").css("display", "flex");
+                } else {
+                    $(".new_message_button").css("display", "none");
+                    setTimeout(new_message_check(), 6000)
+                }
+            }
+        });
+    }
+    
+    // Mark all messages as read
+    read_messages()
+
+
+</script>
+{% endblock %}
+

@@ -1,0 +1,182 @@
+{%extends 'base.html'%} {% load static from static %} {% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"> {% endblock %} {%block page_title%}Home{%endblock%} {%block content%}
+
+<form class="search-form" method="GET">
+    <div class="search-option-container">
+        <button type='button' class="search-reset-button" onclick="remove_selected()">RESET</button> {{ filtered_result.form }}
+        <!--Change to better slider-->
+
+
+        <select {% if sexuality %}data-sexuality="{{sexuality}}" {%endif%} class="custom-form-field" title="Sexuality ▾" id="sexuality" data-container="body" multiple name="sexuality">
+                <option value="s">Straight</option>
+                <option value="b">Bisexual</option>
+                <option value="g">Gay</option>
+            </select>
+        <!--<label for="distance"></label>-->
+        <select {% if distance %}data-distance="{{distance}}" {%endif%} title="Distance ▾" name="distance" class="custom-form-field" id="distance" data-container="body">
+            <option value="10">10km</option>
+            <option value="25">25km</option>
+            <option value="50">50km</option>
+            <option value="100">100km</option>
+            <option value="250">250km</option>
+            <option value="500">500km</option>
+            <option value="worldwide">Worldwide</option>
+        </select>
+        <select {% if min_height %}data-min-height="{{min_height}}" {%endif%} class="custom-form-field" title="Min Height ▾" id="height_min" data-container="body" name="height_min">
+                <!--Change to heights-->
+                <option value="152.4">5' 0"</option>
+                <option value="154.94">5' 1"</option>
+                <option value="157.48">5' 2"</option>
+                <option value="160.02">5' 3"</option>
+                <option value="162.56">5' 4"</option>
+                <option value="165.1">5' 5"</option>
+                <option value="167.64">5' 6"</option>
+                <option value="170.18">5' 7"</option>
+                <option value="172.72">5' 8"</option>
+                <option value="175.26">5' 9"</option>
+                <option value="177.8">5' 10"</option>
+                <option value="180.34">5' 11"</option>
+                <option value="182.88">6' 0"</option>
+                <option value="185.42">6' 1"</option>
+                <option value="187.96">6' 2"</option>
+                <option value="190.5">6' 3"</option>
+                <option value="193.04">6' 4"</option>
+                <option value="195.58">6' 5"</option>
+                <option value="198.12">6' 6"</option>
+                <option value="200.66">6' 7"</option>
+                <option value="203.2">6' 8"</option>
+                <option value="205.74">6' 9"</option>
+                <option value="208.28">6' 10"</option>
+                <option value="210.82">6' 11"</option>
+            </select>
+
+        <select {% if max_height %}data-max-height="{{max_height}}" {%endif%} class="custom-form-field" title="Max Height ▾" id="height_max" name="height_max">
+                <!--Change to heights-->
+                <option value="152.4">5' 0"</option>
+                <option value="154.94">5' 1"</option>
+                <option value="157.48">5' 2"</option>
+                <option value="160.02">5' 3"</option>
+                <option value="162.56">5' 4"</option>
+                <option value="165.1">5' 5"</option>
+                <option value="167.64">5' 6"</option>
+                <option value="170.18">5' 7"</option>
+                <option value="172.72">5' 8"</option>
+                <option value="175.26">5' 9"</option>
+                <option value="177.8">5' 10"</option>
+                <option value="180.34">5' 11"</option>
+                <option value="182.88">6' 0"</option>
+                <option value="185.42">6' 1"</option>
+                <option value="187.96">6' 2"</option>
+                <option value="190.5">6' 3"</option>
+                <option value="193.04">6' 4"</option>
+                <option value="195.58">6' 5"</option>
+                <option value="198.12">6' 6"</option>
+                <option value="200.66">6' 7"</option>
+                <option value="203.2">6' 8"</option>
+                <option value="205.74">6' 9"</option>
+                <option value="208.28">6' 10"</option>
+                <option value="210.82">6' 11"</option>
+            </select>
+    </div>
+    <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
+</form>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in search_page %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})"></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                        <div class="interaction-wrapper">
+                            <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                        </div>
+                </a>
+                <!--Change from a link-->
+                <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="pagination-links">
+{% if search_page %}
+{% for search in search_page %}
+{% endfor %}
+{% if search_page.has_previous %}
+<a href="?page={{ search_page.previous_page_number }}">< Previous</a> 
+{% endif %}
+
+<span data-page={{page}} class="current">
+    Page {{ search_page.number }} of {{ search_page.paginator.num_pages }}
+    </span> {% if search_page.has_next %}
+<a href="?page={{ search_page.next_page_number }}">Next ></a> {% endif %} {% endif %}
+</div>
+
+{% endblock %} {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+<script>
+    function remove_selected() {
+        var custom_fields = {
+            sexuality: "Sexuality ▾",
+            height_max: "Max Height ▾",
+            height_min: "Min Height ▾",
+            distance: "Distance ▾"
+        }
+        
+        $('.custom-form-field').each(function() {
+            $(this).val('')
+            let field_id = $(this).attr('id')
+            $(this).siblings('.dropdown-toggle').find('.filter-option-inner-inner').text(custom_fields[field_id])
+        })
+        $('.search-form select').selectpicker('deselectAll');
+        $('.dropdown-toggle').removeClass('selected-search-option')
+    }
+
+    var sexuality = $('#sexuality').data('sexuality')
+    if (sexuality) {
+        var sexuality_arr = JSON.parse(sexuality.replace(/\'/g, "\""))
+        $('#sexuality').val(sexuality_arr)
+    }
+    var min_height = $('#height_min').data('min-height')
+    var max_height = $('#height_max').data('max-height')
+    var distance = $('#distance').data('distance')
+    console.log(min_height)
+    console.log(distance)
+    
+    $('#height_max').val(max_height)
+    $('#height_min').val(min_height)
+    $('#distance').val(distance)
+
+    $('.search-form select').on('change', function() {
+        if ($(this).val() == null) {
+            $(this).siblings('.dropdown-toggle').removeClass('selected-search-option')
+        }
+        else {
+            $(this).siblings('.dropdown-toggle').addClass('selected-search-option')
+        }
+    })
+
+    $('.search-form select').attr('data-container', 'body')
+    // Improve load render
+    $('.search-form select').selectpicker();
+    $('.search-form select').attr('title', '')
+
+    // On load check if any options are selected and update styling
+    // Has to be after selectpicker
+    $('.search-form select').each(function() {
+        if ($(this).val() != null && $(this).val() != "") {
+            $(this).siblings('.dropdown-toggle').addClass('selected-search-option')
+        }
+    })
+</script>
+{% endblock %}

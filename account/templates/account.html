@@ -1,0 +1,200 @@
+{% extends 'base.html' %} {% block page_title %}Profile{% endblock %} {% block page_heading %}{{request.user}}'s Profile{% endblock %} {% block content %}
+<div class="modal fade" id="edit-password-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <div class="card-form-container">
+                        <h3 class="card-modal-title">Edit Password</h3>
+                        <hr>
+                        <p class="card-form-subtitle">Update your password</p>
+                        <form class="standard-form not-profile-page-message-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %} {{ password_form }}
+                            <input type="submit" class="submit-success" name="password-change-submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-account-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <div class="card-form-container">
+                        <h3 class="card-modal-title">Edit Account</h3>
+                        <hr>
+                        <p class="card-form-subtitle">Make changes to your account</p>
+                        <form class="standard-form not-profile-page-message-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %} {{ user_form }}
+                            <input type="submit" class="submit-success" name="account-change-submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancel-message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <div class="card-form-container">
+                        <h3 class="card-modal-title">Cancel Subscription</h3>
+                        <hr>
+                        <p class="card-form-subtitle">Are you sure?</p>
+                        <p class="card-form-description">Cancelling your subscription means you'll lose access to excellent features at the end of your billing cycle</p>
+                        <div class="single-button-modal">
+                            <a href="" class="btn btn-secondary submit-cancel" />CANCEL SUBSCRIPTION</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="profile-card-container container">
+    <div class="row">
+        <div class="col-sm-12 col-md-7">
+            <div class="col-sm-12">
+                <h2 class="account-info-heading">Account Info</h2>
+            </div>
+            <div class="card-container">
+                <div class="account-info-card card">
+                    <table class="standard-table">
+                        <tr>
+                            <td>Email:</td>
+                            <td class="standard-table-feature">{{request.user.email}} <i class="edit-account-modal-button far fa-edit"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Username:</td>
+                            <td class="standard-table-feature">{{request.user.username}} <i class="edit-account-modal-button far fa-edit"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td class="standard-table-feature">********* <i class="edit-password-modal-button far fa-edit"></i></td>
+                        </tr>
+                    </table>
+                    <a href="{% url 'logout' %}">Logout</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <div class="col-sm-12">
+                <h2>Subscription Info</h2>
+            </div>
+            {% if not active_subscriptions %}
+            <div class="card-container">
+                <div class="card">
+                    <p>No Active Subscriptions</p>
+                </div>
+            </div>
+            {% endif %} {% for sub in active_subscriptions %}
+            <div class="card-container">
+                <div class="card">
+                    <table class="standard-table">
+                        <tr>
+                            <td>Subscription Start Date:</td>
+                            <td class="standard-table-feature">{{ sub.created }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% if sub.cancel_at_period_end %}Cancellation{% else %}Renewal{% endif %} Date:</td>
+                            <td class="standard-table-feature">{{ sub.current_period_end }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td class="standard-table-feature">{% if sub.cancel_at_period_end %}Cancelled{% else %}Renewing{% endif %}</td>
+                        </tr>
+                        {% for items in sub.items.data %}
+                        <tr>
+                            <td>Plan:</td>
+                            <td class="standard-table-feature">{{items.plan.nickname}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% if not sub.cancel_at_period_end %}
+
+                    <p data-subid="{% url 'cancel_subscription' sub.id %}" class="subscription-cancel-button">Cancel</p> {% else %}
+                    <a href="{% url 'reactivate_subscription' sub.id %}" class="reactivate-subscription-button">Reactivate</a> {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="col-sm-12">
+                <h2>Billing Info</h2>
+            </div>
+            {% if not customer.sources.data %}
+            <div class="card-container">
+                <div class="card">
+                    <p>No Billing Information</p>
+                </div>
+            </div>
+            {% endif %} {% for card in customer.sources.data %}
+            <div class="card-container">
+                <div class="card">
+                    <table class="standard-table">
+                        <tr>
+                            <td>Card:</td>
+                            <td class="standard-table-feature">{{card.brand}}</td>
+                        </tr>
+                        <tr>
+                            <td>Expiry:</td>
+                            <td class="standard-table-feature">{{card.exp_month}} - {{card.exp_year}}</td>
+                        </tr>
+                        <tr>
+                            <td>Last 4 Digits Card No.:</td>
+                            <td class="standard-table-feature">{{card.last4}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %} {% block js %}
+<script>
+    // Change to one error modal check
+    if ($("#edit-account-modal").find('.errorlist').length) {
+        $('#edit-account-modal').modal('show')
+    }
+
+    if ($("#edit-password-modal").find('.errorlist').length) {
+        $('#edit-password-modal').modal('show')
+    }
+
+    $('#cancel-message-modal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var sub_id = button.data('subid')
+        var modal = $(this)
+
+        modal.find('.single-button-modal a').attr('href', sub_id)
+    })
+
+
+    $(".subscription-cancel-button").on('click', function(e) {
+        $('#cancel-message-modal').modal('toggle', $(this));
+    });
+
+    $(".edit-account-modal-button").on('click', function(e) {
+        $('#edit-account-modal').modal('toggle', $(this));
+    });
+
+    $(".edit-password-modal-button").on('click', function(e) {
+        $('#edit-password-modal').modal('toggle', $(this));
+    });
+</script>
+{% endblock %}

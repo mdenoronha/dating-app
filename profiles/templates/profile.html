@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block page_title %}Profile{% endblock %}
+{% block page_heading %}{{user}}'s Profile{% endblock %}
+
+{% block content %}
+<p>{{profile.email}}</p>
+{% for image in profile.profileimage_set.all %}
+<img src="/media/{{image.image}}">
+{% endfor %}
+<p>{{user.profile.bio}}</p>
+<p>{{user.profile.location}}</p>
+<!--Add error message if incorrect location is added, saying users cannot find you-->
+<p>{{user.profile.birth_date}}</p>
+{% endblock %}

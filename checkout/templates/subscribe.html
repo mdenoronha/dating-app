@@ -1,0 +1,119 @@
+{% extends 'base.html' %} 
+{% load static from static %} 
+{% block page_title %}Subscribe{% endblock %} 
+{% block page_heading %}Subsribe{% endblock %} 
+{% block content %}
+
+<section class="subscriptions-container">
+    <h1 class="quick-match-heading">JOIN PREMIUM</h1>
+    <div class="subscription-page-subtitle">
+        <p><i class="far fa-comment-alt"></i> SEND UNLIMITED MESSAGES</p>
+        <p><i class="fas fa-eye"></i> SEE WHO'S VIEWED YOUR PROFILE</p>
+        <p><i class="far fa-star"></i> ACCESS NEW FEATURES FIRST</p>
+    </div>
+
+    <div class="subscription-modal-container">
+        <div class="subscription-modal subscription-modal-1 modal-content card-container">
+            <div class="card-form card">
+                <div class="card-form-container">
+                    <h3 class="inactive-subscription-option no-incentive-badge-title">1 MONTH</h3>
+                    <hr class="inactive-subscription-option">
+                    <h4 class="subscription-price">£24.99<span> per month</span></h4>
+                    <p class="subscription-subtitle">Billed as £24.99 every month</p>
+                    <button data-price="£24.99" data-plan="plan_F5eyGdYCvZPtON" class="inactive-subscription-option subscription-button btn btn-success">SELECT</button>
+                </div>
+            </div>
+        </div>
+        <div class="subscription-modal subscription-modal-3 modal-content card-container">
+            <div class="card-form card">
+                <div class="card-form-container">
+                    <h3>3 MONTHS</h3>
+                    <div class="incentive-badge btn btn-success">MOST POPULAR</div>
+                    <hr>
+                    <h4 class="subscription-price">£14.99<span> per month</span></h4>
+                    <p class="subscription-subtitle">Billed as £44.99 every 3 months</p>
+                    <button data-price="£44.99" data-plan="plan_F5ey2nnZwy5v8Q" class="subscription-button btn btn-success">SELECT</button>
+                </div>
+            </div>
+        </div>
+        <div class="subscription-modal subscription-modal-6 modal-content card-container">
+            <div class="card-form card">
+                <div class="card-form-container">
+                    <h3 class=" inactive-subscription-option">6 MONTHS</h3>
+                    <div class="incentive-badge btn btn-success">BEST VALUE</div>
+                    <hr class="inactive-subscription-option">
+                    <h4 class="subscription-price">£12.49<span> per month</span></h4>
+                    <p class="subscription-subtitle">Billed as £74.99 every 6 months</p>
+                    <button data-price="£74.99" data-plan="plan_F5eyNlWXHig7YB" class="inactive-subscription-option subscription-button btn btn-success">SELECT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="card-container subscription-card-container">
+    <div class="card-form card">
+        <div class="card-form-container">
+            <h3 class="billing-title">Billing Information</h3>
+            <hr>
+            <form class="standard-form subscription-form" role="form" method="POST" id="subscription_form" action="{% url 'subscribe' %}">
+                {% for field in order_form.hidden_fields %}
+                {{ field }}
+                {% endfor %}
+                {% for field in order_form.visible_fields %}
+                <p {% if field.name == "plans" %}class="hidden-plan" {%endif%}>
+                    <label for="id_{{field.name}}">{{ field.label }}</label> {{ field }}
+                </p>
+                {% endfor %} 
+                {% for field in payment_form.hidden_fields %}
+                {{ field }}
+                {% endfor %}
+                {% for field in payment_form.visible_fields %}
+                <p>
+                    <label for="id_{{field.name}}">{{ field.label }}</label> {{ field }}
+                </p>
+                {% endfor %} {% csrf_token %}
+                <div class="subscription-total">
+                    <hr>
+                    <h4>Order Summary</h4>
+                    <p>SELECTED PLAN: <span class="plan-total">3 MONTHS</span></p>
+                    <p>TOTAL: <span class="cost-total">£44.99</span></p>
+                </div>
+                <div class="subscription-total-submit subscription-total">
+                    <input type="submit" class="submit-success" value="SUBMIT" name="message_submit" />
+                </div>
+                <div class="subscription-terms">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dictum sem vel arcu egestas, nec bibendum dolor laoreet. Aenean faucibus justo a felis scelerisque vehicula. Pellentesque et erat eleifend sem ullamcorper pellentesque. Proin
+                        at magna ultricies, sollicitudin lorem vel, eleifend diam. Aenean facilisis erat et dictum posuere. Phasellus lacinia elit et tortor porta blandit. Mauris magna tortor, tristique et nisl eget, varius pharetra diam. Vivamus auctor
+                        ornare risus, a pulvinar mi blandit nec. Aliquam vitae justo elementum, scelerisque erat sit amet, lobortis nunc. Nullam consequat elit eget ante molestie pellentesque. Mauris molestie sollicitudin massa.</p>
+
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %} {% block js %}
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+    $('.subscription-button').on('click', function() {
+        $('select[name="plans"]').val($(this).data('plan'))
+        $('.subscription-button').addClass('inactive-subscription-option')
+        $('.subscription-modal h3').addClass('inactive-subscription-option')
+        $('.subscription-modal hr').addClass('inactive-subscription-option')
+        $(this).removeClass('inactive-subscription-option')
+        $(this).siblings('h3').removeClass('inactive-subscription-option')
+        $(this).siblings('hr').removeClass('inactive-subscription-option')
+        $('.plan-total').text($(this).siblings('h3').text())
+        $('.cost-total').text($(this).data('price'))
+    })
+
+
+    //<![CDATA[
+    Stripe.publishableKey = '{{ publishable }}';
+    //]]>
+</script>
+<script type="text/javascript" src="{% static 'js/stripe.js' %}"></script>
+{% endblock %}
