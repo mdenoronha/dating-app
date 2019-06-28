@@ -20,8 +20,7 @@ if os.environ.get('DEVELOPMENT'):
 else:
     development = False
     
-if not development:  
-    import env
+# import env
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
