@@ -24,10 +24,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('secret_key')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = [os.environ.get('C9_HOSTNAME'), "5a824725c9bd45ef92e402d580741815.vfs.cloud9.us-east-1.amazonaws.com"]
+if os.environ.get('DEVELOPMENT'):
+    development = True
+else:
+    development = False
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = development
+
+ALLOWED_HOSTS = [os.environ.get('HOSTNAME'), "5a824725c9bd45ef92e402d580741815.vfs.cloud9.us-east-1.amazonaws.com"]
 
 
 # Application definition
@@ -83,13 +89,21 @@ WSGI_APPLICATION = 'dating_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-    # 'default': dj_database_url.parse("postgres://odrhschsdnqagz:00b639e75d63bd8c3a33b3c033b9882cac171b2aa1a0ef5db4118d35b781539b@ec2-54-228-246-214.eu-west-1.compute.amazonaws.com:5432/ddjkqtuvsjum22")
-
-DATABASES = { 'default' : {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if not development:
+    DATABASES = {'default': dj_database_url.parse("postgres://ctvhsjxcpsyjpk:20623c4b41f8c859839c0cf4b095f52a29f3bd81bd5b075fa4c2ccd6e99c2d43@ec2-54-75-230-253.eu-west-1.compute.amazonaws.com:5432/d2j6at8l3jgeo2")}
+else:
+    print("Database URL not found. Using SQLite instead")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+# DATABASES = { 'default' : {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
