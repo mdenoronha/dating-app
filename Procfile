@@ -1,1 +1,1 @@
-web:gunicorn django_todo.wsgi:application
+web:gunicorn dating_app.wsgi:application
