@@ -128,7 +128,7 @@ def preregister(request):
     }
     
     for k,v in profile.items():
-        k = Profile.objects.get(v['user_id'])
+        k = Profile.objects.get(pk=v['user_id'])
         k.bio = v['bio']
         k.birth_date = v['birth_date']
         k.body_type = v['body_type']
