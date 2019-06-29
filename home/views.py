@@ -54,10 +54,11 @@ def index(request):
     
 def preregister(request):
     from django.db.models.expressions import RawSQL
+    
     gcd_formula = "6371 * acos(cos(radians(%s)) * \
-        cos(radians(cityLat)) \
-        * cos(radians(cityLong) - radians(%s)) + \
-        sin(radians(%s)) * sin(radians(cityLat)))"
+        cos(radians(profiles_profile.cityLat)) \
+        * cos(radians(profiles_profile.cityLong) - radians(%s)) + \
+        sin(radians(%s)) * sin(radians(profiles_profile.cityLat)))"
     distance_raw_sql = RawSQL(
         gcd_formula,
         (30, 20, 30)
