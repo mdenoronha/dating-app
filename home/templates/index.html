@@ -69,13 +69,13 @@
     </div>
     <div id="droppable-left" class="ui-widget-header" style="float: left; display: inline-block; width:3%; height:600px; overflow: hidden">
 </div>  
-    <h2 class="quick-match-heading">SWIPE MATCH FINDER</h2>
+    <h2 id="swipe-match-finder" class="quick-match-heading">SWIPE MATCH FINDER</h2>
     <h3 class="quick-match-subheading">Find love the quick and easy way with the swipe match finder</h3>
     
      <div class="card draggable-card draggable-reset-card" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
                     <div>
                         <p>Keep on looking ;)</p>
-                        <a href="#" class="btn standard-button">ADD MORE PROFILES</a>
+                        <a class="draggable-reset-button btn standard-button">ADD MORE PROFILES</a>
                     </div>
             </div>
     
@@ -282,6 +282,15 @@ if (is_touch_device()) {
             }, 400, "easeOutQuart", function() {
                 $(this).css('display', 'none')
             });
+                
+            $.ajax({
+            url: "/chat/ajax/reject/",
+            datatype: 'json',
+            data: {
+                receiver_id: receiver_id
+            }
+            
+            });
         }
     }
     
@@ -306,12 +315,32 @@ if (is_touch_device()) {
         })
     }
     
+    
+    
     function send_wink(ui) {
         $.ajax({
             url: "/chat/ajax/winks/",
             datatype: 'json',
             data: {
-                receiver_id: ui.draggable.attr('id')
+                receiver_id: ui.draggable.attr('id').replace('draggable-','')
+            },
+            // success: function(json) {
+            // }
+
+            // error: function(xhr, errmsg, err) {
+            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            // }
+        })
+    }
+    
+    function send_reject(ui) {
+        $.ajax({
+            url: "/chat/ajax/reject/",
+            datatype: 'json',
+            data: {
+                receiver_id: ui.draggable.attr('id').replace('draggable-','')
             },
             // success: function(json) {
             // }
@@ -413,6 +442,7 @@ if (is_touch_device()) {
         greedy: true,
         tolerance: "touch",
       drop: function(event, ui) {
+          send_reject(ui)
           ui.draggable.draggable( "option", "revert", false );
           ui.draggable.css("display", "none");
           $('.' + ui.draggable.attr('id') + '.draggable-view-profile').css("display", "none");
@@ -421,6 +451,10 @@ if (is_touch_device()) {
       }
     });
   } );
+  
+  $('.draggable-reset-button').click(function(event) {
+        window.location = '/home#swipe-match-finder';
+    });
   
     //   https://stackoverflow.com/questions/210717/using-jquery-to-center-a-div-on-the-screen
   </script>

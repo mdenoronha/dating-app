@@ -14,7 +14,7 @@ from django.dispatch import receiver
 import os
 
 # Only necessary for local
-# if not "DEVELOPMENT" in os.environ:
+# if "DEVELOPMENT" in os.environ:
 #     @receiver(connection_created)
 #     def extend_sqlite(connection=None, **kwargs):
 #         # sqlite doesn't natively support math functions, so add them
@@ -54,7 +54,6 @@ class LocationManager(models.Manager):
     
     # Assistance from https://stackoverflow.com/questions/19703975/django-sort-by-distance
     def nearby_locations(self, citylat, citylong, max_distance=None):
-        print(citylat)
         """
         Return objects sorted by distance to specified coordinates
         which distance is less than max_distance given in kilometers

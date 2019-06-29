@@ -23,3 +23,8 @@ class Views(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="views_receiver", unique=False)
     created_on = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False, blank=False)  
+
+class Reject(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rejected_sender", unique=False)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rejected_receiver", unique=False)
+    created_on = models.DateTimeField(auto_now_add=True)

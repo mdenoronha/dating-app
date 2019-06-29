@@ -1,10 +1,11 @@
 from django.conf.urls import url, include
-from chat.views import chat, create, new_message_check, wink, chat_ajax, chat_home, read_messages, winks, read_wink, read_view, views
+from chat.views import chat, create, new_message_check, wink, chat_ajax, chat_home, read_messages, winks, read_wink, read_view, views, reject
 
 urlpatterns = [
     url(r'^(?P<id>\d+)', chat, name="chat"),
     url(r'^home/', chat_home, name="chat_home"),
     url(r'^ajax/winks/$', wink, name="wink"),
+    url(r'^ajax/reject/$', reject, name="reject"),
     url(r'^ajax/new_message_check/$', new_message_check, name='new_message_check'),
     url(r'^ajax/read/$', read_messages, name="read_messages"),
     url(r'^ajax/new_message/$', chat_ajax, name="new_message"),

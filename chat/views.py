@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect, render_to_response
 from .forms import MessageForm
-from .models import Conversations, Messages, Winks, Views
+from .models import Conversations, Messages, Winks, Views, Reject
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -172,6 +172,26 @@ def wink(request):
         print("sent")
     # pass messages using https://stackoverflow.com/questions/52483675/how-to-filter-django-annotations-on-reverse-foreign-key-fields
     return HttpResponse(status=204)
+    
+def reject(request):
+    # Change None backup?
+    receiver_id = request.GET.get('receiver_id')
+    if receiver_id == request.user.id:
+        return HttpResponse(status=204)
+        
+    current_reject = Winks.objects.filter(Q(receiver_id=receiver_id) & Q(sender_id=request.user.id)).exists()
+    if current_reject:
+        return HttpResponse(status=204)
+    
+    reject = Reject(receiver=User.objects.get(pk=receiver_id), sender=request.user)
+    try:
+        reject.save()
+    except:
+        # messages.success(request, "Something went wrong. Reject not sent")
+        print("Error Occurred")
+    finally:
+    # pass messages using https://stackoverflow.com/questions/52483675/how-to-filter-django-annotations-on-reverse-foreign-key-fields
+        return HttpResponse(status=204)
 
 @login_required
 @premium_required
@@ -201,6 +221,7 @@ def chat_ajax(request):
         try:
             conversation = Conversations()
             conversation.save()
+            # Is this working?
             conversation.participants.add(request.user.id)
             conversation.participants.add(User.objects.get(pk=receiver_id))
             message = Messages(
