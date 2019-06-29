@@ -453,6 +453,22 @@ body {
     min-height: 200px;
 }
 
+.draggable-card.card.draggable-reset-card {
+    margin-top: 40px;
+    text-align: center;
+    padding: 10px;
+    width: 25vw;
+    max-width: 250px;
+    border: 0;
+    min-width: 200px;
+}
+
+.draggable-card.card.draggable-reset-card a {
+    margin: 0 auto;
+    text-align: center;
+    display: table;
+}
+    
 .draggable-card.card {
     width: 40vw;
     max-width: 300px;

@@ -72,6 +72,14 @@
     <h2 class="quick-match-heading">SWIPE MATCH FINDER</h2>
     <h3 class="quick-match-subheading">Find love the quick and easy way with the swipe match finder</h3>
     
+     <div class="card draggable-card draggable-reset-card" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
+                    <div>
+                        <p>Keep on looking ;)</p>
+                        <a href="#" class="btn standard-button">ADD MORE PROFILES</a>
+                    </div>
+            </div>
+    
+    
     {% for profile in card_profiles %}
     <!--Change id (either with text to strip out or data-->
             <div id="draggable-{{profile.user.id}}" class="card draggable-card draggable ui-widget-content" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
@@ -167,6 +175,7 @@
 {%block js%}
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+    // Centers and rotates cards
     jQuery.fn.center = function () {
     this.css("position","absolute");
     this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2 + 250) + 
@@ -185,8 +194,10 @@
     })
     
     $('.draggable-card').each(function() {
-        var random_number = Math.round(Math.random()) * 2 - 1
-        $(this).css("transform", "rotate(" + random_number + "deg)")
+        if(!$(this).hasClass('draggable-reset-card')) {
+            var random_number = Math.round(Math.random()) * 2 - 1
+            $(this).css("transform", "rotate(" + random_number + "deg)")
+        }
     }) 
   
 </script>
