@@ -14,12 +14,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='profile',
-            name='cityLat',
+            name='citylat',
             field=models.DecimalField(decimal_places=6, default='-2.0180319', max_digits=9),
         ),
         migrations.AddField(
             model_name='profile',
-            name='cityLong',
+            name='citylong',
             field=models.DecimalField(decimal_places=6, default='52.5525525', max_digits=9),
         ),
     ]
