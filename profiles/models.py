@@ -25,7 +25,7 @@ import os
 #         cf('sin', 1, math.sin)
 
 class LocationManager(models.Manager):
-    # def nearby_locations(self, cityLat, cityLong, radius=100, use_miles=True):
+    # def nearby_locations(self, citylat, citylong, radius=100, use_miles=True):
     #     # if use_miles:
     #     #     distance_unit = 3959
     #     # else:
@@ -43,29 +43,29 @@ class LocationManager(models.Manager):
     #         connection.connection.create_function('radians', 1, math.radians)
     #         connection.connection.create_function('sin', 1, math.sin)
         
-    #     sql = """SELECT id, (acos(sin(radians(%f)) * sin(radians(cityLat)) + cos(radians(%f))
-    #       * cos(radians(cityLat)) * cos(radians(%f-cityLong))) * %d)
+    #     sql = """SELECT id, (acos(sin(radians(%f)) * sin(radians(citylat)) + cos(radians(%f))
+    #       * cos(radians(citylat)) * cos(radians(%f-citylong))) * %d)
     #     AS distance FROM profiles_profile WHERE distance < %f
-    #     ORDER BY distance;""" % (cityLat, cityLat, cityLong, distance_unit, radius)
+    #     ORDER BY distance;""" % (citylat, citylat, citylong, distance_unit, radius)
     #     cursor.execute(sql)
     #     ids = [row[0] for row in cursor.fetchall()]
         
     #     return self.filter(id__in=ids)
     
     # Assistance from https://stackoverflow.com/questions/19703975/django-sort-by-distance
-    def nearby_locations(self, cityLat, cityLong, max_distance=None):
-        print(cityLat)
+    def nearby_locations(self, citylat, citylong, max_distance=None):
+        print(citylat)
         """
         Return objects sorted by distance to specified coordinates
         which distance is less than max_distance given in kilometers
         """
         gcd_formula = "6371 * acos(cos(radians(%s)) * \
-        cos(radians(cityLat)) \
-        * cos(radians(cityLong) - radians(%s)) + \
-        sin(radians(%s)) * sin(radians(cityLat)))"
+        cos(radians(citylat)) \
+        * cos(radians(citylong) - radians(%s)) + \
+        sin(radians(%s)) * sin(radians(citylat)))"
         distance_raw_sql = RawSQL(
             gcd_formula,
-            (cityLat, cityLong, cityLat)
+            (citylat, citylong, citylat)
         )
     
         # qs = Profile.objects.all().annotate(distance=distance_raw_sql).order_by('distance')
@@ -76,7 +76,7 @@ class LocationManager(models.Manager):
             return self.annotate(distance=distance_raw_sql)
 
 
-# def get_locations_nearby_coords(self, cityLat, cityLong, max_distance=None):
+# def get_locations_nearby_coords(self, citylat, citylong, max_distance=None):
 #         """
 #         Return objects sorted by distance to specified coordinates
 #         which distance is less than max_distance given in kilometers
@@ -84,12 +84,12 @@ class LocationManager(models.Manager):
         
         
 #         gcd_formula = "6371 * acos(cos(radians(%s)) * \
-#         cos(radians(cityLat)) \
-#         * cos(radians(cityLong) - radians(%s)) + \
-#         sin(radians(%s)) * sin(radians(cityLat)))"
+#         cos(radians(citylat)) \
+#         * cos(radians(citylong) - radians(%s)) + \
+#         sin(radians(%s)) * sin(radians(citylat)))"
 #         distance_raw_sql = RawSQL(
 #             gcd_formula,
-#             (cityLat, cityLong, cityLat)
+#             (citylat, citylong, citylat)
 #         )
 #         qs = Profile.objects.all().annotate(distance=distance_raw_sql).order_by('distance')
 #         if max_distance is not None:

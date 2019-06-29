@@ -28,9 +28,9 @@ def search(request):
     
     if distance and distance != "worldwide":
         distance_check = int(distance)
-        qs = Profile.objects.nearby_locations(float(request.user.profile.cityLat), float(request.user.profile.cityLong), distance_check).order_by('distance').filter(Q(looking_for=user_gender) | Q(looking_for="BOTH")).exclude(user_id=request.user.id)
+        qs = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong), distance_check).order_by('distance').filter(Q(looking_for=user_gender) | Q(looking_for="BOTH")).exclude(user_id=request.user.id)
     else:
-        qs = Profile.objects.nearby_locations(float(request.user.profile.cityLat), float(request.user.profile.cityLong)).order_by('distance').filter(Q(looking_for=user_gender) | Q(looking_for="BOTH")).exclude(user_id=request.user.id)
+        qs = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong)).order_by('distance').filter(Q(looking_for=user_gender) | Q(looking_for="BOTH")).exclude(user_id=request.user.id)
     
     
     # Filter based on sexuality preferences

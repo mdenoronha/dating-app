@@ -105,8 +105,8 @@ class ProfileForm(forms.ModelForm):
         )
     
     location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'id':'autocomplete'}), required=True)
-    cityLat = forms.CharField(widget=forms.HiddenInput, required=True)
-    cityLong = forms.CharField(widget=forms.HiddenInput, required=True)
+    citylat = forms.CharField(widget=forms.HiddenInput, required=True)
+    citylong = forms.CharField(widget=forms.HiddenInput, required=True)
     bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'bio-field'}), required=True)
     # Add custom validation, date must be over 18
     birth_date = forms.DateTimeField()
@@ -115,7 +115,7 @@ class ProfileForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ( 'bio', 'gender', 'hair_colour', 'hair_length', 'body_type', 'ethnicity', 'relationship_status', 'looking_for', 'education', 'height', 'children', 'location',  'cityLat', 'cityLong', 'birth_date')
+        fields = ( 'bio', 'gender', 'hair_colour', 'hair_length', 'body_type', 'ethnicity', 'relationship_status', 'looking_for', 'education', 'height', 'children', 'location',  'citylat', 'citylong', 'birth_date')
         widgets = {
             'date' : forms.DateInput(attrs={'type':'date'})
         }    

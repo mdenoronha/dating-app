@@ -108,8 +108,8 @@
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       var place = autocomplete.getPlace();
       document.getElementById('autocomplete').value = place.name;
-      document.getElementById('id_cityLat').value = place.geometry.location.lat().toFixed(6);
-      document.getElementById('id_cityLong').value = place.geometry.location.lng().toFixed(6);
+      document.getElementById('id_citylat').value = place.geometry.location.lat().toFixed(6);
+      document.getElementById('id_citylong').value = place.geometry.location.lng().toFixed(6);
     });
 
   }
