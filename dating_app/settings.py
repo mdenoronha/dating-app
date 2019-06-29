@@ -20,7 +20,7 @@ if os.environ.get('DEVELOPMENT'):
 else:
     development = False
     
-import env
+# import env
 
 USE_TZ = True
 
