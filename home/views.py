@@ -54,7 +54,4 @@ def index(request):
     
 def preregister(request):
 
-    newest_profiles = Profile.objects.nearby_locations(50, 40)
-    print(newest_profiles)
-
     return render(request, 'preregister.html')
