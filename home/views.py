@@ -54,7 +54,7 @@ def index(request):
     
 def preregister(request):
     
-    closest_profiles = Profile.objects.exclude(user_id=request.user.id).all()
+    closest_profiles = Profile.objects.objects.nearby_locations(10, 20)
     print(closest_profiles)
 
     return render(request, 'preregister.html')
