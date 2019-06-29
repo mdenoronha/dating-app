@@ -27,6 +27,10 @@ def index(request):
         card_profiles = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong)).order_by('distance').filter(Q(looking_for=request.user.profile.gender) | Q(looking_for="BOTH")).exclude(user__winks_receiver__sender_id=request.user.id).exclude(user_id=request.user.id).exclude(user__rejected_receiver__sender_id=request.user.id).all()[:10]
     else:
         card_profiles = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong)).order_by('distance').filter(Q(looking_for=request.user.profile.gender) | Q(looking_for="BOTH")).filter(gender=request.user.profile.looking_for).exclude(user__winks_receiver__sender_id=request.user.id).exclude(user_id=request.user.id).exclude(user__rejected_receiver__sender_id=request.user.id).all()[:10]
+    if card_profiles.count() == 0:
+        card_profiles_exists = False
+    else: 
+        card_profiles_exists = True
     
     today = DT.date.today()
     one_week_ago = today - DT.timedelta(days=7)
@@ -44,6 +48,7 @@ def index(request):
         newest_profiles = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong)).filter(Q(looking_for=request.user.profile.gender) | Q(looking_for="BOTH")).filter(gender=request.user.profile.looking_for).order_by('-user__date_joined').exclude(user_id=request.user.id).all()[:4] 
 
     context = {
+        'card_profiles_exists' : card_profiles_exists,
         'closest_profiles':closest_profiles,
         'active_profiles':active_profiles,
         'newest_profiles': newest_profiles,
@@ -53,5 +58,11 @@ def index(request):
     return render(request, 'index.html', context)
     
 def preregister(request):
-
+    
+    profiles = Profile.objects.all()
+    
+    for profile in profiles:
+        profile.bio = "I haven’t dated much in recent years because I’ve been so focused on my career. Now I’m ready to meet the person who will pull my head out of the books and bring me a bit of happiness."
+        profile.save()
+        
     return render(request, 'preregister.html')
