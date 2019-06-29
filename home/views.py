@@ -53,8 +53,17 @@ def index(request):
     return render(request, 'index.html', context)
     
 def preregister(request):
+    from django.db.models.expressions import RawSQL
+    gcd_formula = "6371 * acos(cos(radians(%s)) * \
+        cos(radians(cityLat)) \
+        * cos(radians(cityLong) - radians(%s)) + \
+        sin(radians(%s)) * sin(radians(cityLat)))"
+    distance_raw_sql = RawSQL(
+        gcd_formula,
+        (30, 20, 30)
+    )
     
-    closest_profiles = Profile.objects.objects.nearby_locations(10, 20)
+    closest_profiles = Profile.objects.annotate(distance=distance_raw_sql)
     print(closest_profiles)
 
     return render(request, 'preregister.html')
