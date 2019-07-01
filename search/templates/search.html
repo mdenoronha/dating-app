@@ -83,6 +83,9 @@
 
 <div class="container-fluid">
     <div class="row">
+        {% if not search_page %}
+        <p class="centered-text">No profiles match your search. Try adjusting your filters</p>
+        {% endif %}
         {% for profile in search_page %}
         <div class="card-container col-sm-12 col-md-6 col-lg-3">
             <div class="card four-cards">
@@ -92,7 +95,7 @@
                         <p class="col-9 card-username">{{profile.user.username}}</p>
                         <p class="col-3 card-age">{{profile.age}}</p>
                     </div>
-                    <p class="card-distance">{%if profile.distance > 100 %}100KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <p class="card-distance">{%if profile.distance > 150 %}150KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
                     <div class="row interaction-container">
                         <div class="interaction-wrapper">
                             <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
@@ -124,59 +127,4 @@
 
 {% endblock %} {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-<script>
-    function remove_selected() {
-        var custom_fields = {
-            sexuality: "Sexuality ▾",
-            height_max: "Max Height ▾",
-            height_min: "Min Height ▾",
-            distance: "Distance ▾"
-        }
-        
-        $('.custom-form-field').each(function() {
-            $(this).val('')
-            let field_id = $(this).attr('id')
-            $(this).siblings('.dropdown-toggle').find('.filter-option-inner-inner').text(custom_fields[field_id])
-        })
-        $('.search-form select').selectpicker('deselectAll');
-        $('.dropdown-toggle').removeClass('selected-search-option')
-    }
-
-    var sexuality = $('#sexuality').data('sexuality')
-    if (sexuality) {
-        var sexuality_arr = JSON.parse(sexuality.replace(/\'/g, "\""))
-        $('#sexuality').val(sexuality_arr)
-    }
-    var min_height = $('#height_min').data('min-height')
-    var max_height = $('#height_max').data('max-height')
-    var distance = $('#distance').data('distance')
-    console.log(min_height)
-    console.log(distance)
-    
-    $('#height_max').val(max_height)
-    $('#height_min').val(min_height)
-    $('#distance').val(distance)
-
-    $('.search-form select').on('change', function() {
-        if ($(this).val() == null) {
-            $(this).siblings('.dropdown-toggle').removeClass('selected-search-option')
-        }
-        else {
-            $(this).siblings('.dropdown-toggle').addClass('selected-search-option')
-        }
-    })
-
-    $('.search-form select').attr('data-container', 'body')
-    // Improve load render
-    $('.search-form select').selectpicker();
-    $('.search-form select').attr('title', '')
-
-    // On load check if any options are selected and update styling
-    // Has to be after selectpicker
-    $('.search-form select').each(function() {
-        if ($(this).val() != null && $(this).val() != "") {
-            $(this).siblings('.dropdown-toggle').addClass('selected-search-option')
-        }
-    })
-</script>
 {% endblock %}

@@ -22,7 +22,11 @@
                         <p class="last-message-date">{{v.created_on}}</p>
                         <!--{{v.is_read}}-->
                     </div>
-                    <div class="sender-photo" style="background-image: url({% static 'temp/maxresdefault.jpg' %})"></div>
+                    {% if v.receiver == request.user %}
+                    <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.sender.profileimage_set.first.image}})"></div>
+                    {% else %}
+                    <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.receiver.profileimage_set.first.image}})"></div>
+                    {% endif %}
                 </a>
             </li>
             {% endfor %}

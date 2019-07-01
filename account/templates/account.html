@@ -75,15 +75,15 @@
                     <table class="standard-table">
                         <tr>
                             <td>Email:</td>
-                            <td class="standard-table-feature">{{request.user.email}} <i class="edit-account-modal-button far fa-edit"></i></td>
+                            <td class="standard-table-feature">{{request.user.email}} <i data-modal-id="edit-account-modal" class="account-modal-button edit-account-modal-button far fa-edit"></i></td>
                         </tr>
                         <tr>
                             <td>Username:</td>
-                            <td class="standard-table-feature">{{request.user.username}} <i class="edit-account-modal-button far fa-edit"></i></td>
+                            <td class="standard-table-feature">{{request.user.username}} <i data-modal-id="edit-account-modal" class="account-modal-button edit-account-modal-button far fa-edit"></i></td>
                         </tr>
                         <tr>
                             <td>Password:</td>
-                            <td class="standard-table-feature">********* <i class="edit-password-modal-button far fa-edit"></i></td>
+                            <td class="standard-table-feature">********* <i data-modal-id="edit-password-modal" class="account-modal-button edit-password-modal-button far fa-edit"></i></td>
                         </tr>
                     </table>
                     <a href="{% url 'logout' %}">Logout</a>
@@ -126,7 +126,7 @@
                     </table>
                     {% if not sub.cancel_at_period_end %}
 
-                    <p data-subid="{% url 'cancel_subscription' sub.id %}" class="subscription-cancel-button">Cancel</p> {% else %}
+                    <p data-subid="{% url 'cancel_subscription' sub.id %}" data-modal-id="cancel-message-modal" class="account-modal-button subscription-cancel-button">Cancel</p> {% else %}
                     <a href="{% url 'reactivate_subscription' sub.id %}" class="reactivate-subscription-button">Reactivate</a> {% endif %}
                 </div>
             </div>
@@ -166,35 +166,4 @@
 </section>
 
 {% endblock %} {% block js %}
-<script>
-    // Change to one error modal check
-    if ($("#edit-account-modal").find('.errorlist').length) {
-        $('#edit-account-modal').modal('show')
-    }
-
-    if ($("#edit-password-modal").find('.errorlist').length) {
-        $('#edit-password-modal').modal('show')
-    }
-
-    $('#cancel-message-modal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget)
-        var sub_id = button.data('subid')
-        var modal = $(this)
-
-        modal.find('.single-button-modal a').attr('href', sub_id)
-    })
-
-
-    $(".subscription-cancel-button").on('click', function(e) {
-        $('#cancel-message-modal').modal('toggle', $(this));
-    });
-
-    $(".edit-account-modal-button").on('click', function(e) {
-        $('#edit-account-modal').modal('toggle', $(this));
-    });
-
-    $(".edit-password-modal-button").on('click', function(e) {
-        $('#edit-password-modal').modal('toggle', $(this));
-    });
-</script>
 {% endblock %}

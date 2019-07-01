@@ -11,7 +11,7 @@
             <div class="card wide-card {%if not view.is_read%} unread-wink {%endif%}">
                 <div class="row">
                     <div class="wide-user-details col-xs-12 col-sm-6">
-                        <div class=" card-img" style="background-image: url({% static 'temp/maxresdefault.jpg' %})"></div>
+                        <div class=" card-img" style="background-image: url({{ MEDIA_URL }}{{view.sender.profileimage_set.first.image}})"></div>
                         <div>
                             <div class="username-container">
                                 <p class="card-username">{{view.sender.username}}</p>
@@ -24,8 +24,8 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 wide-button-container">
-                        <a href="#" class="btn standard-button">VISIT USER</a>
-                        <a href="#" class="btn standard-button">SEND WINK</a>
+                        <a href="{% url 'member_profile' view.sender.id %}" class="btn standard-button">VISIT USER</a>
+                        <button onclick="send_wink_grid_link({{view.sender.id}})" class="btn standard-button">SEND WINK</button>
                     </div>
                 </div>
                 <!--Change from a link-->
@@ -57,22 +57,4 @@
 </div>
 
 
-{% endblock %} {%block js%}
-
-<script>
-    function read_messages() {
-
-        var page = $('.current').data('page')
-
-        $.ajax({
-            url: "/chat/ajax/read-view/",
-            datatype: 'json',
-            data: {
-                'page': page
-            }
-        });
-    }
-
-    read_messages()
-</script>
-{%endblock%}
+{% endblock %}
