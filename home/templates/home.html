@@ -1,0 +1,185 @@
+{%extends 'base.html'%}
+{% load static from static %}
+{%block page_title%}Home{%endblock%}
+
+{%block content%}
+
+
+<div class="heading-hr">
+    <span>CLOSEST TO YOU</span>
+</div>
+
+<div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <div class="card-form-container">
+                    <h3 class="card-modal-title">Send Message</h3>
+                    <hr>
+                    <p class="card-form-subtitle">Start a conversation</p>
+                        <form class="standard-form not-profile-page-message-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %}
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+                            <input id="message-receiver-id" type="hidden" value="">
+                            <textarea cols="40" maxlength="500" rows="10" required="" id="message-input"></textarea>
+                            <input type="submit" class="submit-success" name="message_submit" />
+                        </form>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>  
+
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in closest_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url( {{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 150 %}150KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="quick-match-container">
+    <div class="left-quick-match-message">
+      <div class="text">DRAG LEFT TO IGNORE</div>
+    </div>
+    <div id="droppable-left" class="ui-widget-header" style="float: left; display: inline-block; width:3%; height:600px; overflow: hidden">
+</div>  
+    <h2 id="swipe-match-finder" class="quick-match-heading">SWIPE MATCH FINDER</h2>
+    <h3 class="quick-match-subheading">Find love the quick and easy way with the swipe match finder</h3>
+    
+     <div class="card draggable-card draggable-reset-card" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
+                    <div>
+                        {% if card_profiles_exists %}
+                        <p>Keep on looking ;)</p>
+                        <a class="draggable-reset-button btn standard-button">ADD MORE PROFILES</a>
+                        {% else %}
+                        <p>No More Swipe Match Members Available :(</p>
+                        <a href="{% url 'search' %}" class="btn standard-button">SEARCH INSTEAD</a>
+                        {% endif %}
+                    </div>
+            </div>
+    
+    
+    {% for profile in card_profiles %}
+    <!--Change id (either with text to strip out or data-->
+            <div id="draggable-{{profile.user.id}}" class="card draggable-card draggable ui-widget-content" style="display: inline-block; position: absolute; z-index: 1 ; margin-left:-250px; margin-right:-250px; overflow: hidden">
+                    <div class="card-img" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 150 %}150KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                        <div class="col-4 grid-three-link"><i onclick="send_wink_draggable({{profile.user.id}}, false)" class="far fa-times-circle grid-times"></i></div>
+                        <div class="col-4 grid-three-link"><a href="{% url 'member_profile' profile.user.id %}"><i class="far fa-user grid-view"></i></a></div>
+                        <div class="col-4 grid-three-link"><i onclick="send_wink_draggable({{profile.user.id}}, true)" class="far fa-smile-wink grid-wink"></i></div>
+                    </div>
+            </div>
+            
+    <div>
+    <a class="draggable-view-profile {{profile.user.id}}" href="{% url 'member_profile' profile.user.id %}"><p>VIEW {{profile.user.username | upper}}'S PROFILE</p></a>
+</div>
+    {%endfor%}
+<div class="right-quick-match-message">
+      <div class="text">DRAG RIGHT TO WINK</div>
+</div>
+<div id="droppable-right" class="ui-widget-header" style="float: right; display: inline-block; width:3%; height:600px">
+</div>
+</div>
+
+<div class="heading-hr">
+    <span>ACTIVE RECENTLY</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in active_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 150 %}150KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="heading-hr">
+    <span>NEWCOMERS</span>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for profile in newest_profiles %}
+        <div class="card-container col-sm-12 col-md-6 col-lg-3">
+            <div class="card four-cards">
+                <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
+                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    <div class="row username-container">
+                        <p class="col-9 card-username">{{profile.user.username}}</p>
+                        <p class="col-3 card-age">{{profile.age}}</p>
+                    </div>
+                    <p class="card-distance">{%if profile.distance > 150 %}150KM+{%else%}{{profile.distance|floatformat:"0"}}KM{%endif%} Away</p>
+                    <div class="row interaction-container">
+                    <div class="interaction-wrapper">
+                        <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
+                    </div>
+                    </a>
+                    <!--Change from a link-->
+                    <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
+                    <a class="card-link card-link-right" href="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{%endblock%}
+
+{%block js%}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+{%endblock%}
+
+
