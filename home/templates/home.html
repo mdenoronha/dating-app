@@ -102,7 +102,7 @@
             </div>
             
     <div>
-    <a class="draggable-view-profile {{profile.user.id}}" href="{% url 'member_profile' profile.user.id %}"><p>VIEW {{profile.user.username | upper}}'S PROFILE</p></a>
+    <a class="draggable-view-profile draggable-{{profile.user.id}}" href="{% url 'member_profile' profile.user.id %}"><p>VIEW {{profile.user.username | upper}}'S PROFILE</p></a>
 </div>
     {%endfor%}
 <div class="right-quick-match-message">
