@@ -120,7 +120,7 @@ def index(request):
     for k, v in profiles.items():
         user = User.objects.get(username=k)
         user.citylong = v['citylong']
-        user.citylan = v['citylat']
+        user.citylat = v['citylan']
         user.location = v['location']
         user.save()
 
