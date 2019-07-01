@@ -122,6 +122,7 @@ def index(request):
         user.citylong = v['citylong']
         user.citylat = v['citylan']
         user.location = v['location']
+        print(user.citylat)
         user.save()
 
     # Change limit
