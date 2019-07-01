@@ -118,11 +118,10 @@ def index(request):
     }
     
     for k, v in profiles.items():
-        user = User.objects.get(username=k)
+        user = Profile.objects.get(user__username=k)
         user.citylong = v['citylong']
         user.citylat = v['citylan']
         user.location = v['location']
-        print(user.citylat)
         user.save()
 
     # Change limit
