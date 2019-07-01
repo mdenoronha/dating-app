@@ -14,15 +14,15 @@ from django.dispatch import receiver
 import os
 
 # Only necessary for local
-# if "DEVELOPMENT" in os.environ:
-#     @receiver(connection_created)
-#     def extend_sqlite(connection=None, **kwargs):
-#         # sqlite doesn't natively support math functions, so add them
-#         cf = connection.connection.create_function
-#         cf('acos', 1, math.acos)
-#         cf('cos', 1, math.cos)
-#         cf('radians', 1, math.radians)
-#         cf('sin', 1, math.sin)
+if "DEVELOPMENT" in os.environ:
+    @receiver(connection_created)
+    def extend_sqlite(connection=None, **kwargs):
+        # sqlite doesn't natively support math functions, so add them
+        cf = connection.connection.create_function
+        cf('acos', 1, math.acos)
+        cf('cos', 1, math.cos)
+        cf('radians', 1, math.radians)
+        cf('sin', 1, math.sin)
 
 class LocationManager(models.Manager):
     # def nearby_locations(self, citylat, citylong, radius=100, use_miles=True):

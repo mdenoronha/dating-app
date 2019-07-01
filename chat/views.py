@@ -87,7 +87,9 @@ def chat(request, id):
     else:
         message_form = MessageForm()
     
+    page_ref = "chat"
     context = {
+        'page_ref': page_ref,
         'user_messages': messages,
         'message_form':message_form,
         'all_conversations': all_conversations,
@@ -257,6 +259,7 @@ def winks(request):
         
     
     context = {
+        'page_ref': 'wink',
         'winks_page': winks_page,
         'page': page
     }
@@ -283,6 +286,7 @@ def views(request):
         page = views_paginated.num_pages
         
     context = {
+        'page_ref': 'view',
         'views_page': views_page,
         'page': page
     }

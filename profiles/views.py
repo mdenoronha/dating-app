@@ -144,6 +144,7 @@ def create_profile(request):
         
         
     context = {
+        'page_ref':'create_profile',
         'profile_form':profile_form,
         'image_form':image_form,
         'formset': formset
@@ -204,6 +205,7 @@ def member_profile(request, id):
         current_user = True
         
     context = {
+        'page_ref': 'member_profile',
         'member':member,
         'message_form': message_form,
         'current_user': current_user

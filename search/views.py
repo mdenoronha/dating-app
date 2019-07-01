@@ -53,12 +53,12 @@ def search(request):
     
     # Filter based on user's gender preferences  
     if request.user.profile.looking_for == "BOTH":
-        filtered_result = GenderlessProfileFilter(request.GET, queryset=qs)
+        filtered_result = ProfileFilter(request.GET, queryset=qs)
     else:
         gender_check = "MALE" if request.user.profile.looking_for == "MALE" else "FEMALE"
         qs = qs.filter(gender=gender_check)
-        filtered_result = ProfileFilter(request.GET, queryset=qs)
-        
+        filtered_result = GenderlessProfileFilter(request.GET, queryset=qs)
+
     search_paginated = Paginator(filtered_result.qs, 12)
     print(search_paginated)
 
@@ -74,6 +74,7 @@ def search(request):
         page = search_paginated.num_pages
     
     context = {
+        'page_ref': 'search',
         'filtered_result': filtered_result,
         'page': page,
         'search_page': search_page,
