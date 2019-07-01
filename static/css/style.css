@@ -23,6 +23,11 @@ body {
     }
 }
 
+.centered-text {
+    text-align: center;
+    width: 100%;
+}
+
 /*Nav*/
 
 .navbar {
@@ -693,7 +698,7 @@ left-quick-match-message p {}
     max-height: 90px;
     min-width: 74px;
     min-height: 74px;
-    font-size: 3em;
+    font-size: 2.7em;
     color: #acd8aa;
     outline: none;
     border: none;
