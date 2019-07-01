@@ -10,6 +10,8 @@ from profiles.views import looking_for_check
 import time
 from checkout.decorators import premium_required
 from django.contrib.auth.decorators import login_required
+import json as simplejson
+
 # error message checks needed
 
 @login_required
@@ -74,7 +76,7 @@ def chat(request, id):
             message.sender = request.user
             message.conversation = conversation
             message.save()
-            
+
         context = {
             'user_messages': messages,
             'message_form':message_form,
@@ -142,6 +144,7 @@ def create(request):
             message.receiver = User.objects.get(id=2)
             message.sender = request.user
             message.save()
+            messages.success(request, "Message sent successfully")
     else:
         message_form = MessageForm()
         
@@ -155,25 +158,24 @@ def wink(request):
     # Change None backup?
     receiver_id = request.GET.get('receiver_id')
     if receiver_id == request.user.id:
-        messages.success(request, "You can't send a wink to yourself, cheeky")
-        return redirect(reverse('index'))
+        data = {}
+        data['message'] = "You can't wink at yourself, cheeky!"
+        return JsonResponse(data)
     current_wink = Winks.objects.filter(Q(receiver_id=receiver_id) & Q(sender_id=request.user.id) & Q(is_read=False)).exists()
     if current_wink:
-        # messages.success(request, "Your last wink hasn't been seen yet. Try again later.")
-        print("not seen")
-        return HttpResponse(status=204)
+        data = {}
+        data['message'] = "Member hasn't viewed your last wink yet"
+        return JsonResponse(data)
     
     wink = Winks(receiver=User.objects.get(pk=receiver_id), sender=request.user)
+    data = {}
     try:
         wink.save()
     except:
-        # messages.success(request, "Something went wrong. Wink not sent")
-        print("not sent")
+        data['message'] = 'Something went wrong. Wink not sent'
     finally:
-        # messages.success(request, "Wink successfully sent.")
-        print("sent")
-    # pass messages using https://stackoverflow.com/questions/52483675/how-to-filter-django-annotations-on-reverse-foreign-key-fields
-    return HttpResponse(status=204)
+        data['message'] = 'Wink successfully sent.'
+    return JsonResponse(data)
     
 def reject(request):
     # Change None backup?
@@ -189,7 +191,6 @@ def reject(request):
     try:
         reject.save()
     except:
-        # messages.success(request, "Something went wrong. Reject not sent")
         print("Error Occurred")
     finally:
     # pass messages using https://stackoverflow.com/questions/52483675/how-to-filter-django-annotations-on-reverse-foreign-key-fields
@@ -202,8 +203,9 @@ def chat_ajax(request):
     message_content = request.POST.get('message_content')
     
     if receiver_id == request.user.id:
-        messages.success(request, "You can't send a message to yourself")
-        return redirect(reverse('index'))
+        data = {}
+        data['message'] = "You can't send a message to yourself"
+        return JsonResponse(data)
     
     conversation = Conversations.objects.filter(participants=request.user.id).filter(participants=receiver_id)
     if conversation.exists():
@@ -217,8 +219,9 @@ def chat_ajax(request):
             )
             message.save()
         except:
-            # Errors
-            print("Error report")
+            data = {}
+            data['message'] = "Error occurred. Message not sent"
+            return JsonResponse(data)
     else:
         try:
             conversation = Conversations()
@@ -235,9 +238,13 @@ def chat_ajax(request):
                 )
             message.save()
         except:
-            # Errors
-            print("Error report")
-            
+            data = {}
+            data['message'] = "Error occurred. Message not sent"
+            return JsonResponse(data)
+    
+    data = {}
+    data['message'] = "Message Successfully Sent"
+    return JsonResponse(data)
     return HttpResponse(status=204)
     
 @login_required

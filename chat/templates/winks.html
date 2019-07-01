@@ -24,8 +24,8 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 wide-button-container">
-                        <a href="{% url 'member_profile' view.sender.id %}" class="btn standard-button">WINK BACK</a>
-                        <a onclick="send_wink_grid_link({{wink.sender.id}})" class="btn standard-button">VISIT USER</a>
+                        <a href="{% url 'member_profile' wink.sender.id %}" class="btn standard-button">WINK BACK</a>
+                        <button onclick="send_wink_grid_link({{wink.sender.id}})" class="btn standard-button">VISIT USER</button>
                     </div>
                 </div>
                 <!--Change from a link-->

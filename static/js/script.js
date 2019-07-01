@@ -31,14 +31,22 @@ $.ajaxSetup({
 
 // Send wink - when passing receiver_id
 function send_wink_grid_link(receiver_id) {
+    console.log("working")
     $.ajax({
         url: "/chat/ajax/winks/",
         datatype: 'json',
         data: {
             receiver_id: receiver_id
         },
-        // success: function(json) {
-        // }
+        success: function(json) {
+            $('.toast-container').html('')
+            $('.toast-container').html(
+                '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
+                )
+            $(".toast").toast('show', {
+                autohide: false,
+            });
+        }
 
         // error: function(xhr, errmsg, err) {
         //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
@@ -194,8 +202,15 @@ if ($('#page-ref').data('page-ref') == "home") {
                 message_content: $('#message-input').val(),
                 message_receiver: $('#message-receiver-id').val()
             },
-            // success: function(json) {
-            // }
+            success: function(json) {
+                $('.toast-container').html('')
+                $('.toast-container').html(
+                    '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
+                )
+                $(".toast").toast('show', {
+                    autohide: false,
+                });
+            }
 
             // error: function(xhr, errmsg, err) {
             //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
@@ -266,8 +281,15 @@ if ($('#page-ref').data('page-ref') == "home") {
             data: {
                 receiver_id: receiver_id
             },
-            // success: function(json) {
-                // 
+            success: function(json) {
+                $('.toast-container').html('')
+                $('.toast-container').html(
+                    '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
+                )
+                $(".toast").toast('show', {
+                    autohide: false,
+                });
+            }
             // error: function(xhr, errmsg, err) {
             //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
             //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
@@ -302,6 +324,15 @@ if ($('#page-ref').data('page-ref') == "home") {
             data: {
                 receiver_id: ui.draggable.attr('id').replace('draggable-','')
             },
+            success: function(json) {
+                $('.toast-container').html('')
+                $('.toast-container').html(
+                    '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
+                )
+                $(".toast").toast('show', {
+                    autohide: false,
+                });
+            }
             // success: function(json) {
             // }
 
@@ -312,26 +343,6 @@ if ($('#page-ref').data('page-ref') == "home") {
             // }
         })
     }
-    
-    // Function to send wink when option is selected on non-draggable card
-    function send_wink_grid_link(receiver_id) {
-        $.ajax({
-            url: "/chat/ajax/winks/",
-            datatype: 'json',
-            data: {
-                receiver_id: receiver_id
-            },
-            // success: function(json) {
-            // }
-
-            // error: function(xhr, errmsg, err) {
-            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            // }
-        })
-    }
-
     
     // Select quick swipe messages and turn opacity to 0
     const messages = [$('.right-quick-match-message .text'), $('.left-quick-match-message .text')]
