@@ -17,10 +17,10 @@ import os
 
 if os.environ.get('DEVELOPMENT'):
     development = True
+    import env
 else:
     development = False
     
-import env
 
 USE_TZ = True
 
