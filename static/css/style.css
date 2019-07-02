@@ -28,6 +28,19 @@ body {
     width: 100%;
 }
 
+.standard-link {
+    color: #212529;
+}
+
+.standard-link:hover {
+    color: #212529;
+}
+
+.red-text,
+.red-text:hover {
+    color: #dc3545;
+}
+
 /*Nav*/
 
 .navbar {
@@ -1109,29 +1122,37 @@ left-quick-match-message p {}
     display: none;
 }
 
-.message-box .dropdown {
+.dropdown-standard.dropdown {
     display: inline-block;
     float: right;
     background-color: transparent;
 }
 
-.message-box .btn-secondary:not(:disabled):not(.disabled).active,
-.message-box .show>.btn-secondary.dropdown-toggle:focus,
-.message-box .btn-secondary:not(:disabled):not(.disabled):active,
-.message-box .show>.btn-secondary.dropdown-toggle,
-.message-box .dropdown button {
-    box-shadow: none;
+.dropdown-standard.dropdown .btn-secondary:not(:disabled):not(.disabled).active,
+.dropdown-standard.dropdown 
+.dropdown-standard.dropdown .btn-secondary:not(:disabled):not(.disabled):active,
+.dropdown-standard.dropdown .show>.btn-secondary.dropdown-toggle,
+.dropdown-standard.dropdown button,
+.dropdown-standard.dropdown show>.btn-secondary.dropdown-toggle,
+.show>.btn-secondary.dropdown-toggle,
+.show>.btn-secondary.dropdown-toggle:focus,
+.btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
     background-color: transparent;
     color: black;
     border: none;
     height: 40px;
+    box-shadow: none !important;
 }
 
-.message-box .dropdown button:focus {
+.dropdown-standard.dropdown button:focus {
     box-shadow: none;
 }
 
-.message-box .dropdown-item:active {
+.dropdown-standard .dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-standard .dropdown-item:active {
     background-color: #f8f9fa;
 }
 
@@ -1304,6 +1325,8 @@ left-quick-match-message p {}
 .create-profile-form p:first-of-type {
     width: 90%;
 }
+
+
 
 /*Subscribe*/
 

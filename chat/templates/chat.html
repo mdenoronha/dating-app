@@ -58,7 +58,7 @@
         <form class="standard-form" method="POST">
             {{ message_form.as_p }}
             {% csrf_token %}
-            <div class="dropdown">
+            <div class="dropdown dropdown-standard">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-ellipsis-v"></i>
               </button>
@@ -76,12 +76,4 @@
     </div>
 </div>
 {%endblock%}
-
-{%block js%}
-<script>
-    // Duplicate of index
-
-
-</script>
-{% endblock %}
 
