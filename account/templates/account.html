@@ -10,7 +10,6 @@
                         <hr>
                         <p class="card-form-subtitle">Update your password</p>
                         <form class="standard-form not-profile-page-message-form" method="POST">
-                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
                             {% csrf_token %} {{ password_form }}
                             <input type="submit" class="submit-success" name="password-change-submit" />
                         </form>
@@ -64,6 +63,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="delete-message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <div class="card-form-container">
+                        <h3 class="card-modal-title">Delete Account</h3>
+                        <hr>
+                        <p class="card-form-subtitle">Are you sure?</p>
+                        <p class="card-form-description">Deleting your account is permanant. Your profile, messages, engagement, etc. cannnot be retrieved.</p>
+                        <div class="single-button-modal">
+                            <a href="{% url 'delete' %}" class="btn btn-secondary submit-cancel" />DELETE ACCOUNT</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="profile-card-container container">
     <div class="row">
         <div class="col-sm-12 col-md-7">
@@ -86,10 +106,39 @@
                             <td class="standard-table-feature">********* <i data-modal-id="edit-password-modal" class="account-modal-button edit-password-modal-button far fa-edit"></i></td>
                         </tr>
                     </table>
-                    <a href="{% url 'logout' %}">Logout</a>
+                    <!--<div class="dropdown dropdown-standard">-->
+                    <!--    <button class="btn btn-secondary dropdown-toggle account-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                    <!--                ACCOUNT OPTIONS-->
+                    <!--              </button>-->
+                    <!--    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+                    <!--        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>-->
+                    <!--    </div>-->
+                    <!--</div>-->
 
                 </div>
             </div>
+            
+            <div class="col-sm-12">
+                <h2 class="account-info-heading">Account Options</h2>
+            </div>
+            <div class="card-container">
+                <div class="account-info-card card">
+                    <table class="standard-table">
+                        <tr>
+                            <td><a class="standard-link" href="{% url 'member_profile' request.user.id %} ">Edit Profile</a></td>
+                        </tr>
+                        <tr>
+                            <td><a class="standard-link" href="{% url 'logout' %}">Logout</a></td>
+                        </tr>
+                        <tr>
+                            <td><a data-modal-id="delete-message-modal" class="account-modal-button standard-link red-text" href="#">Delete</a></td>
+                        </tr>
+                    </table>
+  
+
+                </div>
+            </div>
+            
         </div>
         <div class="col-sm-12 col-md-5">
             <div class="col-sm-12">

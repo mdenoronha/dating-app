@@ -1,6 +1,7 @@
 from .models import Subscription
 import stripe
 from django.shortcuts import render, redirect, reverse
+from django.http import JsonResponse
 
 def premium_required(function):
     def wrap(request, *args, **kwargs):
@@ -16,6 +17,10 @@ def premium_required(function):
             request.user.profile.is_premium = False
             return redirect(reverse('subscribe'))
         else:
+            if request.is_ajax():
+                data = {}
+                data['redirect'] = '/subscribe'
+                return JsonResponse(data)
             return redirect(reverse('subscribe'))
             
     # wrap.__doc__ = function.__doc__
