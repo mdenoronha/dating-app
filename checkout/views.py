@@ -72,6 +72,8 @@ def subscribe(request):
                             )
                     subscription.save()
                     make_user_premium(request)
+                    messages.error(request, "Success! You are now a premium user")
+                    return redirect(reverse('index'))
             else:
             # If new customer
                 try:
@@ -86,11 +88,7 @@ def subscribe(request):
                     return redirect(reverse('checkout'))
                 
                 finally:
-                # Add check if subscription created successfully (will need to change paid
                 # https://stripe.com/docs/api/customers/create)
-                # if customer.paid:
-                #     messages.error(request, "You have paid successfully")
-                #     return redirect(reverse('index'))
                     subscription = Subscription(
                             user = request.user, 
                             # Make custom
@@ -99,9 +97,8 @@ def subscribe(request):
                             )
                     subscription.save()
                     make_user_premium(request)
-                
-                # else:
-                #     messages.error(request, "Unable to take payment")
+                    messages.error(request, "Success! You are now a premium user")
+                    return redirect(reverse('index'))
         else:
             messages.error(request, "Unable to take payment")
             print(order_form.errors)

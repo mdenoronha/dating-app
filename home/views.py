@@ -5,7 +5,11 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import datetime as DT
 from django.contrib.auth.models import User
+from chat.models import Conversations
 import datetime
+
+import stripe
+from checkout.models import Subscription
 
 
 
@@ -59,5 +63,6 @@ def index(request):
     return render(request, 'home.html', context)
     
 def preregister(request):
+
         
     return render(request, 'index.html')
