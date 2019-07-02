@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from chat.models import Conversations
+from checkout.models import Subscription
+from django.db.models.signals import post_save, pre_delete
 from django.utils.crypto import get_random_string
 from django.core.validators import MaxValueValidator, MinValueValidator
 import uuid
@@ -8,7 +10,7 @@ import datetime
 import os
 import math
 from django.db.models.expressions import RawSQL
-import math
+import stripe
 from django.db.backends.signals import connection_created
 from django.dispatch import receiver
 import os
@@ -25,32 +27,6 @@ if "DEVELOPMENT" in os.environ:
         cf('sin', 1, math.sin)
 
 class LocationManager(models.Manager):
-    # def nearby_locations(self, citylat, citylong, radius=100, use_miles=True):
-    #     # if use_miles:
-    #     #     distance_unit = 3959
-    #     # else:
-    #     distance_unit = 6371
-        
-    #     from django.db import connection, transaction
-    #     from django.conf import settings
-    #     cursor = connection.cursor()
-    #     # As certain math functions not usable in sqlite, this check is used to make them available
-    #     # Uses Haversine formula to determine radius to check for close values
-    #     # Assistance from https://stackoverflow.com/questions/1916953/filter-zipcodes-by-proximity-in-django-with-the-spherical-law-of-cosines
-    #     if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-    #         connection.connection.create_function('acos', 1, math.acos)
-    #         connection.connection.create_function('cos', 1, math.cos)
-    #         connection.connection.create_function('radians', 1, math.radians)
-    #         connection.connection.create_function('sin', 1, math.sin)
-        
-    #     sql = """SELECT id, (acos(sin(radians(%f)) * sin(radians(citylat)) + cos(radians(%f))
-    #       * cos(radians(citylat)) * cos(radians(%f-citylong))) * %d)
-    #     AS distance FROM profiles_profile WHERE distance < %f
-    #     ORDER BY distance;""" % (citylat, citylat, citylong, distance_unit, radius)
-    #     cursor.execute(sql)
-    #     ids = [row[0] for row in cursor.fetchall()]
-        
-    #     return self.filter(id__in=ids)
     
     # Assistance from https://stackoverflow.com/questions/19703975/django-sort-by-distance
     def nearby_locations(self, citylat, citylong, max_distance=None):
@@ -74,26 +50,6 @@ class LocationManager(models.Manager):
         else:
             return self.annotate(distance=distance_raw_sql)
 
-
-# def get_locations_nearby_coords(self, citylat, citylong, max_distance=None):
-#         """
-#         Return objects sorted by distance to specified coordinates
-#         which distance is less than max_distance given in kilometers
-#         """
-        
-        
-#         gcd_formula = "6371 * acos(cos(radians(%s)) * \
-#         cos(radians(citylat)) \
-#         * cos(radians(citylong) - radians(%s)) + \
-#         sin(radians(%s)) * sin(radians(citylat)))"
-#         distance_raw_sql = RawSQL(
-#             gcd_formula,
-#             (citylat, citylong, citylat)
-#         )
-#         qs = Profile.objects.all().annotate(distance=distance_raw_sql).order_by('distance')
-#         if max_distance is not None:
-#             qs = qs.filter(distance__lt=max_distance)
-#         return qs
 
 class Profile(models.Model):
     # Limit username 11 chars
@@ -215,5 +171,26 @@ post_save.connect(create_user_profile, sender=User)
     
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-    
+
 post_save.connect(create_user_profile, sender=User)
+
+def pre_delete_user(sender, instance, **kwargs):
+    # Before user deleted, delete all conversations they were participants of
+    conversations = Conversations.objects.filter(participants=instance.id)
+    for conversation in conversations:
+        conversation.delete()
+    
+    # Before user deleted, cancel all subscriptions
+    customer = Subscription.objects.filter(user_id=instance.id).first()
+    try:
+        if customer:
+            stripe_customer = stripe.Customer.retrieve(customer.customer_id)
+            for sub in stripe_customer.subscriptions.data:
+                stripe.Subscription.modify(
+                    sub.id,
+                    cancel_at_period_end=True
+                )
+    except:
+        print('Pre-delete user failed')
+        
+pre_delete.connect(pre_delete_user, sender=User)

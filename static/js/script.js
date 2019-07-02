@@ -31,7 +31,6 @@ $.ajaxSetup({
 
 // Send wink - when passing receiver_id
 function send_wink_grid_link(receiver_id) {
-    console.log("working")
     $.ajax({
         url: "/chat/ajax/winks/",
         datatype: 'json',
@@ -66,6 +65,13 @@ if ($("#edit-account-modal").find('.errorlist').length || $("#edit-password-moda
 
 // Display cancel subscription modal with link to cancel sub URL
 $('#cancel-message-modal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget)
+    var sub_id = button.data('subid')
+    var modal = $(this)
+    modal.find('.single-button-modal a').attr('href', sub_id)
+})
+
+$('#delete-message-modal').on('show.bs.modal', function(event) {
     var button = $(event.relatedTarget)
     var sub_id = button.data('subid')
     var modal = $(this)
@@ -203,13 +209,18 @@ if ($('#page-ref').data('page-ref') == "home") {
                 message_receiver: $('#message-receiver-id').val()
             },
             success: function(json) {
-                $('.toast-container').html('')
-                $('.toast-container').html(
+                // If user is not premium, redirect as informed by premium_required decorator
+                if(json['redirect']) {
+                    window.location.href = json['redirect']
+                } else {
+                   $('.toast-container').html('')
+                    $('.toast-container').html(
                     '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
-                )
-                $(".toast").toast('show', {
-                    autohide: false,
-                });
+                    )
+                    $(".toast").toast('show', {
+                        autohide: false,
+                    }); 
+                }
             }
 
             // error: function(xhr, errmsg, err) {

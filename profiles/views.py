@@ -32,6 +32,17 @@ def logout(request):
     messages.success(request, "You have been logged out")
     return redirect(reverse('preregister'))
     
+@login_required
+def delete(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        user.delete()
+        messages.success(request, "Your account has been deleted") 
+    except:
+        messages.success(request, "Something went wrong. Please contact us for more information") 
+        
+    return redirect(reverse('preregister'))
+    
 def login(request):
     if request.user.is_authenticated:
         return redirect(reverse('index'))
@@ -124,13 +135,10 @@ def create_profile(request):
                     instance_image.user = request.user
                     instance_image.is_verified = False
                     instance_image.save()
-                    
-                    # image = form['image']
-                    # profile_photo = ProfileImage(user=request.user, image=image, is_verified=False)
-                    # profile_photo.save()
+
                     # Add progress bar
             
-            return redirect(reverse('index'))
+            return redirect(reverse('verification_message'))
             
     else:
         # user_profile = Profile.objects.get(pk=profile_user_id)
@@ -138,10 +146,6 @@ def create_profile(request):
         image_form = ProfileImageForm(instance=request.user.profile)
         initial_images = [{'image_url': i.image} for i in ProfileImage.objects.filter(user_id=request.user.id).all() if i.image]
         formset = ImageFormSet(queryset=ProfileImage.objects.filter(user_id=request.user.id).all(), initial=initial_images)
-        
-    # AIzaSyAMjDIJJGvw9xwl6n-0Gbm2961UDo9Jato
-
-        
         
     context = {
         'page_ref':'create_profile',
@@ -211,3 +215,7 @@ def member_profile(request, id):
         'current_user': current_user
     }
     return render(request, 'member.html', context)
+    
+def verification_message(request):
+    
+    return render(request, 'verification-message.html')
