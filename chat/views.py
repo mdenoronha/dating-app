@@ -237,16 +237,14 @@ def chat_ajax(request):
                 conversation=conversation
                 )
             message.save()
+            data = {}
+            data['message'] = "Message Successfully Sent"
+            return JsonResponse(data)
         except:
             data = {}
             data['message'] = "Error occurred. Message not sent"
             return JsonResponse(data)
-    
-    data = {}
-    data['message'] = "Message Successfully Sent"
-    return JsonResponse(data)
-    return HttpResponse(status=204)
-    
+
 @login_required
 def winks(request):
     
