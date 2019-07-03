@@ -29,6 +29,62 @@ $.ajaxSetup({
     }
 });
 
+// Function to send message to defined user
+function send_message() {
+    $.ajax({
+        url: "/chat/ajax/new_message/",
+        type: 'POST',
+        data: {
+            message_content: $('#message-input').val(),
+            message_receiver: $('#message-receiver-id').val()
+        },
+        success: function(json) {
+            // If user is not premium, redirect as informed by premium_required decorator
+            if(json['redirect']) {
+                window.location.href = json['redirect']
+            } else {
+               $('.toast-container').html('')
+                $('.toast-container').html(
+                '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
+                )
+                $(".toast").toast('show', {
+                    autohide: false,
+                }); 
+            }
+        }
+        // error: function(xhr, errmsg, err) {
+        //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+        //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        // }
+    })
+}
+
+// Show message modal on click
+$(".card-link-left").on('click', function(e) {
+    $('#message-modal').modal('toggle', $(this));
+});
+
+// https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content
+// Populate modal with necessary user information to create message record
+$('#message-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var username = button.data('username')
+    var username_id = button.data('user-id')
+    var modal = $(this)
+    modal.find('.card-form-subtitle').text('Start a conversation with ' + username)
+    modal.find('#message-receiver-id').val(username_id)
+})
+
+// Send message to user on form submit
+$('.not-profile-page-message-form').on('submit', function(event) {
+    $('#message-modal').modal('toggle')
+    // Stop page refreshing on form submit
+    event.preventDefault();
+    send_message();
+    $('#message-input').val('');
+});
+
 // Send wink - when passing receiver_id
 function send_wink_grid_link(receiver_id) {
     $.ajax({
@@ -199,63 +255,6 @@ if ($('#page-ref').data('page-ref') == "home") {
         }
     }) 
     
-    // Function to send message to defined user
-    function send_message() {
-        $.ajax({
-            url: "/chat/ajax/new_message/",
-            type: 'POST',
-            data: {
-                message_content: $('#message-input').val(),
-                message_receiver: $('#message-receiver-id').val()
-            },
-            success: function(json) {
-                // If user is not premium, redirect as informed by premium_required decorator
-                if(json['redirect']) {
-                    window.location.href = json['redirect']
-                } else {
-                   $('.toast-container').html('')
-                    $('.toast-container').html(
-                    '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + json['message'] + '</div></div>'
-                    )
-                    $(".toast").toast('show', {
-                        autohide: false,
-                    }); 
-                }
-            }
-
-            // error: function(xhr, errmsg, err) {
-            //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-            //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            // }
-        })
-    }
-    
-    // Show message modal on click
-    $(".card-link-left").on('click', function(e) {
-        $('#message-modal').modal('toggle', $(this));
-    });
-    
-    // https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content
-    // Populate modal with necessary user information to create message record
-    $('#message-modal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var username = button.data('username')
-        var username_id = button.data('user-id')
-        var modal = $(this)
-
-        modal.find('.card-form-subtitle').text('Start a conversation with ' + username)
-        modal.find('#message-receiver-id').val(username_id)
-    })
-    
-    // Send message to user on form submit
-    $('.not-profile-page-message-form').on('submit', function(event) {
-        $('#message-modal').modal('toggle')
-        // Stop page refreshing on form submit
-        event.preventDefault();
-        send_message();
-        $('#message-input').val('');
-    });
     
     // Remove links on draggable card for mobile as issues with selecting button
     // on Android Chrome
