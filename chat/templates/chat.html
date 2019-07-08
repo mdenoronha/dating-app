@@ -23,9 +23,17 @@
                         <p class="last-message-date">{{v.created_on}}</p>
                     </div>
                     {% if v.receiver == request.user %}
-                    <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.sender.profileimage_set.first.image}})"></div>
+                        {% if v.sender.profileimage_set.first.is_verified == "APPROVED" %}
+                        <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.sender.profileimage_set.first.image}})"></div>
+                        {% else %}
+                        <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                        {% endif %}
                     {% else %}
-                    <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.receiver.profileimage_set.first.image}})"></div>
+                        {% if v.receiver.profileimage_set.first.is_verified == "APPROVED" %}
+                        <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.receiver.profileimage_set.first.image}})"></div>
+                        {% else %}
+                        <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                        {% endif %}
                     {% endif %}
                 </a>
             </li>

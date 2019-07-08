@@ -11,7 +11,11 @@
             <div class="card wide-card {%if not view.is_read%} unread-wink {%endif%}">
                 <div class="row">
                     <div class="wide-user-details col-xs-12 col-sm-6">
+                        {% if view.sender.profileimage_set.first.is_verified == "APPROVED" %}
                         <div class=" card-img" style="background-image: url({{ MEDIA_URL }}{{view.sender.profileimage_set.first.image}})"></div>
+                        {% else %}
+                        <div class=" card-img" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                        {% endif %}
                         <div>
                             <div class="username-container">
                                 <p class="card-username">{{view.sender.username}}</p>

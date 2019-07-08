@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block page_title %}Member{% endblock %} {% block page_heading %}{{member.username}}'s Profile{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block page_title %}Member{% endblock %} {% load static from static %} {% block page_heading %}{{member.username}}'s Profile{% endblock %} {% block content %}
 <div class="profile-img-container">
     <div  class="icon-wink-form-container {% if current_user %}disabled-wink-container{% endif %}">
         <button id="wink-receiver-input" {% if not current_user %}onclick="send_wink_grid_link({{ member.id }})"{% endif %}><i class="far fa-smile-wink"></i></button>
@@ -15,8 +15,10 @@
     <div class="profile-img-draggable">
 {% for image in member.profileimage_set.all %}
 <!--Better way for this?-->
-{% if image.is_verified == "APPROVED" %}
-<img class="profile-img" src="https://dating-app-mvd.s3.eu-west-2.amazonaws.com/media/{{image.image}}"> 
+{% if image.is_verified == "APPROVED" or request.user.id == member.id %}
+<img class="profile-img" src="{{image.image.url}}"> 
+{% else %}
+<img class="profile-img" src="{% static 'temp/profile-placeholder.png' %}">
 {% endif %}
 {% endfor %}
     </div>
@@ -31,7 +33,7 @@
             <div class="card-container">
                 <div class="card">
                     <!--<p>{{member.email}}</p>-->
-                    <p>{% if member.profile.is_verified == "APPROVED" %}{{member.profile.bio}}{% else %}Our verification team is currently vetting this profile. This user's bio will be visible soon.{%endif%}</p>
+                    <p>{% if member.profile.is_verified == "APPROVED" %}{{member.profile.bio}}{% else %}Our verification team is currently vetting this member. This user's profile will be visible soon.{%endif%}</p>
                     <!--<p>{{member.profile.location}}</p>-->
                     <!--Add error message if incorrect location is added, saying users cannot find you-->
                     <!--<p>{{member.profile.birth_date}}</p>-->

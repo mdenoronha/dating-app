@@ -1,6 +1,31 @@
 {%extends 'base.html'%} {% load static from static %} {% block css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"> {% endblock %} {%block page_title%}Home{%endblock%} {%block content%}
 
+<div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="card-container">
+                <div class="card-form card">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <div class="card-form-container">
+                    <h3 class="card-modal-title">Send Message</h3>
+                    <hr>
+                    <p class="card-form-subtitle">Start a conversation</p>
+                        <form class="standard-form not-profile-page-message-form" method="POST">
+                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
+                            {% csrf_token %}
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+                            <input id="message-receiver-id" type="hidden" value="">
+                            <textarea cols="40" maxlength="500" rows="10" required="" id="message-input"></textarea>
+                            <input type="submit" class="submit-success" name="message_submit" />
+                        </form>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div> 
+
 <form class="search-form" method="GET">
     <div class="search-option-container">
         <button type='button' class="search-reset-button" onclick="remove_selected()">RESET</button> {{ filtered_result.form }}
@@ -90,7 +115,11 @@
         <div class="card-container col-sm-12 col-md-6 col-lg-3">
             <div class="card four-cards">
                 <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
-                    <div class="card-img four-cards" style="background-image: url({{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})"></div>
+                    {% if profile.user.profileimage_set.first.is_verified == "APPROVED" %}
+                    <div class="card-img four-cards" style="background-image: url( {{ MEDIA_URL }}{{profile.user.profileimage_set.first.image}})" ></div>
+                    {% else %}
+                    <div class="card-img four-cards" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                    {% endif %}
                     <div class="row username-container">
                         <p class="col-9 card-username">{{profile.user.username}}</p>
                         <p class="col-3 card-age">{{profile.age}}</p>

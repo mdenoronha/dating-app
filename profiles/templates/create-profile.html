@@ -1,6 +1,6 @@
 
 
-{% extends 'base.html' %} {% block page_title %}Create Profile{% endblock %} {% block page_heading %}Create Profile{% endblock %} 
+{% extends 'base.html' %} {% block page_title %}Create Profile{% endblock %} {% load static from static %} {% block page_heading %}Create Profile{% endblock %} 
 {% block css %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
 {% endblock %}
@@ -49,9 +49,10 @@
             </div>
             {% endfor %}
           </div>
-
-          <input type="submit" value="UPDATE" class="submit-wide submit-success" name="message_submit">
-
+          <div class="standard-form-submit">
+            <input type="submit" value="UPDATE" class="submit-wide submit-success" name="message_submit">
+            <img class="loading-image" src="{% static 'temp/34-1.gif' %}"></img>
+          </div>
         </form>
       </div>
     </div>
