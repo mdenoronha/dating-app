@@ -285,7 +285,8 @@ body {
 
 .standard-button {
     background-color: #acd8aa;
-    color: white;
+    color: white !important;
+    cursor: pointer;
 }
 
 .standard-button:hover {
@@ -640,6 +641,11 @@ left-quick-match-message p {}
 .profile-card-container .card {
     max-width: 90vw;
     padding: 30px;
+}
+
+.account-access-form.card.card-form {
+    max-width: 900px;
+    width: 90vw;
 }
 
 .profile-card-container .card p {
@@ -1655,7 +1661,18 @@ left-quick-match-message p {}
 /*Create Profile*/
 
 .profile-form-container {
-    width: 90%;
+    width: 95%;
+}
+
+.standard-form-submit {
+    width: 100%;
+}
+
+.standard-form .loading-image {
+    float: right;
+    height: 30px;
+    margin: 10px;
+    display: none;
 }
 
 .profile-photo-overlay,
