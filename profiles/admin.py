@@ -21,7 +21,7 @@ def reject(modeladmin, request, queryset):
         if isinstance(value, Profile):
             emailtuple = emailtuple + (('Your account has not been approved', 'Unfortunately your bio does not follow our community guidelines. Please update it by editing your profile.', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
         else: 
-            emailtuple = emailtuple + (('Your profile photo has been rejected', 'One of your profile photos do not follow our community guidelines and has been deleted', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
+            emailtuple = emailtuple + (('Your profile photo has been rejected', 'Thank you for submitting your profile photos. However, one of your profile photos do not follow our community guidelines and has been deleted', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
      
     send_mass_mail(emailtuple)
     
