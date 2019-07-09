@@ -55,7 +55,7 @@ def login(request):
         if login_form.is_valid():
             user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
             if user:
-                messages.success(request, "Logged In Successfully")
+                messages.success(request, "Logged in successfully")
                 auth.login(user=user, request=request)
                 return redirect(reverse('index'))
             else: 
