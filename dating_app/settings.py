@@ -14,14 +14,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import dj_database_url
 import os
 
+try: 
+    import env
+except:
+    print("Live cannot import env")
 
 if os.environ.get('DEVELOPMENT'):
     development = True
-    
 else:
     development = False
     
-import env
+# import env
 USE_TZ = True
 
 
@@ -98,21 +101,16 @@ WSGI_APPLICATION = 'dating_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-# if not development:
-#     DATABASES = {'default': dj_database_url.parse("postgres://ctvhsjxcpsyjpk:20623c4b41f8c859839c0cf4b095f52a29f3bd81bd5b075fa4c2ccd6e99c2d43@ec2-54-75-230-253.eu-west-1.compute.amazonaws.com:5432/d2j6at8l3jgeo2")}
-# else:
-print("Database URL not found. Using SQLite instead")
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if not development:
+    DATABASES = {'default': dj_database_url.parse("postgres://ctvhsjxcpsyjpk:20623c4b41f8c859839c0cf4b095f52a29f3bd81bd5b075fa4c2ccd6e99c2d43@ec2-54-75-230-253.eu-west-1.compute.amazonaws.com:5432/d2j6at8l3jgeo2")}
+else:
+    print("Database URL not found. Using SQLite instead")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-# DATABASES = { 'default' : {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
