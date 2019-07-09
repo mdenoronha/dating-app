@@ -88,7 +88,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media'
+                'django.template.context_processors.media',
+                'dating_app.context_processors.engagement_processor'
             ],
         },
     },
@@ -101,8 +102,8 @@ WSGI_APPLICATION = 'dating_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-if not development:
-    DATABASES = {'default': dj_database_url.parse("postgres://ctvhsjxcpsyjpk:20623c4b41f8c859839c0cf4b095f52a29f3bd81bd5b075fa4c2ccd6e99c2d43@ec2-54-75-230-253.eu-west-1.compute.amazonaws.com:5432/d2j6at8l3jgeo2")}
+if "DATABASE_URL" in os.environ:
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
 else:
     print("Database URL not found. Using SQLite instead")
     DATABASES = {
