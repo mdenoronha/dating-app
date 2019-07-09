@@ -31,7 +31,6 @@
                         <hr>
                         <p class="card-form-subtitle">Make changes to your account</p>
                         <form class="standard-form not-profile-page-message-form" method="POST">
-                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
                             {% csrf_token %} {{ user_form }}
                             <input type="submit" class="submit-success" name="account-change-submit" />
                         </form>
@@ -106,14 +105,6 @@
                             <td class="standard-table-feature">********* <i data-modal-id="edit-password-modal" class="account-modal-button edit-password-modal-button far fa-edit"></i></td>
                         </tr>
                     </table>
-                    <!--<div class="dropdown dropdown-standard">-->
-                    <!--    <button class="btn btn-secondary dropdown-toggle account-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-                    <!--                ACCOUNT OPTIONS-->
-                    <!--              </button>-->
-                    <!--    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
-                    <!--        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>-->
-                    <!--    </div>-->
-                    <!--</div>-->
 
                 </div>
             </div>
