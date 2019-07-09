@@ -16,7 +16,7 @@ from django.dispatch import receiver
 import os
 
 # Only necessary for local
-if "DEVELOPMENT" in os.environ:
+if "DEVELOPMENT" in os.environ or "TESTING" in os.environ:
     @receiver(connection_created)
     def extend_sqlite(connection=None, **kwargs):
         # sqlite doesn't natively support math functions, so add them
