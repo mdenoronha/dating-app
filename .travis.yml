@@ -3,4 +3,4 @@ python:
     - "3.6.7"
 install: "pip install -r requirements.txt"
 script:
-    - SECRET_KEY="whatever" ./manage.py test
+    - SECRET_KEY="y@)xld3a6xna)44_zr2)u@7y$7(eejg@!r+j9+lvi#qnv!)08_" ./manage.py test
