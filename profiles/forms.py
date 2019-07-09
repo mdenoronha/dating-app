@@ -2,9 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
-# from betterforms.multiform import MultiModelForm
 from .models import Profile, ProfileImage
 from chat.models import Messages
+from dating_app import settings
 
 class UserLoginForm(forms.Form):
     username = forms.CharField()
@@ -109,7 +109,7 @@ class ProfileForm(forms.ModelForm):
     citylong = forms.CharField(widget=forms.HiddenInput, required=True)
     bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'bio-field'}), required=True)
     # Add custom validation, date must be over 18
-    birth_date = forms.DateTimeField()
+    birth_date = forms.DateTimeField(input_formats=settings.DATE_INPUT_FORMATS)
     children = forms.ChoiceField(choices = CHILDREN_CHOICES, initial='', widget=forms.Select(), required=True)
     height = forms.ChoiceField(choices = HEIGHT_CHOICES, initial='', widget=forms.Select(), required=True)
     
