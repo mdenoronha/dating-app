@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from chat.views import chat, create, new_message_check, wink, chat_ajax, chat_home, read_messages, winks, read_wink, read_view, views, reject
+from chat.views import chat, new_message_check, wink, chat_ajax, chat_home, read_messages, winks, read_wink, read_view, views, reject
 
 urlpatterns = [
     url(r'^(?P<id>\d+)', chat, name="chat"),
@@ -11,9 +11,8 @@ urlpatterns = [
     url(r'^ajax/new_message/$', chat_ajax, name="new_message"),
     url(r'^winks/$', winks, name="winks"),
     url(r'^views/$', views, name="views"),
-    url(r'^ajax/read-view/', read_view),
-    url(r'^ajax/read-wink/', read_wink),
-    url(r'^$', create, name="create"),
+    url(r'^ajax/read-view/', read_view, name='read_view'),
+    url(r'^ajax/read-wink/', read_wink, name='read_wink'),
 ]
 
 
