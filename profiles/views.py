@@ -8,15 +8,13 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .models import Profile, ProfileImage
 from chat.models import Conversations, Messages, Views
-
-def validate_username(request):
-    username = request.GET.get('username', None)
-    data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
-    }
-    return JsonResponse(data)
+import stripe
+from checkout.models import Subscription
     
-# Check this works after changing MEN to MALE
+"""
+Function to check if member profiles matches with current user's sexuality (and 
+vice versa). This stops users from visiting profiles outside of their preferences
+"""
 def looking_for_check(request, user_one, user_two):
     if not user_one == user_two:
         if user_one.looking_for == "MALE":
@@ -26,12 +24,14 @@ def looking_for_check(request, user_one, user_two):
             if not user_two.gender == "FEMALE":
                 return redirect(reverse('index'))
 
+# URL to log user out
 @login_required
 def logout(request):
     auth.logout(request)
     messages.success(request, "You have been logged out")
     return redirect(reverse('preregister'))
-    
+
+# URL to delete user
 @login_required
 def delete(request):
     try:
@@ -42,10 +42,14 @@ def delete(request):
         messages.success(request, "Something went wrong. Please contact us for more information") 
         
     return redirect(reverse('preregister'))
-    
+
+# Log in page
 def login(request):
+    # If user is already logged in
     if request.user.is_authenticated:
         return redirect(reverse('index'))
+        
+    # If user submits log in form, try logging them in
     if request.method == "POST":
         login_form = UserLoginForm(request.POST)
         if login_form.is_valid():
@@ -55,7 +59,7 @@ def login(request):
                 auth.login(user=user, request=request)
                 return redirect(reverse('index'))
             else: 
-                login_form.add_error(None, "Username or password is incorrect")
+                messages.error(request, "Username or password incorrect")
     else:
         login_form = UserLoginForm()
             
@@ -64,11 +68,12 @@ def login(request):
     }
     return render(request, 'login.html', context)
     
-
+# Register a user account page
 def register(request):
+    # If user submits register form, try registering an account
     if request.method == "POST":
         registration_form = UserRegistrationForm(request.POST)
-        
+
         if registration_form.is_valid():
             registration_form.save()
             
@@ -77,7 +82,7 @@ def register(request):
             if user:
                 messages.success(request, "Your account had been created")
                 auth.login(user=user, request=request)
-                return redirect(reverse('create_profile'))
+                return redirect(reverse('index'))
             else:
                 messages.error(request, "We have been unable to create your account")
     else:
@@ -89,46 +94,38 @@ def register(request):
     }
     return render(request, 'register.html', context)
 
-@login_required
-def user_profile(request):
-    user = User.objects.get(email=request.user.email)
-    user.profileimage_set.all()
-    context = {
-        'profile':user,
-    }
-    return render(request, 'profile.html', context)
- 
+# Page to create/edit a user profile
 @login_required  
 def create_profile(request):
-    # user = User.objects.get(email=request.user.email)
-    # profile_user_id = user.profile.id
-    
-    # https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
+    """
+    Create a formset to allow for multiple profile photos to be uploaded
+    Assistance from
+    https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
+    """
     ImageFormSet = modelformset_factory(ProfileImage, form=ProfileImageForm, extra=6, max_num=6, help_texts=None)
-
+    
+    # If user has submitted profile form
     if request.method == "POST":
-        # Why doesn't instance work?
-        
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         image_form = ProfileImageForm(request.POST, request.FILES)
         
         formset = ImageFormSet(request.POST, request.FILES,
                               queryset=ProfileImage.objects.filter(user_id=request.user.id).all())
-                        
-
+        
+        # Update profile and change profile to 'to be approved'
         if profile_form.is_valid() and formset.is_valid():
             instance = profile_form.save(commit=False)
             instance.user_id = request.user.id
             instance.is_verified = 'TO BE APPROVED'
             instance.save()
             
-            # Delete checked images
+            # Get images requested to be deleted and delete them
             deleted_images = request.POST.getlist('delete')
-            print(deleted_images)
             for image in deleted_images:
                 if not image == "None":
                     ProfileImage.objects.get(pk=image).delete()
-            
+                    
+            # Save submitted images
             for form in formset:
                 if form.is_valid() and form.has_changed():
                     instance_image = form.save(commit=False)
@@ -136,12 +133,9 @@ def create_profile(request):
                     instance_image.is_verified = False
                     instance_image.save()
 
-                    # Add progress bar
-            
             return redirect(reverse('verification_message'))
             
     else:
-        # user_profile = Profile.objects.get(pk=profile_user_id)
         profile_form = ProfileForm(instance=request.user.profile)
         image_form = ProfileImageForm(instance=request.user.profile)
         initial_images = [{'image_url': i.image} for i in ProfileImage.objects.filter(user_id=request.user.id).all() if i.image]
@@ -155,17 +149,16 @@ def create_profile(request):
     }
         
     return render(request, 'create-profile.html', context)    
-    
+
+# Page to view a specific member profile
 @login_required 
 def member_profile(request, id):
-    # Add check if correct gender prefernce (for both)
-
-    # Add check member is current user
-    member = User.objects.get(id=id)
     
+    # Check is member if current user
+    member = User.objects.get(id=id)
     if not member == request.user:
         current_user = False
-    
+        # Redirect if sexuality preferences are not met
         result = looking_for_check(request, request.user.profile, member.profile)
         if result:
             return result
@@ -173,35 +166,55 @@ def member_profile(request, id):
         if result:
             return result
         
-        # Add view if last view is not read or user hasn't view member before
+        # Add view if last view is not read or user hasn't viewed member before
         last_view = Views.objects.filter(receiver_id=id).filter(sender_id=request.user.id).last()
         if not last_view or last_view.is_read:
             view = Views(receiver=member, sender=request.user)
             view.save()
-
+        
+        # If user has submitted messages form
         if request.method == "POST" and 'message_submit' in request.POST:
             message_form = MessagesForm(request.POST)
             if message_form.is_valid():
-                conversation = Conversations.objects.filter(participants=request.user.id).filter(participants=id)
-                if conversation.exists():
-                    message = message_form.save(commit=False)
-                    message.sender = request.user
-                    message.receiver = User.objects.get(pk=id)
-                    message.conversation = conversation[0]
-                    message.save()
-                    return redirect('/chat/%s' % conversation[0].id )
+                # Check if user is premium
+                if request.user.profile.is_premium:
+                    customer_stripe_id = Subscription.objects.filter(user_id=request.user).first()
+                    customer = stripe.Customer.retrieve(customer_stripe_id.customer_id)
+                    for sub in customer.subscriptions:
+                        # If subscription is active or unpaid/cancelled but not yet inactive
+                        if sub.status == 'active' or sub.status == 'trialing' or sub.status == 'incomplete' or sub.status == 'past_due' or sub.status == 'canceled':
+                            # Create conversation (if one does not already exist) and message
+                            conversation = Conversations.objects.filter(participants=request.user.id).filter(participants=id)
+                            if conversation.exists():
+                                message = message_form.save(commit=False)
+                                message.sender = request.user
+                                message.receiver = User.objects.get(pk=id)
+                                message.conversation = conversation[0]
+                                message.save()
+                                return redirect('/chat/%s' % conversation[0].id )
+                            else:
+                                receiver = User.objects.get(pk=id)
+                                conversation = Conversations()
+                                conversation.save()
+                                conversation.participants.add(request.user.id)
+                                conversation.participants.add(receiver)
+                                message = message_form.save(commit=False)
+                                message.sender = request.user
+                                message.receiver = receiver
+                                message.conversation = conversation
+                                message.save()
+                                return redirect('/chat/%s' % conversation.id )
+                                
+                    """
+                    If user is premium, but does not have an active subscription
+                    update them to not be premium
+                    """
+                    current_user = User.objects.get(pk=request.user.id)
+                    current_user.is_premium = False
+                    current_user.save()
+                    return redirect(reverse('subscribe'))
                 else:
-                    receiver = User.objects.get(pk=id)
-                    conversation = Conversations()
-                    conversation.save()
-                    conversation.participants.add(request.user.id)
-                    conversation.participants.add(receiver)
-                    message = message_form.save(commit=False)
-                    message.sender = request.user
-                    message.receiver = receiver
-                    message.conversation = conversation
-                    message.save()
-                    return redirect('/chat/%s' % conversation.id )
+                    return redirect(reverse('subscribe'))
         else:
             message_form = MessagesForm()
     else:
@@ -216,6 +229,7 @@ def member_profile(request, id):
     }
     return render(request, 'member.html', context)
     
+# Page to display verification message
 def verification_message(request):
     
     return render(request, 'verification-message.html')

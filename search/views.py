@@ -7,23 +7,19 @@ from django.db import models
 from django.db.models import Q, F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
-
-# Create your views here.
-
-# May need to turn into separate POST and GET
+# Search page to display specific profiles
 @login_required
 def search(request):
     
+    # Get search options not in ProfileFilter or GenderlessProfileFilter form
     min_height = request.GET.get('height_min', '0')
     max_height = request.GET.get('height_max', '200')
     
     sexuality = request.GET.getlist('sexuality', '')
 
-    # Filter based on returned user's gender preferences and location
     user_gender = "MALE" if request.user.profile.gender == "MALE" else "FEMALE"
-    # Add check to see if distance was submitted (max on range is worldwide=None)
     
+    # Filter users by distance and exclude incompatible sexuality preferences
     distance = request.GET.get('distance', '')
     
     if distance and distance != "worldwide":
@@ -33,7 +29,7 @@ def search(request):
         qs = Profile.objects.nearby_locations(float(request.user.profile.citylat), float(request.user.profile.citylong)).order_by('distance').filter(Q(looking_for=user_gender) | Q(looking_for="BOTH")).exclude(user_id=request.user.id)
     
     
-    # Filter based on sexuality preferences
+    # Filter based on sexuality preferences selected in search
     sexuality_query = Q()
     if 's' in sexuality:
         sexuality_query.add(~Q(looking_for=F('gender')), Q.AND)
@@ -45,25 +41,28 @@ def search(request):
 
     qs = qs.filter(sexuality_query)
         
-    # Filter based on height options
+    # Filter based on height options 
     if min_height: 
         qs = qs.filter(height__gt=min_height)
     if max_height:
         qs = qs.filter(height__lt=max_height)
     
-    # Filter based on user's gender preferences  
+    """
+    Filter results based on filter search form.
+    Different search forms are used based on user's sexuality preferences i.e. 
+    gender is not an option for non-bisexual users.
+    """
     if request.user.profile.looking_for == "BOTH":
         filtered_result = ProfileFilter(request.GET, queryset=qs)
     else:
         gender_check = "MALE" if request.user.profile.looking_for == "MALE" else "FEMALE"
         qs = qs.filter(gender=gender_check)
         filtered_result = GenderlessProfileFilter(request.GET, queryset=qs)
-
+    
+    # Paginate search results
     search_paginated = Paginator(filtered_result.qs, 12)
-    print(search_paginated)
 
     page = request.GET.get('page')
-    # https://docs.djangoproject.com/en/1.11/topics/pagination/
     try:
         search_page = search_paginated.page(page)
     except PageNotAnInteger:
