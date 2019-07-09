@@ -9,11 +9,10 @@ from django.utils import timezone
 import stripe
 from profiles.models import Profile
 
-# Check redirect reverse are working
-# Create your views here.
 
 stripe.api_key = settings.STRIPE_SECRET
 
+# Function to update user profile to premium
 def make_user_premium(request):
     profile = Profile.objects.get(user_id=request.user.id)
     profile.is_premium = True
@@ -21,8 +20,17 @@ def make_user_premium(request):
     
     return
 
+# Subscribe page, allowing users to create a Stripe subscription
 @login_required
 def subscribe(request):
+    
+    plan_ids = {
+        'plan_F5eyNlWXHig7YB': '6 Monthly',
+        'plan_F5ey2nnZwy5v8Q': '3 Monthly',
+        'plan_F5eyGdYCvZPtON': 'Monthly'
+    }
+    
+    # If user submits payment form
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         payment_form = MakePaymentForm(request.POST)
@@ -31,51 +39,42 @@ def subscribe(request):
             order.date = timezone.now()
             order.save()
             
-            print(order.plans)
+            subscription = Subscription.objects.filter(user_id=request.user.id).first()
             
-            customer = stripe.Customer.list(email=request.user.email)
-            # customer = Subscription.objects.filter(user_id=request.user.id).first()
-            # If customer already exists
-            if customer:
-                """
-                Stripe returns a list of customers, as there shouldn't be any more
-                one customer from a email query, the first of the list is used. If
-                more than one is returned, the latest active account would be used.
-                """
-                active_customer = customer.data[0]
-                # Merge into one try
+            # If user has subscribed before and has customer record
+            if subscription:
+                customer = stripe.Customer.retrieve(subscription.customer_id)
+
                 try:
-                    print("updating customer")
                     stripe.Customer.modify(
-                        active_customer.id,
+                        customer.id,
                         card = payment_form.cleaned_data['stripe_id']
                     )
-                # Add error messages
                 except:
-                    print('error')
-                    return redirect(reverse('checkout'))
+                    messages.error(request, "Error updating your customer record")
+                    return redirect(reverse('subscribe'))
                     
                 try:
-                    print("updating sub")
                     stripe.Subscription.create(
-                        customer = active_customer.id,
+                        customer = customer.id,
                         items=[{"plan": order.plans,},]
                     )
                 except stripe.error.CardError:
                     messages.error(request, "Your card was declined!")
-                    return redirect(reverse('checkout'))
+                    return redirect(reverse('subscribe'))
                 finally:
+                    # Create new subscription
                     subscription = Subscription(
                             user = request.user, 
-                            plan = "Monthly", 
-                            customer_id = active_customer.id
+                            plan = plan_ids[order.plans], 
+                            customer_id = customer.id
                             )
                     subscription.save()
                     make_user_premium(request)
                     messages.error(request, "Success! You are now a premium user")
                     return redirect(reverse('index'))
+            # If user has not subscribed before and has no customer record
             else:
-            # If new customer
                 try:
                     customer = stripe.Customer.create(
                         email = request.user.email,
@@ -85,14 +84,12 @@ def subscribe(request):
                     )
                 except stripe.error.CardError:
                     messages.error(request, "Your card was declined!")
-                    return redirect(reverse('checkout'))
-                
+                    return redirect(reverse('subscribe'))
                 finally:
-                # https://stripe.com/docs/api/customers/create)
+                # Assistance from https://stripe.com/docs/api/customers/create
                     subscription = Subscription(
                             user = request.user, 
-                            # Make custom
-                            plan = "Monthly", 
+                            plan = plan_ids[order.plans], 
                             customer_id = customer.id
                             )
                     subscription.save()
@@ -101,8 +98,6 @@ def subscribe(request):
                     return redirect(reverse('index'))
         else:
             messages.error(request, "Unable to take payment")
-            print(order_form.errors)
-            print(payment_form.errors)
     else:
         payment_form = MakePaymentForm()
         order_form = OrderForm()
