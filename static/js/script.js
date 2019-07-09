@@ -207,13 +207,18 @@ if ($('#page-ref').data('page-ref') == "chat") {
 
 // Mark all views or winks on page as read
 function read_engagement(page_type) {
-
     var page = $('.current').data('page')
     $.ajax({
         url: "/chat/ajax/read-" + page_type + "/",
         datatype: 'json',
         data: {
             'page': page
+        },
+        success: function(json) {
+            // If user is not premium, redirect as informed by premium_required decorator
+            if(json['redirect']) {
+                window.location.href = json['redirect']
+            }
         }
     });
 }
@@ -423,6 +428,13 @@ if ($('#page-ref').data('page-ref') == "home") {
 
 // Create Profile
 // *********
+
+// Show loading image on form submit
+$('.create-profile-form').submit(function() {
+    $('.loading-image').show();
+});
+
+
 if ($('#page-ref').data('page-ref') == "create_profile") {
     // Using Google Places API, display autocomplete options for location
     // Assistance from Google Maps API documentation
@@ -487,13 +499,22 @@ if ($('#page-ref').data('page-ref') == "create_profile") {
     }
     
     $(function() {
+        // Ensure correct date format
+            var dateAndTimeAr = $('.standard-form input[name=birth_date]').val().split(' ');
+            var dateAr = dateAndTimeAr[0].split('-')
+        if(typeof dateAr[2] !== "undefined" && typeof dateAr[1] !== "undefined" && typeof dateAr[0] !== "undefined") {
+            var newDate = dateAr[2] + "/" + dateAr[1] + "/" + dateAr[0]
+            $('.standard-form input[name=birth_date]').val(newDate) 
+        }
+        
     
         // Initiliase date picker, limiting user to DoB over 18 years ago 
         var min_date = new Date();
         min_date.setFullYear(min_date.getFullYear() - 18);
         
         $("#id_birth_date").datepicker({
-          'endDate': min_date,
+            format: 'dd/mm/yyyy',
+            'endDate': min_date,
         });
     
     });
