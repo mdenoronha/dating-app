@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block page_title %}Profile{% endblock %} {% block page_heading %}{{request.user}}'s Profile{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block page_title %}My Account{% endblock %} {% block content %}
+
+<!--Edit password modal-->
 <div class="modal fade" id="edit-password-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -20,6 +22,7 @@
     </div>
 </div>
 
+<!--Edit account modal-->
 <div class="modal fade" id="edit-account-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -41,6 +44,7 @@
     </div>
 </div>
 
+<!--Cancel verification modal-->
 <div class="modal fade" id="cancel-message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -62,6 +66,7 @@
     </div>
 </div>
 
+<!--Delete account verification modal-->
 <div class="modal fade" id="delete-message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -86,6 +91,7 @@
 <section class="profile-card-container container">
     <div class="row">
         <div class="col-sm-12 col-md-7">
+            <!--Account info card-->
             <div class="col-sm-12">
                 <h2 class="account-info-heading">Account Info</h2>
             </div>
@@ -108,7 +114,7 @@
 
                 </div>
             </div>
-            
+            <!--Account options card-->
             <div class="col-sm-12">
                 <h2 class="account-info-heading">Account Options</h2>
             </div>
@@ -125,12 +131,10 @@
                             <td><a data-modal-id="delete-message-modal" class="account-modal-button standard-link red-text" href="#">Delete</a></td>
                         </tr>
                     </table>
-  
-
                 </div>
             </div>
-            
         </div>
+        <!--Subscription info card-->
         <div class="col-sm-12 col-md-5">
             <div class="col-sm-12">
                 <h2>Subscription Info</h2>
@@ -171,6 +175,7 @@
                 </div>
             </div>
             {% endfor %}
+            <!--Billing information card-->
             <div class="col-sm-12">
                 <h2>Billing Info</h2>
             </div>
@@ -205,5 +210,4 @@
     </div>
 </section>
 
-{% endblock %} {% block js %}
 {% endblock %}
