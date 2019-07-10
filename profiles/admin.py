@@ -5,25 +5,25 @@ from django.core.mail import send_mass_mail
 def verify(modeladmin, request, queryset):
     queryset.update(is_verified='APPROVED')
 
-    # emailtuple = ()
-    # for value in queryset:
-    #     if isinstance(value, Profile):
-    #         emailtuple += (('Your account has been approved', 'We have good news! Your account has been approved, you can now start dating!', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
-    #     else: 
-    #         emailtuple += (('Your profile photo has been approved', 'Thank you for submitting your profile photos. The following image has been approved: "%s"> '% value.image.url, 'worlds.best.dating.app@gmail.com', [value.user.email]),)
+    emailtuple = ()
+    for value in queryset:
+        if isinstance(value, Profile):
+            emailtuple += (('Your account has been approved', 'We have good news! Your account has been approved, you can now start dating!', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
+        else: 
+            emailtuple += (('Your profile photo has been approved', 'Thank you for submitting your profile photos. The following image has been approved: "%s"> '% value.image.url, 'worlds.best.dating.app@gmail.com', [value.user.email]),)
                 
-    # send_mass_mail(emailtuple)
+    send_mass_mail(emailtuple)
         
 def reject(modeladmin, request, queryset):
     emailtuple = ()
     
-    # for value in queryset:
-    #     if isinstance(value, Profile):
-    #         emailtuple = emailtuple + (('Your account has not been approved', 'Unfortunately your bio does not follow our community guidelines. Please update it by editing your profile.', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
-    #     else: 
-    #         emailtuple = emailtuple + (('Your profile photo has been rejected', 'Thank you for submitting your profile photos. However, one of your profile photos do not follow our community guidelines and has been deleted', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
+    for value in queryset:
+        if isinstance(value, Profile):
+            emailtuple = emailtuple + (('Your account has not been approved', 'Unfortunately your bio does not follow our community guidelines. Please update it by editing your profile.', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
+        else: 
+            emailtuple = emailtuple + (('Your profile photo has been rejected', 'Thank you for submitting your profile photos. However, one of your profile photos do not follow our community guidelines and has been deleted', 'worlds.best.dating.app@gmail.com', [value.user.email]),)
      
-    # send_mass_mail(emailtuple)
+    send_mass_mail(emailtuple)
     
     if isinstance(queryset.first(), Profile):
         queryset.update(is_verified='TO BE APPROVED')
