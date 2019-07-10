@@ -166,7 +166,7 @@ def preregister(request):
     for k, v in profiles.items():
         profile = Profile.objects.get(user__username=k)
         profile.citylong = v['citylong']
-        profile.citylan = v['citylan']
+        profile.citylat = v['citylan']
         profile.location = v['location']
 
         profile.save()
