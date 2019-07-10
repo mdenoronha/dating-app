@@ -60,115 +60,416 @@ def index(request):
     
 # Home page before logged in/registered
 def preregister(request):
-    profiles = {
-        'dberzons0' : {'citylong':-2.351248,'citylan':51.638025,'location':'Wotton-under-Edge'},
-        'bcorringham1' : {'citylong':-1.04281,'citylan':51.85339,'location':'Ludgershall'},
-        'mbumphrey2' : {'citylong':-0.902918,'citylan':51.451652,'location':'Woodley'},
-        'kalcoran3' : {'citylong':-0.902918,'citylan':51.451652,'location':'Redditch'},
-        'chedderly4' : {'citylong':-2.12882,'citylan':52.586973,'location':'Wolverhampton'},
-        'ogetley5' : {'citylong':-6.04172,'citylan':54.51006,'location':'Lisburn'},
-        'aroback6' : {'citylong':-1.88394,'citylan':54.73256,'location':'Wolsingham'},
-        'kbatkin7' : {'citylong':-2.59168,'citylan':51.45379,'location':'Bristol'},
-        'ghabishaw8' : {'citylong':0.965274,'citylan':51.857997,'location':'Wivenhoe'},
-        'zdutnall9' : {'citylong':-5.8316,'citylan':54.46048,'location':'Saintfield'},
-        'kfaersa' : {'citylong':0.709554,'citylan':50.924972,'location':'Winchelsea'},
-        'abadcockb' : {'citylong':-6.25419,'citylan':54.10116,'location':'Warrenpoint'},
-        'mkellerc' : {'citylong':-1.983,'citylan':50.800465,'location':'Wimborne Minster'},
-        'lgetchd' : {'citylong':-3.7527,'citylan':56.10769,'location':'Clackmannan'},
-        'pfawdriee' : {'citylong':-2.40123,'citylan':51.593722,'location':'Wickwar'},
-        'gstivensf' : {'citylong':-2.34873,'citylan':54.47327,'location':'Kirkby Stephen'},
-        'pabramchikg' : {'citylong':-0.739779,'citylan':51.761877,'location':'Wendover'},
-        'jnielsonh' : {'citylong':-2.02208,'citylan':52.552888,'location':'Wednesbury'},
-        'asurridgei' : {'citylong':-0.342274,'citylan':51.588142,'location':'Harrow'},
-        'drigglesfordj' : {'citylong':-1.865449,'citylan':50.878978,'location':'Verwood'},
-        'ldelavaletteparisotk' : {'citylong':-3.506101,'citylan':51.659719,'location':'Treorchy'},
-        'bmacallasterl' : {'citylong':-4.194344,'citylan':50.37529,'location':'Torpoint'},
-        'xgierckem' : {'citylong':-3.491207,'citylan':50.902049,'location':'Tiverton'},
-        'bmyrtlen' : {'citylong':-2.525153,'citylan':51.608306,'location':'Thornbury'},
-        'tgairdnero' : {'citylong':-3.02666,'citylan':53.184872,'location':'Hawarden'},
-        'shaydockp' : {'citylong':-1.328982,'citylan':54.570455,'location':'Stockton-on-Tees'},
-        'rreinq' : {'citylong':-1.023942,'citylan':53.69109,'location':'Snaith'},
-        'qoneilr' : {'citylong':-3.22333,'citylan':53.2747,'location':'Holywell'},
-        'koverys' : {'citylong':0.101108,'citylan':50.773467,'location':'Seaford'},
-        'kcastanost' : {'citylong':-3.59423,'citylan':55.978371,'location':'Linlithgow'},
-        'tbradlaughu' : {'citylong':0.505078,'citylan':51.56491,'location':'Pitsea'},
-        'gbalmv' : {'citylong':-3.15219,'citylan':55.880638,'location':'Loanhead'},
-        'hmcurew' : {'citylong':-2.576585,'citylan':51.531653,'location':'Patchway'},
-        'mburnardx' : {'citylong':-3.05374,'citylan':55.94215,'location':'Musselburgh'},
-        'arichmonty' : {'citylong':-2.428085,'citylan':53.418359,'location':'Partington'},
-        'ssmithez' : {'citylong':-3.23048,'citylan':56.06002,'location':'Burntisland'},
-        'fupward10' : {'citylong':-4.939017,'citylan':50.542062,'location':'Padstow'},
-        'jbushe11' : {'citylong':-3.18395,'citylan':56.21168,'location':'Collydean'},
-        'emanoelli12' : {'citylong':0.242756,'citylan':51.709531,'location':'Ongar'},
-        'ikrier13' : {'citylong':-3.34329,'citylan':56.110222,'location':'Cowdenbeath'},
-        'speyntue14' : {'citylong':-5.69317,'citylan':54.591379,'location':'Newtownards'},
-        'tcommuzzo15' : {'citylong':-1.35614,'citylan':53.72591,'location':'Castleford'},
-        'jpitkeathley16' : {'citylong':-3.750323,'citylan':50.671082,'location':'Moretonhampstead'},
-        'scomberbeach17' : {'citylong':-1.71354,'citylan':53.723049,'location':'Cleckheaton'},
-        'mlough18' : {'citylong':-2.489453,'citylan':51.862693,'location':'Mitcheldean'},
-        'mrallinshaw19' : {'citylong':-1.89452,'citylan':53.80236,'location':'Denholme'},
-        'lcribbott1a' : {'citylong':-2.936639,'citylan':50.725156,'location':'Lyme Regis'},
-        'megell1b' : {'citylong':-2.530504,'citylan':51.72913,'location':'Lydney'},
-        'lprendeguest1c' : {'citylong':-1.63284,'citylan':53.691551,'location':'Dewsbury'},
-        'djumonet1d' : {'citylong':-6.933676,'citylan':55.045456,'location':'Limavady'},
-        'aroussell1e' : {'citylong':-2.03484,'citylan':52.568981,'location':'Darlaston'},
-        'hcicullo1f' : {'citylong':0.00878,'citylan':50.873872,'location':'Lewes'},
-        'dravilious1g' : {'citylong':-2.08734,'citylan':52.508671,'location':'Dudley'},
-        'njovis1h' : {'citylong':-1.549077,'citylan':53.800755,'location':'Leeds'},
-        'kbunning1i' : {'citylong':-1.338362,'citylan':53.01827,'location':'Langley Mill'},
-        'jbilbie1j' : {'citylong':-2.279823,'citylan':56.84495,'location':'Inverbervie'},
-        'jmilan1k' : {'citylong':-1.74484,'citylan':52.48758,'location':'Fordbridge'},
-        'eguyonnet1l' : {'citylong':-1.786292,'citylan':53.571744,'location':'Holmfirth'},
-        'dfranck1m' : {'citylong':-0.46804,'citylan':52.135712,'location':'Bedford'},
-        'nquincee1n' : {'citylong':1.260297,'citylan':51.934731,'location':'Harwich'},
-        'mcantillion1o' : {'citylong':-1.56756,'citylan':54.94226,'location':'Windy Nook'},
-        'atoplin1p' : {'citylong':0.35792,'citylan':51.873148,'location':'Great Dunmow'},
-        'mpickaver1q' : {'citylong':-1.86827,'citylan':52.217049,'location':'Alcester'},
-        'mlegerton1r' : {'citylong':-0.876381,'citylan':53.702941,'location':'Goole'},
-        'czupo1s' : {'citylong':-0.10193,'citylan':51.24061,'location':'Beltchingley'},
-        'hcarding1t' : {'citylong':-2.238156,'citylan':51.864245,'location':'Gloucester'},
-        'lwims1u' : {'citylong':-2.718454,'citylan':51.147427,'location':'Glastonbury'},
-        'dduran1v' : {'citylong':-1.899776,'citylan':50.807364,'location':'Ferndown'},
-        'cryburn1w' : {'citylong':-2.40396,'citylan':53.545838,'location':'Farnworth'},
-        'lodowgaine1x' : {'citylong':-0.7444,'citylan':51.340248,'location':'Camberley'},
-        'bandres1y' : {'citylong':-2.897404,'citylan':53.279812,'location':'Ellesmere Port'},
-        'adoe1z' : {'citylong':-0.50776,'citylan':51.388168,'location':'Chertsey'},
-        'lkenchington20' : {'citylong':-6.26031,'citylan':53.349805,'location':'Dublin'},
-        'sferrara21' : {'citylong':1.44002,'citylan':52.454632,'location':'Bungay'},
-        'tholtham22' : {'citylong':1.234845,'citylan':51.927088,'location':'Dovercourt'},
-        'sewington23' : {'citylong':0.710493,'citylan':52.242924,'location':'Bury St Edmunds'},
-        'bhiseman24' : {'citylong':-1.968243,'citylan':51.718495,'location':'Cirencester'},
-        'bolphert25' : {'citylong':1.69417,'citylan':52.45145,'location':'Carlton Colville'},
-        'mranby26' : {'citylong':-2.214115,'citylan':53.394361,'location':'Cheadle'},
-        'nspalding27' : {'citylong':-0.52313,'citylan':51.887619,'location':'Dunstable'},
-        'tthoresby28' : {'citylong':-1.912923,'citylan':53.323988,'location':'Chapel-en-le-Frith'},
-        'ltourle29' : {'citylong':-3.47952,'citylan':51.64522,'location':'Rhondda'},
-        'oloyndon2a' : {'citylong':-3.17909,'citylan':51.481581,'location':'Cardiff'},
-        'jswaton2b' : {'citylong':0.121817,'citylan':52.205337,'location':'Cambridge'},
-        'mnunson2c' : {'citylong':-0.52028,'citylan':51.90461,'location':'Houghton Regis'},
-        'awrightim2d' : {'citylong':0.814539,'citylan':51.628347,'location':'Burnham-on-Crouch'},
-        'dmisk2e' : {'citylong':-3.943646,'citylan':51.621441,'location':'Swansea'},
-        'msaye2f' : {'citylong':-3.779342,'citylan':50.481799,'location':'Buckfastleigh'},
-        'rlaxston2g' : {'citylong':1.021399,'citylan':51.816142,'location':'Brightlingsea'},
-        'mhuff2h' : {'citylong':-0.24846,'citylan':52.573391,'location':'Peterborough'},
-        'mwhitechurch2i' : {'citylong':-2.57864,'citylan':53.58736,'location':'Blackrod'},
-        'mmaffi2j' : {'citylong':-5.35325,'citylan':36.14491,'location':'Ramsey'},
-        'gbugg2k' : {'citylong':-1.890401,'citylan':52.486243,'location':'Birmingham'},
-        'nmajor2l' : {'citylong':-0.26422,'citylan':52.086938,'location':'Biggleswade'},
-        'celsay2m' : {'citylong':0.33713,'citylan':52.334099,'location':'Soham'},
-        'dbree2n' : {'citylong':-0.529209,'citylan':52.062739,'location':'Bedfordshire'},
-        'dlangan2o' : {'citylong':-0.644241,'citylan':51.602396,'location':'Beaconsfield'},
-        'kyare2p' : {'citylong':-1.092396,'citylan':51.26654,'location':'Basingstoke'},
-        'dbambrough2q' : {'citylong':-0.265103,'citylan':52.230083,'location':'St Neots'},
-        'ngrave2r' : {'citylong':-3.218894,'citylan':54.108967,'location':'Barrow-in-Furness'},
-    }
+    maleuser1 = ProfileImage(image='images/male1.jpg', user_id=1)
+    maleuser2 = ProfileImage(image='images/male2.jpg', user_id=3)
+    maleuser3 = ProfileImage(image='images/male3.jpg', user_id=5)
+    maleuser4 = ProfileImage(image='images/male4.jpg', user_id=7)
+    maleuser5 = ProfileImage(image='images/male5.jpg', user_id=9)
+    maleuser6 = ProfileImage(image='images/male6.jpg', user_id=11)
+    maleuser7 = ProfileImage(image='images/male7.jpg', user_id=13)
+    maleuser8 = ProfileImage(image='images/male8.jpg', user_id=15)
+    maleuser9 = ProfileImage(image='images/male9.jpg', user_id=17)
+    maleuser10 = ProfileImage(image='images/male10.jpg', user_id=19)
+    maleuser11 = ProfileImage(image='images/male11.jpg', user_id=21)
+    maleuser12 = ProfileImage(image='images/male12.jpg', user_id=23)
+    maleuser13 = ProfileImage(image='images/male13.jpg', user_id=25)
+    maleuser14 = ProfileImage(image='images/male14.jpg', user_id=27)
+    maleuser15 = ProfileImage(image='images/male15.jpg', user_id=29)
+    maleuser16 = ProfileImage(image='images/male16.jpg', user_id=31)
+    maleuser17 = ProfileImage(image='images/male17.jpg', user_id=33)
+    maleuser18 = ProfileImage(image='images/male18.jpg', user_id=35)
+    maleuser19 = ProfileImage(image='images/male19.jpg', user_id=37)
+    maleuser20 = ProfileImage(image='images/male20.jpg', user_id=39)
+    maleuser21 = ProfileImage(image='images/male21.jpg', user_id=41)
+    maleuser22 = ProfileImage(image='images/male22.jpg', user_id=43)
+    maleuser23 = ProfileImage(image='images/male23.jpg', user_id=45)
+    maleuser24 = ProfileImage(image='images/male24.jpg', user_id=47)
+    maleuser25 = ProfileImage(image='images/male25.jpg', user_id=49)
+    maleuser26 = ProfileImage(image='images/male26.jpg', user_id=51)
+    maleuser27 = ProfileImage(image='images/male27.jpg', user_id=53)
+    maleuser28 = ProfileImage(image='images/male28.jpg', user_id=55)
+    maleuser29 = ProfileImage(image='images/male29.jpg', user_id=57)
+    maleuser30 = ProfileImage(image='images/male30.jpg', user_id=59)
+    maleuser31 = ProfileImage(image='images/male31.jpg', user_id=61)
+    maleuser32 = ProfileImage(image='images/male32.jpg', user_id=63)
+    maleuser33 = ProfileImage(image='images/male33.jpg', user_id=65)
+    maleuser34 = ProfileImage(image='images/male34.jpg', user_id=67)
+    maleuser35 = ProfileImage(image='images/male35.jpg', user_id=69)
+    maleuser36 = ProfileImage(image='images/male36.jpg', user_id=71)
+    maleuser37 = ProfileImage(image='images/male37.jpg', user_id=73)
+    maleuser38 = ProfileImage(image='images/male38.jpg', user_id=75)
+    maleuser39 = ProfileImage(image='images/male39.jpg', user_id=77)
+    maleuser40 = ProfileImage(image='images/male40.jpg', user_id=79)
+    maleuser41 = ProfileImage(image='images/male41.jpg', user_id=81)
+    maleuser42 = ProfileImage(image='images/male42.jpg', user_id=83)
+    maleuser43 = ProfileImage(image='images/male43.jpg', user_id=85)
+    maleuser44 = ProfileImage(image='images/male44.jpg', user_id=87)
+    maleuser45 = ProfileImage(image='images/male45.jpg', user_id=89)
+    maleuser46 = ProfileImage(image='images/male46.jpg', user_id=91)
+    maleuser47 = ProfileImage(image='images/male47.jpg', user_id=93)
+    maleuser48 = ProfileImage(image='images/male48.jpg', user_id=95)
+    maleuser49 = ProfileImage(image='images/male49.jpg', user_id=97)
+    maleuser50 = ProfileImage(image='images/male49.jpg', user_id=99)
+    maleuser51 = ProfileImage(image='images/male48.jpg', user_id=1)
+    maleuser52 = ProfileImage(image='images/male47.jpg', user_id=3)
+    maleuser53 = ProfileImage(image='images/male46.jpg', user_id=5)
+    maleuser54 = ProfileImage(image='images/male45.jpg', user_id=7)
+    maleuser55 = ProfileImage(image='images/male44.jpg', user_id=9)
+    maleuser56 = ProfileImage(image='images/male43.jpg', user_id=11)
+    maleuser57 = ProfileImage(image='images/male42.jpg', user_id=13)
+    maleuser58 = ProfileImage(image='images/male41.jpg', user_id=15)
+    maleuser59 = ProfileImage(image='images/male40.jpg', user_id=17)
+    maleuser60 = ProfileImage(image='images/male39.jpg', user_id=19)
+    maleuser61 = ProfileImage(image='images/male38.jpg', user_id=21)
+    maleuser62 = ProfileImage(image='images/male37.jpg', user_id=23)
+    maleuser63 = ProfileImage(image='images/male36.jpg', user_id=25)
+    maleuser64 = ProfileImage(image='images/male35.jpg', user_id=27)
+    maleuser65 = ProfileImage(image='images/male34.jpg', user_id=29)
+    maleuser66 = ProfileImage(image='images/male33.jpg', user_id=31)
+    maleuser67 = ProfileImage(image='images/male32.jpg', user_id=33)
+    maleuser68 = ProfileImage(image='images/male31.jpg', user_id=35)
+    maleuser69 = ProfileImage(image='images/male30.jpg', user_id=37)
+    maleuser70 = ProfileImage(image='images/male29.jpg', user_id=39)
+    maleuser71 = ProfileImage(image='images/male28.jpg', user_id=41)
+    maleuser72 = ProfileImage(image='images/male27.jpg', user_id=43)
+    maleuser73 = ProfileImage(image='images/male26.jpg', user_id=45)
+    maleuser74 = ProfileImage(image='images/male25.jpg', user_id=47)
+    maleuser75 = ProfileImage(image='images/male24.jpg', user_id=49)
+    maleuser76 = ProfileImage(image='images/male23.jpg', user_id=51)
+    maleuser77 = ProfileImage(image='images/male22.jpg', user_id=53)
+    maleuser78 = ProfileImage(image='images/male21.jpg', user_id=55)
+    maleuser79 = ProfileImage(image='images/male20.jpg', user_id=57)
+    maleuser80 = ProfileImage(image='images/male19.jpg', user_id=59)
+    maleuser81 = ProfileImage(image='images/male18.jpg', user_id=61)
+    maleuser82 = ProfileImage(image='images/male17.jpg', user_id=63)
+    maleuser83 = ProfileImage(image='images/male16.jpg', user_id=65)
+    maleuser84 = ProfileImage(image='images/male15.jpg', user_id=67)
+    maleuser85 = ProfileImage(image='images/male14.jpg', user_id=69)
+    maleuser86 = ProfileImage(image='images/male13.jpg', user_id=71)
+    maleuser87 = ProfileImage(image='images/male12.jpg', user_id=73)
+    maleuser88 = ProfileImage(image='images/male11.jpg', user_id=75)
+    maleuser89 = ProfileImage(image='images/male10.jpg', user_id=77)
+    maleuser90 = ProfileImage(image='images/male9.jpg', user_id=79)
+    maleuser91 = ProfileImage(image='images/male8.jpg', user_id=81)
+    maleuser92 = ProfileImage(image='images/male7.jpg', user_id=83)
+    maleuser93 = ProfileImage(image='images/male6.jpg', user_id=85)
+    maleuser94 = ProfileImage(image='images/male5.jpg', user_id=87)
+    maleuser95 = ProfileImage(image='images/male4.jpg', user_id=89)
+    maleuser96 = ProfileImage(image='images/male3.jpg', user_id=91)
+    maleuser97 = ProfileImage(image='images/male2.jpg', user_id=93)
+    maleuser98 = ProfileImage(image='images/male1.jpg', user_id=95)
     
-    for k, v in profiles.items():
-        profile = Profile.objects.get(user__username=k)
-        profile.citylong = v['citylong']
-        profile.citylat = v['citylan']
-        profile.location = v['location']
-
-        profile.save()
+    femaleuser1 = ProfileImage(image='images/female1.jpg', user_id=2)
+    femaleuser2 = ProfileImage(image='images/female2.jpg', user_id=4)
+    femaleuser3 = ProfileImage(image='images/female3.jpg', user_id=6)
+    femaleuser4 = ProfileImage(image='images/female4.jpg', user_id=8)
+    femaleuser5 = ProfileImage(image='images/female5.jpg', user_id=10)
+    femaleuser6 = ProfileImage(image='images/female6.jpg', user_id=12)
+    femaleuser7 = ProfileImage(image='images/female7.jpg', user_id=14)
+    femaleuser8 = ProfileImage(image='images/female8.jpg', user_id=16)
+    femaleuser9 = ProfileImage(image='images/female9.jpg', user_id=18)
+    femaleuser10 = ProfileImage(image='images/female10.jpg', user_id=20)
+    femaleuser11 = ProfileImage(image='images/female11.jpg', user_id=22)
+    femaleuser12 = ProfileImage(image='images/female12.jpg', user_id=24)
+    femaleuser13 = ProfileImage(image='images/female13.jpg', user_id=26)
+    femaleuser14 = ProfileImage(image='images/female14.jpg', user_id=28)
+    femaleuser15 = ProfileImage(image='images/female15.jpg', user_id=30)
+    femaleuser16 = ProfileImage(image='images/female16.jpg', user_id=32)
+    femaleuser17 = ProfileImage(image='images/female17.jpg', user_id=34)
+    femaleuser18 = ProfileImage(image='images/female18.jpg', user_id=36)
+    femaleuser19 = ProfileImage(image='images/female19.jpg', user_id=38)
+    femaleuser20 = ProfileImage(image='images/female20.jpg', user_id=40)
+    femaleuser21 = ProfileImage(image='images/female21.jpg', user_id=42)
+    femaleuser22 = ProfileImage(image='images/female22.jpg', user_id=44)
+    femaleuser23 = ProfileImage(image='images/female23.jpg', user_id=46)
+    femaleuser24 = ProfileImage(image='images/female24.jpg', user_id=48)
+    femaleuser25 = ProfileImage(image='images/female25.jpg', user_id=50)
+    femaleuser26 = ProfileImage(image='images/female26.jpg', user_id=52)
+    femaleuser27 = ProfileImage(image='images/female27.jpg', user_id=54)
+    femaleuser28 = ProfileImage(image='images/female28.jpg', user_id=56)
+    femaleuser29 = ProfileImage(image='images/female29.jpg', user_id=58)
+    femaleuser30 = ProfileImage(image='images/female30.jpg', user_id=60)
+    femaleuser31 = ProfileImage(image='images/female31.jpg', user_id=62)
+    femaleuser32 = ProfileImage(image='images/female32.jpg', user_id=64)
+    femaleuser33 = ProfileImage(image='images/female33.jpg', user_id=66)
+    femaleuser34 = ProfileImage(image='images/female34.jpg', user_id=68)
+    femaleuser35 = ProfileImage(image='images/female35.jpg', user_id=70)
+    femaleuser36 = ProfileImage(image='images/female36.jpg', user_id=72)
+    femaleuser37 = ProfileImage(image='images/female37.jpg', user_id=74)
+    femaleuser38 = ProfileImage(image='images/female38.jpg', user_id=76)
+    femaleuser39 = ProfileImage(image='images/female39.jpg', user_id=78)
+    femaleuser40 = ProfileImage(image='images/female40.jpg', user_id=80)
+    femaleuser41 = ProfileImage(image='images/female41.jpg', user_id=82)
+    femaleuser42 = ProfileImage(image='images/female42.jpg', user_id=84)
+    femaleuser43 = ProfileImage(image='images/female43.jpg', user_id=86)
+    femaleuser44 = ProfileImage(image='images/female44.jpg', user_id=88)
+    femaleuser45 = ProfileImage(image='images/female45.jpg', user_id=90)
+    femaleuser46 = ProfileImage(image='images/female46.jpg', user_id=92)
+    femaleuser47 = ProfileImage(image='images/female47.jpg', user_id=94)
+    femaleuser48 = ProfileImage(image='images/female48.jpg', user_id=96)
+    femaleuser49 = ProfileImage(image='images/female49.jpg', user_id=98)
+    femaleuser50 = ProfileImage(image='images/female50.jpg', user_id=100)
+    femaleuser51 = ProfileImage(image='images/female51.jpg', user_id=2)
+    femaleuser52 = ProfileImage(image='images/female52.jpg', user_id=4)
+    femaleuser53 = ProfileImage(image='images/female53.jpg', user_id=6)
+    femaleuser54 = ProfileImage(image='images/female53.jpg', user_id=8)
+    femaleuser55 = ProfileImage(image='images/female52.jpg', user_id=10)
+    femaleuser56 = ProfileImage(image='images/female51.jpg', user_id=12)
+    femaleuser57 = ProfileImage(image='images/female50.jpg', user_id=14)
+    femaleuser58 = ProfileImage(image='images/female49.jpg', user_id=16)
+    femaleuser59 = ProfileImage(image='images/female48.jpg', user_id=18)
+    femaleuser60 = ProfileImage(image='images/female47.jpg', user_id=20)
+    femaleuser61 = ProfileImage(image='images/female46.jpg', user_id=22)
+    femaleuser62 = ProfileImage(image='images/female45.jpg', user_id=24)
+    femaleuser63 = ProfileImage(image='images/female44.jpg', user_id=26)
+    femaleuser64 = ProfileImage(image='images/female43.jpg', user_id=28)
+    femaleuser65 = ProfileImage(image='images/female42.jpg', user_id=30)
+    femaleuser66 = ProfileImage(image='images/female41.jpg', user_id=32)
+    femaleuser67 = ProfileImage(image='images/female40.jpg', user_id=34)
+    femaleuser68 = ProfileImage(image='images/female39.jpg', user_id=36)
+    femaleuser69 = ProfileImage(image='images/female38.jpg', user_id=38)
+    femaleuser70 = ProfileImage(image='images/female37.jpg', user_id=40)
+    femaleuser71 = ProfileImage(image='images/female36.jpg', user_id=42)
+    femaleuser72 = ProfileImage(image='images/female35.jpg', user_id=44)
+    femaleuser73 = ProfileImage(image='images/female34.jpg', user_id=46)
+    femaleuser74 = ProfileImage(image='images/female33.jpg', user_id=48)
+    femaleuser75 = ProfileImage(image='images/female32.jpg', user_id=50)
+    femaleuser76 = ProfileImage(image='images/female31.jpg', user_id=52)
+    femaleuser77 = ProfileImage(image='images/female30.jpg', user_id=54)
+    femaleuser78 = ProfileImage(image='images/female29.jpg', user_id=56)
+    femaleuser79 = ProfileImage(image='images/female28.jpg', user_id=58)
+    femaleuser80 = ProfileImage(image='images/female27.jpg', user_id=60)
+    femaleuser81 = ProfileImage(image='images/female26.jpg', user_id=62)
+    femaleuser82 = ProfileImage(image='images/female25.jpg', user_id=64)
+    femaleuser83 = ProfileImage(image='images/female24.jpg', user_id=66)
+    femaleuser84 = ProfileImage(image='images/female23.jpg', user_id=68)
+    femaleuser85 = ProfileImage(image='images/female22.jpg', user_id=70)
+    femaleuser86 = ProfileImage(image='images/female21.jpg', user_id=72)
+    femaleuser87 = ProfileImage(image='images/female20.jpg', user_id=74)
+    femaleuser88 = ProfileImage(image='images/female19.jpg', user_id=76)
+    femaleuser89 = ProfileImage(image='images/female18.jpg', user_id=78)
+    femaleuser90 = ProfileImage(image='images/female17.jpg', user_id=80)
+    femaleuser91 = ProfileImage(image='images/female16.jpg', user_id=82)
+    femaleuser92 = ProfileImage(image='images/female15.jpg', user_id=84)
+    femaleuser93 = ProfileImage(image='images/female14.jpg', user_id=86)
+    femaleuser94 = ProfileImage(image='images/female13.jpg', user_id=88)
+    femaleuser95 = ProfileImage(image='images/female12.jpg', user_id=90)
+    femaleuser96 = ProfileImage(image='images/female11.jpg', user_id=92)
+    femaleuser97 = ProfileImage(image='images/female10.jpg', user_id=94)
+    femaleuser98 = ProfileImage(image='images/female9.jpg', user_id=96)
+    femaleuser99 = ProfileImage(image='images/female8.jpg', user_id=98)
+    femaleuser100 = ProfileImage(image='images/female7.jpg', user_id=100)
+    femaleuser101 = ProfileImage(image='images/female6.jpg', user_id=2)
+    femaleuser102 = ProfileImage(image='images/female5.jpg', user_id=4)
+    femaleuser103 = ProfileImage(image='images/female4.jpg', user_id=6)
+    femaleuser104 = ProfileImage(image='images/female3.jpg', user_id=8)
+    femaleuser105 = ProfileImage(image='images/female2.jpg', user_id=10)
+    femaleuser106 = ProfileImage(image='images/female1.jpg', user_id=12) 
+    
+    maleuser1.save()
+    maleuser2.save()
+    maleuser3.save()
+    maleuser4.save()
+    maleuser5.save()
+    maleuser6.save()
+    maleuser7.save()
+    maleuser8.save()
+    maleuser9.save()
+    maleuser10.save()
+    maleuser11.save()
+    maleuser12.save()
+    maleuser13.save()
+    maleuser14.save()
+    maleuser15.save()
+    maleuser16.save()
+    maleuser17.save()
+    maleuser18.save()
+    maleuser19.save()
+    maleuser20.save()
+    maleuser21.save()
+    maleuser22.save()
+    maleuser23.save()
+    maleuser24.save()
+    maleuser25.save()
+    maleuser26.save()
+    maleuser27.save()
+    maleuser28.save()
+    maleuser29.save()
+    maleuser30.save()
+    maleuser31.save()
+    maleuser32.save()
+    maleuser33.save()
+    maleuser34.save()
+    maleuser35.save()
+    maleuser36.save()
+    maleuser37.save()
+    maleuser38.save()
+    maleuser39.save()
+    maleuser40.save()
+    maleuser41.save()
+    maleuser42.save()
+    maleuser43.save()
+    maleuser44.save()
+    maleuser45.save()
+    maleuser46.save()
+    maleuser47.save()
+    maleuser48.save()
+    maleuser49.save()
+    maleuser50.save()
+    maleuser51.save()
+    maleuser52.save()
+    maleuser53.save()
+    maleuser54.save()
+    maleuser55.save()
+    maleuser56.save()
+    maleuser57.save()
+    maleuser58.save()
+    maleuser59.save()
+    maleuser60.save()
+    maleuser61.save()
+    maleuser62.save()
+    maleuser63.save()
+    maleuser64.save()
+    maleuser65.save()
+    maleuser66.save()
+    maleuser67.save()
+    maleuser68.save()
+    maleuser69.save()
+    maleuser70.save()
+    maleuser71.save()
+    maleuser72.save()
+    maleuser73.save()
+    maleuser74.save()
+    maleuser75.save()
+    maleuser76.save()
+    maleuser77.save()
+    maleuser78.save()
+    maleuser79.save()
+    maleuser80.save()
+    maleuser81.save()
+    maleuser82.save()
+    maleuser83.save()
+    maleuser84.save()
+    maleuser85.save()
+    maleuser86.save()
+    maleuser87.save()
+    maleuser88.save()
+    maleuser89.save()
+    maleuser90.save()
+    maleuser91.save()
+    maleuser92.save()
+    maleuser93.save()
+    maleuser94.save()
+    maleuser95.save()
+    maleuser96.save()
+    maleuser97.save()
+    maleuser98.save()
+    
+    femaleuser1.save()
+    femaleuser2.save()
+    femaleuser3.save()
+    femaleuser4.save()
+    femaleuser5.save()
+    femaleuser6.save()
+    femaleuser7.save()
+    femaleuser8.save()
+    femaleuser9.save()
+    femaleuser10.save()
+    femaleuser11.save()
+    femaleuser12.save()
+    femaleuser13.save()
+    femaleuser14.save()
+    femaleuser15.save()
+    femaleuser16.save()
+    femaleuser17.save()
+    femaleuser18.save()
+    femaleuser19.save()
+    femaleuser20.save()
+    femaleuser21.save()
+    femaleuser22.save()
+    femaleuser23.save()
+    femaleuser24.save()
+    femaleuser25.save()
+    femaleuser26.save()
+    femaleuser27.save()
+    femaleuser28.save()
+    femaleuser29.save()
+    femaleuser30.save()
+    femaleuser31.save()
+    femaleuser32.save()
+    femaleuser33.save()
+    femaleuser34.save()
+    femaleuser35.save()
+    femaleuser36.save()
+    femaleuser37.save()
+    femaleuser38.save()
+    femaleuser39.save()
+    femaleuser40.save()
+    femaleuser41.save()
+    femaleuser42.save()
+    femaleuser43.save()
+    femaleuser44.save()
+    femaleuser45.save()
+    femaleuser46.save()
+    femaleuser47.save()
+    femaleuser48.save()
+    femaleuser49.save()
+    femaleuser50.save()
+    femaleuser51.save()
+    femaleuser52.save()
+    femaleuser53.save()
+    femaleuser54.save()
+    femaleuser55.save()
+    femaleuser56.save()
+    femaleuser57.save()
+    femaleuser58.save()
+    femaleuser59.save()
+    femaleuser60.save()
+    femaleuser61.save()
+    femaleuser62.save()
+    femaleuser63.save()
+    femaleuser64.save()
+    femaleuser65.save()
+    femaleuser66.save()
+    femaleuser67.save()
+    femaleuser68.save()
+    femaleuser69.save()
+    femaleuser70.save()
+    femaleuser71.save()
+    femaleuser72.save()
+    femaleuser73.save()
+    femaleuser74.save()
+    femaleuser75.save()
+    femaleuser76.save()
+    femaleuser77.save()
+    femaleuser78.save()
+    femaleuser79.save()
+    femaleuser80.save()
+    femaleuser81.save()
+    femaleuser82.save()
+    femaleuser83.save()
+    femaleuser84.save()
+    femaleuser85.save()
+    femaleuser86.save()
+    femaleuser87.save()
+    femaleuser88.save()
+    femaleuser89.save()
+    femaleuser90.save()
+    femaleuser91.save()
+    femaleuser92.save()
+    femaleuser93.save()
+    femaleuser94.save()
+    femaleuser95.save()
+    femaleuser96.save()
+    femaleuser97.save()
+    femaleuser98.save()
+    femaleuser99.save()
+    femaleuser100.save()
+    femaleuser101.save()
+    femaleuser102.save()
+    femaleuser103.save()
+    femaleuser104.save()
+    femaleuser105.save()
+    femaleuser106.save()
         
     return render(request, 'index.html')
