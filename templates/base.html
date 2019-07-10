@@ -32,13 +32,13 @@
       <div class="navbar-options-hidden collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="d-lg-none d-xl-none navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'chat_home' %}"><p>CHAT</p></a>
+                    <a class="{% if new_message%}new-engagement{%endif%} nav-link" href="{% url 'chat_home' %}"><p>CHAT</p></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'winks' %}"><p>WINKS</p></a>
+                    <a class="{% if new_wink%}new-engagement{%endif%} nav-link" href="{% url 'winks' %}"><p>WINKS</p></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'views' %}"><p>VIEWS</p></a>
+                    <a class="{% if new_view%}new-engagement{%endif%} nav-link" href="{% url 'views' %}"><p>VIEWS</p></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'member_profile' request.user.id %}"><p>PROFILE</p></a>
@@ -47,13 +47,13 @@
             
             <ul class="d-none d-lg-flex nav navbar-nav">
                 <li class="nav-item nav-icon">
-                    <a href="{% url 'chat_home' %}"><i class="far fa-comment-alt"></i><p>Chat</p></a>
+                    <a class="{% if new_message %}new-engagement{%endif%}" href="{% url 'chat_home' %}"><i class="far fa-comment-alt"></i><p>Chat</p></a>
                 </li>
                 <li class="nav-item nav-icon">
-                    <a href="{% url 'winks' %}"><i class="far fa-smile-wink"></i><p>Winks</p></a>
+                    <a class="{% if new_wink %}new-engagement{%endif%}" href="{% url 'winks' %}"><i class="far fa-smile-wink"></i><p>Winks</p></a>
                 </li>
                 <li class="nav-item nav-icon">
-                    <a href="{% url 'views' %}"><i class="fas fa-eye"></i><p>Views</p></a>
+                    <a class="{% if new_view %}new-engagement{%endif%}" href="{% url 'views' %}"><i class="fas fa-eye"></i><p>Views</p></a>
                 </li>
                 <li class="profile-icon nav-item nav-icon">
                 {% if request.user.id %}
@@ -104,17 +104,19 @@
         <div class="row footer-row-bottom">
             <div class="col-xs-12 col-md-6">
                 <ul>
-                    <li><a href="{% url 'index' %}"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="{% url 'index' %}"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="{% url 'index' %}"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="{% url 'index' %}"><i class="fab fa-snapchat-ghost"></i></a></li>
+                    <li><a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://snapchat.com" target="_blank"><i class="fab fa-snapchat-ghost"></i></a></li>
                 </ul>
-                <p class="brand-footer">Dating Site, 2019</p>
+                <p class="brand-footer">World's Best Dating Site, 2019</p>
             </div>
             <div class="footer-info-text col-xs-12 col-md-6">
-                <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                Lorem ipsum</p>
+                <p>Welcome to the world's best dating Site. Enjoy browsing singles using our
+                advanced features. Find love, lust and romance the easy way.
+                <br>
+                World's Best Dating Site©
+                </p>
             </div>
         </div>
         <section class="d-none d-md-block">
@@ -124,7 +126,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <!--PopperJS requirement for Bootstrap dropdown-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
     </script>
