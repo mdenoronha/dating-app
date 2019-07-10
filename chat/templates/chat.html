@@ -1,88 +1,88 @@
-{% extends 'base.html' %}  {% load static from static %} {% load chatextras %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static from static %} 
+<!--Required to access key and value in all_conversations loop-->
+{% load chatextras %} 
+{% block page_title %}Conversation Messages{% endblock %} {% block content %}
 
 <div class="message-page container">
     <div class="row">
+        <!--All conversations list-->
+        <div class="card-container col-xs-12 col-lg-4 conversation-list">
+            <div class="card">
+                <ul>
+                    {% for k, v in all_conversations.items %}
 
-<div class="card-container col-xs-12 col-lg-4 conversation-list">
-    <div class="card">
-        <ul>
-            {% for k, v in all_conversations.items %}
+                    <li {% if conversation_id == k %}class="active-conversation" {% endif %} {% if not is_read_check|get_value:k %}class="unread-conversation" {% endif %} data-id="{{k}}">
+                        <!--<li {% if k == conversation_id %}class="active-conversation" {% endif %} -->
+                        <!--{% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">-->
 
-            <li {% if conversation_id == k %}class="active-conversation" {% endif %} 
-            {% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">
-            <!--<li {% if k == conversation_id %}class="active-conversation" {% endif %} -->
-            <!--{% if not is_read_check|get_value:k %}class="unread-conversation"{% endif %} data-id="{{k}}">-->
-
-                <a  href="{% url 'chat' k %}">
-                    <div class="sender-container">
-                        {% if v.receiver == request.user %}
-                        <p class="message-sender">{{v.sender}}</p>
-                        {% else %}
-                        <p class="message-sender">{{v.receiver}}</p>
-                        {% endif %}
-                        <p class="last-message-date">{{v.created_on}}</p>
-                    </div>
-                    {% if v.receiver == request.user %}
-                        {% if v.sender.profileimage_set.first.is_verified == "APPROVED" %}
-                        <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.sender.profileimage_set.first.image}})"></div>
-                        {% else %}
-                        <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
-                        {% endif %}
-                    {% else %}
-                        {% if v.receiver.profileimage_set.first.is_verified == "APPROVED" %}
-                        <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.receiver.profileimage_set.first.image}})"></div>
-                        {% else %}
-                        <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
-                        {% endif %}
-                    {% endif %}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-
-<div class="card-container col-lg-8 message-box">
-    <div class="card">
-        <div class="message-box-content" style="overflow: auto;">
-            {% for message in user_messages %}
-                {% if message.sender == request.user %}
-                <div class="message-sent message-container">
-                {% else %}
-                <div class="message-received message-container">
-                {% endif %}
-                <div class="{% if not message.is_read and message.sender != request.user %}unread-message{%endif%} message-bubble">
-                    <p>{{ message.message_content }}</p>
-                </div>
-                <p class="message-date">{{ message.created_on }}</p>
-                </div>
-            {% endfor %}
+                        <a href="{% url 'chat' k %}">
+                            <div class="sender-container">
+                                {% if v.receiver == request.user %}
+                                <p class="message-sender">{{v.sender}}</p>
+                                {% else %}
+                                <p class="message-sender">{{v.receiver}}</p>
+                                {% endif %}
+                                <p class="last-message-date">{{v.created_on}}</p>
+                            </div>
+                            {% if v.receiver == request.user %} {% if v.sender.profileimage_set.first.is_verified == "APPROVED" %}
+                            <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.sender.profileimage_set.first.image}})"></div>
+                            {% else %}
+                            <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                            {% endif %} {% else %} {% if v.receiver.profileimage_set.first.is_verified == "APPROVED" %}
+                            <div class="sender-photo" style="background-image: url({{ MEDIA_URL }}{{ v.receiver.profileimage_set.first.image}})"></div>
+                            {% else %}
+                            <div class="sender-photo" style="background-image: url({% static 'temp/profile-placeholder.png' %})"></div>
+                            {% endif %} {% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
         
-        </div>
-        <div class="message-box-form-container">
-            <div class="new_message_button">
-                <button onclick="location.reload();"><i class="fas fa-sync-alt"></i> New Message Received. Update.</button>
-        </div>
-        <form class="standard-form" method="POST">
-            {{ message_form.as_p }}
-            {% csrf_token %}
-            <div class="dropdown dropdown-standard">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!--Messages from selected conversation-->
+        <div class="card-container col-lg-8 message-box">
+            <div class="card">
+                <div class="message-box-content" style="overflow: auto;">
+                    {% for message in user_messages %} {% if message.sender == request.user %}
+                    <div class="message-sent message-container">
+                        {% else %}
+                        <div class="message-received message-container">
+                            {% endif %}
+                            <div class="{% if not message.is_read and message.sender != request.user %}unread-message{%endif%} message-bubble">
+                                <p>{{ message.message_content }}</p>
+                            </div>
+                            <p class="message-date">{{ message.created_on }}</p>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                    <div class="message-box-form-container">
+                        <div class="new_message_button">
+                            <button onclick="location.reload();"><i class="fas fa-sync-alt"></i> New Message Received. Update.</button>
+                        </div>
+                        <!--Submit message form-->
+                        <form class="standard-form" method="POST">
+                            {{ message_form.as_p }} {% csrf_token %}
+                            <div class="dropdown dropdown-standard">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-ellipsis-v"></i>
               </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'member_profile' receiver %}">View Profile</a>
-                    <a class="dropdown-item" onclick="send_wink_grid_link({{receiver}})">Send a Wink</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{% url 'member_profile' receiver %}">View Profile</a>
+                                    <a class="dropdown-item" onclick="send_wink_grid_link({{receiver}})">Send a Wink</a>
+                                </div>
+                            </div>
+
+                            <input class="submit-success" type="submit" value="SEND" />
+                        </form>
+                    </div>
                 </div>
             </div>
-            
-            <input class="submit-success" type="submit" value="SEND"/>
-        </form>
         </div>
     </div>
-</div>
-    </div>
-</div>
+
+<!--Needed for Bootstrap dropdown-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 
 {%endblock%}
