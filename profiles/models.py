@@ -15,7 +15,7 @@ from django.db.backends.signals import connection_created
 from django.dispatch import receiver
 import os
 
-# Only necessary for local
+# Only necessary for local and testing sqlite databases
 if "DEVELOPMENT" in os.environ or "TESTING" in os.environ:
     @receiver(connection_created)
     def extend_sqlite(connection=None, **kwargs):
