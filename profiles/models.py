@@ -121,12 +121,13 @@ class Profile(models.Model):
         ("MALE", "Male"),
         ("FEMALE", "Female"))
     
+    
     gender = models.CharField(choices=GENDER, default="MALE", max_length=6)
     hair_length = models.CharField(choices=HAIR_LENGTH, default="LONG", blank=False, max_length=100)
     ethnicity = models.CharField(choices=ETHNICITY, default="WHITE", blank=False, max_length=100)
     relationship_status = models.CharField(choices=RELATIONSHIP_STATUS, default="NEVER MARRIED", blank=False, max_length=100)
     education = models.CharField(choices=EDUCATION, default="HIGH SCHOOL", blank=False, max_length=100)
-    height = models.DecimalField(max_digits=10, default=100, decimal_places=2)
+    height = models.DecimalField(max_digits=10, default=180.34, decimal_places=2)
     hair_colour = models.CharField(choices=HAIR_COLOUR, default="BLACK", blank=False, max_length=10)
     body_type = models.CharField(choices=BODY_TYPE, default="AVERAGE", blank=False, max_length=15)
     looking_for = models.CharField(choices=LOOKING_FOR, default='BOTH', blank=False, max_length=6)
