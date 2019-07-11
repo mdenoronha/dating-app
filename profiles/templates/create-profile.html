@@ -1,67 +1,63 @@
-
-
-{% extends 'base.html' %} {% block page_title %}Create Profile{% endblock %} {% load static from static %} {% block page_heading %}Create Profile{% endblock %} 
+{% extends 'base.html' %} {% block page_title %}Update your Profile{% endblock %} {% load static from static %} 
+<!--CSS for datepicker-->
 {% block css %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-{% endblock %}
-{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+{% endblock %} 
 
+{% block content %}
+<!--Profile details form-->
 <section class="profile-card-container">
-  <div class="card-container card-margin-top">
-    <div class="card-form card">
-      <div class="card-form-container">
-        <h3>Profile Details</h3>
-        <hr>
-        <p class="card-form-subtitle">Customise your public profile</p>
-        <p class="card-form-description">This is your opportunity to let your personality shine. A well crafted profile can increase your engagement 4x so try to make it an honest expression of who you are!</p>
-        <form class="create-profile-form standard-form" method="POST" enctype="multipart/form-data">
-          <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
-          {% csrf_token %} {{ profile_form }}
-          <!--{{ image_form }}-->
-          <label>Profile Photos: </label> {{ formset.management_form }}
-          <div class="profile-form-container">
-            {% for form in formset %}
-            <div id="field_{{form.id.id_for_label}}" class="profile-photo-container">
-              
-              <div {% if not form.initial.image %}style="display: none;"{% endif %} class="profile-delete-icon-container">
-                <i onclick="delete_profile_photo( event, 'field_{{form.id.id_for_label}}' )" class="far fa-trash-alt"></i>
-              </div>
-              {{form}}
-              <div class="profile-photo-overlay">
-                <div class="profile-icon-container-absolute">
-                  <div class="profile-icon-container-flex">
-                    <i class="fas fa-plus"></i>
-                  </div>
-                </div>
-                {% if form.initial.image %}
-                <div class="profile-photo-image" style="background-image: url({{form.initial.image.url}})"></div>
-                {% else %}
-                <div class="profile-photo-image" style="background-image: none"></div>
-                {% endif %}
-              </div>
-              
-              {% for hidden in form %}
-              {% if not 'image' in hidden.auto_id %}
-              <input hidden class="delete-hidden-input" type="checkbox" name="delete" value="{{ hidden.value }}">
-              {% endif %}
-              {% endfor %}
-              
+    <div class="card-container card-margin-top">
+        <div class="card-form card">
+            <div class="card-form-container">
+                <h3>Profile Details</h3>
+                <hr>
+                <p class="card-form-subtitle">Customise your public profile</p>
+                <p class="card-form-description">This is your opportunity to let your personality shine. A well crafted profile can increase your engagement 4x so try to make it an honest expression of who you are!</p>
+                <form class="create-profile-form standard-form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} {{ profile_form }}
+                    <!--Profile photos form-->
+                    <label>Profile Photos: </label> {{ formset.management_form }}
+                    <div class="profile-form-container">
+                        {% for form in formset %}
+                        <div id="field_{{form.id.id_for_label}}" class="profile-photo-container">
+
+                            <div {% if not form.initial.image %}style="display: none;" {% endif %} class="profile-delete-icon-container">
+                                <i onclick="delete_profile_photo( event, 'field_{{form.id.id_for_label}}' )" class="far fa-trash-alt"></i>
+                            </div>
+                            {{form}}
+                            <div class="profile-photo-overlay">
+                                <div class="profile-icon-container-absolute">
+                                    <div class="profile-icon-container-flex">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                </div>
+                                {% if form.initial.image %}
+                                <div class="profile-photo-image" style="background-image: url({{form.initial.image.url}})"></div>
+                                {% else %}
+                                <div class="profile-photo-image" style="background-image: none"></div>
+                                {% endif %}
+                            </div>
+
+                            {% for hidden in form %} {% if not 'image' in hidden.auto_id %}
+                            <input hidden class="delete-hidden-input" type="checkbox" name="delete" value="{{ hidden.value }}"> {% endif %} {% endfor %}
+
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="standard-form-submit">
+                        <input type="submit" value="UPDATE" class="submit-wide submit-success" name="message_submit">
+                        <img class="loading-image" src="{% static 'temp/34-1.gif' %}"></img>
+                    </div>
+                </form>
             </div>
-            {% endfor %}
-          </div>
-          <div class="standard-form-submit">
-            <input type="submit" value="UPDATE" class="submit-wide submit-success" name="message_submit">
-            <img class="loading-image" src="{% static 'temp/34-1.gif' %}"></img>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </section>
 
 {% endblock %} {% block js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8CKdpcMMIDq0BZ7x7DMbH_71XpVH4HWo&libraries=places&callback=initAutocomplete" async defer></script>
+<!--Google maps and datepicker dependencies-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8CKdpcMMIDq0BZ7x7DMbH_71XpVH4HWo&libraries=places&callback=initAutocomplete" async defer></script>
 
 {% endblock %}
-

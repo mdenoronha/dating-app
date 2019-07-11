@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% block page_title %}Login{% endblock %} {% block page_heading %}Login{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block page_title %}Verification Message{% endblock %}{% block content %}
 
 
-
+<!--Verification information card-->
 <section class="profile-card-container">
     <div class="card-container card-margin-top">
         <div class="card-form card">
@@ -9,11 +9,9 @@
                 <h3>Verification</h3>
                 <hr>
                 <p>To ensure our dating community is safe and fun for all, every profile is manually verified by our verification team.
-                <br><br>
-                Please bear with us while we approve your profile. During this time, you will still be able to use the site, however some features may be limited.
-                <br><br>
-                Average approval time is 20 minutes<br><br></p>
-    
+                    <br><br> Please bear with us while we approve your profile. During this time, you will still be able to use the site, however some features may be limited.
+                    <br><br> Average approval time is 20 minutes<br><br></p>
+
                 <a class="btn standard-button" href="{% url 'index' %}">START DATING</a>
 
 

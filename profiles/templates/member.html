@@ -1,48 +1,49 @@
-{% extends 'base.html' %} {% block page_title %}Member{% endblock %} {% load static from static %} {% block page_heading %}{{member.username}}'s Profile{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block page_title %}{{member.username}}'s Profile{% endblock %} {% load static from static %} {% block content %}
+<!--Profile images-->
 <div class="profile-img-container">
-    <div  class="icon-wink-form-container {% if current_user %}disabled-wink-container{% endif %}">
-        <button id="wink-receiver-input" {% if not current_user %}onclick="send_wink_grid_link({{ member.id }})"{% endif %}><i class="far fa-smile-wink"></i></button>
-</div>
-
-{% if request.user.id == member.id %}
-<div class="icon-edit-container">
-    <form action="{% url 'create_profile' %}">
-        <button><i class="far fa-edit"></i></button>
-    </form>
-</div>
-{% endif %}
-
+    <div class="icon-wink-form-container {% if current_user %}disabled-wink-container{% endif %}">
+        <button id="wink-receiver-input" {% if not current_user %}onclick="send_wink_grid_link({{ member.id }})" {% endif %}><i class="far fa-smile-wink"></i></button>
+    </div>
+    <!--Edit profile button-->
+    {% if request.user.id == member.id %}
+    <div class="icon-edit-container">
+        <form action="{% url 'create_profile' %}">
+            <button><i class="far fa-edit"></i></button>
+        </form>
+    </div>
+    {% endif %}
+    <!--Profile images-->
     <div class="profile-img-draggable">
-{% for image in member.profileimage_set.all %}
-<!--Better way for this?-->
-{% if image.is_verified == "APPROVED" or request.user.id == member.id %}
-<img class="profile-img" src="{{image.image.url}}"> 
-{% else %}
-<img class="profile-img" src="{% static 'temp/profile-placeholder.png' %}">
-{% endif %}
-{% endfor %}
+        {% for image in member.profileimage_set.all %}
+        <!--Displays profile image or placeholder if image is not verified-->
+        {% if image.is_verified == "APPROVED" or request.user.id == member.id %}
+        <img class="profile-img" src="{{image.image.url}}"> {% else %}
+        <img class="profile-img" src="{% static 'temp/profile-placeholder.png' %}"> {% endif %} {% endfor %}
     </div>
 </div>
+
 <section class="profile-card-container container">
     <div class="row">
-    <div class="col-sm-12 profile-username">
-        <h2>{{member.username}}</h2>
-        <h3>{{member.profile.age}}</h3>
-    </div>
+        <div class="col-sm-12 profile-username">
+            <h2>{{member.username}}</h2>
+            <h3>{{member.profile.age}}</h3>
+        </div>
         <div class="col-sm-12 col-md-7">
+            <!--Member bio-->
             <div class="card-container">
                 <div class="card">
-                    <!--<p>{{member.email}}</p>-->
                     <p>{% if member.profile.is_verified == "APPROVED" %}{{member.profile.bio}}{% else %}Our verification team is currently vetting this member. This user's profile will be visible soon.{%endif%}</p>
-                    <!--<p>{{member.profile.location}}</p>-->
-                    <!--Add error message if incorrect location is added, saying users cannot find you-->
-                    <!--<p>{{member.profile.birth_date}}</p>-->
-                    </div>
                 </div>
+            </div>
             {% if member.profile.is_verified == "APPROVED" %}
             <div class="card-container">
                 <div class="card">
+                    <!--Member details-->
                     <table class="standard-table">
+                        <tr>
+                            <td>Location:</td>
+                            <td class="standard-table-feature">{{member.profile.location}}</td>
+                        </tr>
                         <tr>
                             <td>Gender:</td>
                             <td class="standard-table-feature">{{member.profile.gender|title}}</td>
@@ -84,61 +85,33 @@
                             <td class="standard-table-feature">{{member.profile.looking_for|title}}</td>
                         </tr>
                     </table>
-                    <!--Add error message if incorrect location is added, saying users cannot find you-->
-                    </div>
+                </div>
             </div>
             {%endif%}
         </div>
         <div class="col-sm-12 col-md-5">
+            <!--Send message form-->
             <div class="card-container">
                 <div class="{% if current_user %}disabled-card{%endif%} card-form card">
-                <div class="card-form-container">
-                    <h3>Message {{member.username}}</h3>
-                    <hr>
+                    <div class="card-form-container">
+                        <h3>Message {{member.username}}</h3>
+                        <hr>
                         <form class="standard-form" method="POST">
-                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
-                            {% csrf_token %} 
-                            {% if current_user %}
+                            {% csrf_token %} {% if current_user %}
                             <label for="id_message_content">Message content:</label>
                             <textarea disabled="" cols="40" rows="10" id="id_message_content" maxlength="500"></textarea>
-                            <input type="submit" disabled value="SEND" class="disabled-button submit-wide submit-success" name="message_submit" />
-                            {% else %}
-                            {{ message_form }}
-                            <input type="submit" value="SEND" class="submit-wide submit-success" name="message_submit" />
-                            {% endif %}
+                            <input type="submit" disabled value="SEND" class="disabled-button submit-wide submit-success" name="message_submit" /> {% else %} {{ message_form }}
+                            <input type="submit" value="SEND" class="submit-wide submit-success" name="message_submit" /> {% endif %}
                         </form>
                     </div>
                 </div>
-            </div>        
+            </div>
         </div>
-        
-        <!--<div class="card-container">-->
-        <!--        <div class="card-form card">-->
-        <!--        <div class="card-form-container">-->
-        <!--            <h3>Send a Message</h3>-->
-        <!--            <hr>-->
-        <!--            <p class="card-form-subtitle">This is a subtitle with more info</p>-->
-        <!--            <p class="card-form-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus suscipit massa ac neque lobortis, sed varius sapien pretium. Dolor sit amet, consectetur adipiscing elit.</p>-->
-        <!--                <form class="standard-form" method="POST">-->
-                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
-        <!--                    <label for="text-input">First Name</label>-->
-        <!--                    <input type="text" id="text-input" name="text-input"/>-->
-        <!--                    <label for="id_message_content">Message</label>-->
-        <!--                    <textarea name="message_content" cols="40" rows="10" id="id_message_content" required="" maxlength="500"></textarea>-->
-                            <!--{% csrf_token %} {{ message_form }}-->
-        <!--                    <input type="submit" name="cancel"/>-->
-        <!--                    <input type="submit" class="submit-success" name="message_submit" />-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>  -->
     </div>
 </section>
-{% endblock %}
-
-{% block js %}
+{% endblock %} {% block js %}
+<!--Necessary for draggable elements-->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
 {% endblock %}
-
