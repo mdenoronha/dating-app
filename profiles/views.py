@@ -24,6 +24,38 @@ def looking_for_check(request, user_one, user_two):
             if not user_two.gender == "FEMALE":
                 return redirect(reverse('index'))
 
+# Return users height in feet and inches from form choices
+def height_choices(member_height):
+    height = {
+        "152.40": "5' 0",
+        "154.94":"5' 1",
+        "157.48":"5' 2",
+        "160.02":"5' 3",
+        "162.56":"5' 4",
+        "165.10":"5' 5",
+        "167.64":"5' 6",
+        "170.18":"5' 7",
+        "172.72":"5' 8",
+        "175.26":"5' 9",
+        "177.80":"5' 10",
+        "180.34":"5' 11",
+        "182.88":"6' 0",
+        "185.42":"6' 1",
+        "187.96":"6' 2",
+        "190.50":"6' 3",
+        "193.04":"6' 4",
+        "195.58":"6' 5",
+        "198.12":"6' 6",
+        "200.66":"6' 7",
+        "203.20":"6' 8",
+        "205.74":"6' 9",
+        "208.28":"6' 10",
+        "210.82":"6' 11"
+        }
+        
+        
+    return height[member_height]
+
 # URL to log user out
 @login_required
 def logout(request):
@@ -156,8 +188,10 @@ def member_profile(request, id):
     
     # Check is member if current user
     member = User.objects.get(id=id)
+    height = height_choices(str(member.profile.height))
     if not member == request.user:
         current_user = False
+        
         # Redirect if sexuality preferences are not met
         result = looking_for_check(request, request.user.profile, member.profile)
         if result:
@@ -222,6 +256,7 @@ def member_profile(request, id):
         current_user = True
         
     context = {
+        'height': height,
         'page_ref': 'member_profile',
         'member':member,
         'message_form': message_form,
