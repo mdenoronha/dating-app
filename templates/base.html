@@ -15,11 +15,12 @@
 </head>
 
 <body>
+    <!--Page ref used in JS file-->
     {% if page_ref %}
     <div id="page-ref" data-page-ref="{{page_ref}}"></div>
     {% endif %}
     <div id="page-container">
-
+    <!--Navbar-->
     <nav class="navbar navbar-expand-lg">
         <a class="nav-icon brand-icon" href="{% url 'index' %}">
             <i class="far fa-heart"></i>
@@ -78,7 +79,7 @@
           
 
     </nav>
-    
+    <!--Notifications-->
     <div class="toast-container">
     {% for message in messages %}
         <div data-delay="4000" class="toast fade show">
@@ -97,9 +98,9 @@
 
     
     {% block content %} {% endblock %}
+    <!--Footer-->
     <div class="footer-spacer">
     </div>
-    <!--Change to standard footer on mobile-->
     <footer class="footer-curve">
         <div class="row footer-row-bottom">
             <div class="col-xs-12 col-md-6">
@@ -125,7 +126,6 @@
     </footer>
     </div>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <!--PopperJS requirement for Bootstrap dropdown-->
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
     </script>

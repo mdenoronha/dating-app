@@ -1,18 +1,19 @@
 {%extends 'base.html'%} {% load static from static %} {% block css %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"> {% endblock %} {%block page_title%}Home{%endblock%} {%block content%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"> {% endblock %} 
+{%block page_title%}Search{%endblock%} {%block content%}
 
+<!--Send message modal-->
 <div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-labelledby="message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="card-container">
                 <div class="card-form card">
-                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <div class="card-form-container">
-                    <h3 class="card-modal-title">Send Message</h3>
-                    <hr>
-                    <p class="card-form-subtitle">Start a conversation</p>
+                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <div class="card-form-container">
+                        <h3 class="card-modal-title">Send Message</h3>
+                        <hr>
+                        <p class="card-form-subtitle">Start a conversation</p>
                         <form class="standard-form not-profile-page-message-form" method="POST">
-                            <!--https://docs.djangoproject.com/en/1.9/topics/forms/#s-looping-over-the-form-s-fields-->
                             {% csrf_token %}
                             <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
                             <input id="message-receiver-id" type="hidden" value="">
@@ -21,15 +22,14 @@
                         </form>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
-</div> 
-
+</div>
+<!--Search options-->
 <form class="search-form" method="GET">
     <div class="search-option-container">
         <button type='button' class="search-reset-button" onclick="remove_selected()">RESET</button> {{ filtered_result.form }}
-        <!--Change to better slider-->
 
 
         <select {% if sexuality %}data-sexuality="{{sexuality}}" {%endif%} class="custom-form-field" title="Sexuality ▾" id="sexuality" data-container="body" multiple name="sexuality">
@@ -37,7 +37,6 @@
                 <option value="b">Bisexual</option>
                 <option value="g">Gay</option>
             </select>
-        <!--<label for="distance"></label>-->
         <select {% if distance %}data-distance="{{distance}}" {%endif%} title="Distance ▾" name="distance" class="custom-form-field" id="distance" data-container="body">
             <option value="10">10km</option>
             <option value="25">25km</option>
@@ -45,10 +44,10 @@
             <option value="100">100km</option>
             <option value="250">250km</option>
             <option value="500">500km</option>
+            <option value="750">750km</option>
             <option value="worldwide">Worldwide</option>
         </select>
         <select {% if min_height %}data-min-height="{{min_height}}" {%endif%} class="custom-form-field" title="Min Height ▾" id="height_min" data-container="body" name="height_min">
-                <!--Change to heights-->
                 <option value="152.4">5' 0"</option>
                 <option value="154.94">5' 1"</option>
                 <option value="157.48">5' 2"</option>
@@ -76,7 +75,6 @@
             </select>
 
         <select {% if max_height %}data-max-height="{{max_height}}" {%endif%} class="custom-form-field" title="Max Height ▾" id="height_max" name="height_max">
-                <!--Change to heights-->
                 <option value="152.4">5' 0"</option>
                 <option value="154.94">5' 1"</option>
                 <option value="157.48">5' 2"</option>
@@ -105,13 +103,12 @@
     </div>
     <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
 </form>
-
+<!--Filtered profiles-->
 <div class="container-fluid">
     <div class="row">
         {% if not search_page %}
         <p class="centered-text">No profiles match your search. Try adjusting your filters</p>
-        {% endif %}
-        {% for profile in search_page %}
+        {% endif %} {% for profile in search_page %}
         <div class="card-container col-sm-12 col-md-6 col-lg-3">
             <div class="card four-cards">
                 <a class="card-link card-link-wrapper" href="{% url 'member_profile' profile.user.id %}">
@@ -130,30 +127,28 @@
                             <i class="hidden-icon col-6 far fa-comment-alt grid-message"></i>
                         </div>
                 </a>
-                <!--Change from a link-->
                 <a class="card-link card-link-left" data-username="{{profile.user.username}}" data-user-id="{{profile.user.id}}"><i class="col-6 far fa-comment-alt grid-message"></i></a>
                 <a class="card-link card-link-right" onclick="send_wink_grid_link({{profile.user.id}})"><i class="col-6 far fa-smile-wink grid-wink"></i></a>
-                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
-
+</div>
+<!--Pagination-->
 <div class="pagination-links">
-{% if search_page %}
-{% for search in search_page %}
-{% endfor %}
-{% if search_page.has_previous %}
-<a href="?page={{ search_page.previous_page_number }}">< Previous</a> 
-{% endif %}
+    {% if search_page %} {% for search in search_page %} {% endfor %} {% if search_page.has_previous %}
+    <a href="?page={{ search_page.previous_page_number }}">
+        < Previous</a>
+            {% endif %}
 
-<span data-page={{page}} class="current">
+            <span data-page={{page}} class="current">
     Page {{ search_page.number }} of {{ search_page.paginator.num_pages }}
     </span> {% if search_page.has_next %}
-<a href="?page={{ search_page.next_page_number }}">Next ></a> {% endif %} {% endif %}
+            <a href="?page={{ search_page.next_page_number }}">Next ></a> {% endif %} {% endif %}
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 {% endblock %} {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 {% endblock %}
