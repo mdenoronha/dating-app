@@ -13,6 +13,10 @@ def verify(modeladmin, request, queryset):
             emailtuple += (('Your profile photo has been approved', 'Thank you for submitting your profile photos. The following image has been approved: "%s"> '% value.image.url, 'worlds.best.dating.app@gmail.com', [value.user.email]),)
                 
     send_mass_mail(emailtuple)
+    
+def temp_height(modeladmin, request, queryset):
+    queryset.update(is_verified=180.34)
+    
         
 def reject(modeladmin, request, queryset):
     emailtuple = ()
@@ -26,7 +30,7 @@ def reject(modeladmin, request, queryset):
     send_mass_mail(emailtuple)
     
     if isinstance(queryset.first(), Profile):
-        queryset.update(is_verified='TO BE APPROVED')
+        queryset.update(is_verified='NOT APPROVED')
     else: 
         queryset.delete()
     
@@ -37,7 +41,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'bio', 'is_verified')
     list_filter = ('is_verified', )
     readonly_fields = ('id',)
-    actions = (verify, reject)
+    actions = (verify, reject, temp_height)
     list_per_page = 30
     
 admin.site.register(Profile, ProfileAdmin)
@@ -48,7 +52,7 @@ class ProfileImageAdmin(admin.ModelAdmin):
     list_display = ('user', 'image', 'thumbnail', 'is_verified')
 
     def thumbnail(self, obj):
-        return '<img src="{thumb}" width="150" />'.format(thumb=obj.image.url,)
+        return '<img src="{%s}" width="150" />' % obj.image.url
         
     thumbnail.allow_tags = True
     thumbnail.short_description = 'Image'
