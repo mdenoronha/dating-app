@@ -52,9 +52,13 @@ def height_choices(member_height):
         "208.28":"6' 10",
         "210.82":"6' 11"
         }
+    
+    try:
+        height = height[member_height]
+    except:
+        height = "%scm" % member_height
         
-        
-    return height[member_height]
+    return height
 
 # URL to log user out
 @login_required
