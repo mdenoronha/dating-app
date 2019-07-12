@@ -114,7 +114,7 @@ def register(request):
             if user:
                 messages.success(request, "Your account had been created")
                 auth.login(user=user, request=request)
-                return redirect(reverse('index'))
+                return redirect(reverse('create_profile'))
             else:
                 messages.error(request, "We have been unable to create your account")
     else:
