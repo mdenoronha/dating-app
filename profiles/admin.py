@@ -48,7 +48,7 @@ class ProfileImageAdmin(admin.ModelAdmin):
     list_display = ('user', 'image', 'thumbnail', 'is_verified')
 
     def thumbnail(self, obj):
-        return '<img src="{%s}" width="150" />' % obj.image.url
+        return '<img src="{thumb}" width="150" />'.format(thumb=obj.image.url,)
         
     thumbnail.allow_tags = True
     thumbnail.short_description = 'Image'
