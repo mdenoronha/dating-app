@@ -55,8 +55,10 @@ def height_choices(member_height):
     
     try:
         height = height[member_height]
+        print(height)
     except:
         height = "%scm" % member_height
+        print(height)
         
     return height
 
