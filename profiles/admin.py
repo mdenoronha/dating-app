@@ -13,11 +13,6 @@ def verify(modeladmin, request, queryset):
             emailtuple += (('Your profile photo has been approved', 'Thank you for submitting your profile photos. The following image has been approved: "%s"> '% value.image.url, 'worlds.best.dating.app@gmail.com', [value.user.email]),)
                 
     send_mass_mail(emailtuple)
-    
-def temp_height(modeladmin, request, queryset):
-    queryset.update(is_verified='APPROVED')
-    queryset.update(height=180.34)
-    
         
 def reject(modeladmin, request, queryset):
     emailtuple = ()
@@ -42,7 +37,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'bio', 'is_verified')
     list_filter = ('is_verified', )
     readonly_fields = ('id',)
-    actions = (verify, reject, temp_height)
+    actions = (verify, reject)
     list_per_page = 30
     
 admin.site.register(Profile, ProfileAdmin)
