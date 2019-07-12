@@ -57,7 +57,7 @@ class TestViews(TestCase):
                                   'email':'foo@test.com',
                                   'password1':'bar123456',
                                   'password2':'bar123456' } )
-        self.assertRedirects(page, reverse('index'), status_code=302)
+        self.assertRedirects(page, reverse('create_profile'), status_code=302)
     
     # Test get create profile page
     def test_get_create_profile_page(self):
