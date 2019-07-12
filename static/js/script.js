@@ -215,9 +215,11 @@ function read_engagement(page_type) {
             'page': page
         },
         success: function(json) {
-            // If user is not premium, redirect as informed by premium_required decorator
-            if(json['redirect']) {
-                window.location.href = json['redirect']
+            if(json) {
+                // If user is not premium, redirect as informed by premium_required decorator
+                if(json['redirect']) {
+                    window.location.href = json['redirect']
+                }
             }
         }
     });
@@ -633,4 +635,22 @@ if ($('#page-ref').data('page-ref') == "search") {
         }
     })
     
+}
+
+// Subscribe page
+// *******
+
+// Adjust style and total text when a plan is selected
+if ($('#page-ref').data('page-ref') == "subscribe") {
+        $('.subscription-button').on('click', function() {
+        $('select[name="plans"]').val($(this).data('plan'))
+        $('.subscription-button').addClass('inactive-subscription-option')
+        $('.subscription-modal h3').addClass('inactive-subscription-option')
+        $('.subscription-modal hr').addClass('inactive-subscription-option')
+        $(this).removeClass('inactive-subscription-option')
+        $(this).siblings('h3').removeClass('inactive-subscription-option')
+        $(this).siblings('hr').removeClass('inactive-subscription-option')
+        $('.plan-total').text($(this).siblings('h3').text())
+        $('.cost-total').text($(this).data('price'))
+    })
 }

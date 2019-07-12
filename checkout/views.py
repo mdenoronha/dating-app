@@ -102,5 +102,5 @@ def subscribe(request):
         payment_form = MakePaymentForm()
         order_form = OrderForm()
       
-    return render(request, 'subscribe.html', {'order_form': order_form, 'payment_form': payment_form, 'publishable': settings.STRIPE_PUBLISHABLE})
+    return render(request, 'subscribe.html', {'page_ref': 'subscribe', 'order_form': order_form, 'payment_form': payment_form, 'publishable': settings.STRIPE_PUBLISHABLE})
 
