@@ -15,7 +15,8 @@ def verify(modeladmin, request, queryset):
     send_mass_mail(emailtuple)
     
 def temp_height(modeladmin, request, queryset):
-    queryset.update(is_verified=180.34)
+    queryset.update(is_verified='APPROVED')
+    queryset.update(height=180.34)
     
         
 def reject(modeladmin, request, queryset):
