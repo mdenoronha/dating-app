@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {% load static from static %} {% load chatextras %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static from static %} {% load chatextras %} {% block page_title %}Views{% endblock %} {% block content %}
 <div class="page-title">
     <h1>Views</h1>
 </div>
 
-
+<!--All profiles that have viewed member-->
 <div class="container-fluid">
     <div class="row">
         {% if views_page %} {% for view in views_page %}
@@ -49,6 +49,7 @@
         {% endif %}
     </div>
 </div>
+<!--Pagination-->
 <div class="pagination-links">
     {% if views_page %} {% for view in views_page %} {% endfor %} {% if views_page.has_previous %}
     <a href="?page={{ views_page.previous_page_number }}">

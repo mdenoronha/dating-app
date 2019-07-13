@@ -1,8 +1,0 @@
-{% extends 'base.html' %} {% block page_title %}Chat{% endblock %} {% block page_heading %}Chat{% endblock %} {% block content %}
-
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ message_form.as_p }}
-    <button type="submit">Submit</button>
-</form>
-{% endblock %}
