@@ -37,7 +37,7 @@ def read_messages(request):
         if message.receiver == request.user:
             message.is_read = True
             message.save()
-            
+
     is_read = Messages.objects.filter(conversation=conversation_id, receiver=request.user, is_read=False).exists()
     data = {
         'conversation': is_read
