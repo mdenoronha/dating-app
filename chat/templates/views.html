@@ -32,7 +32,6 @@
                         <button onclick="send_wink_grid_link({{view.sender.id}})" class="btn standard-button">SEND WINK</button>
                     </div>
                 </div>
-                <!--Change from a link-->
             </div>
         </div>
         {% endfor %} {% else %}
@@ -41,7 +40,7 @@
                 <div class="message-box-content message-box-empty" style="overflow: auto;">
                     <div>
                         <h3>No Views :(</h3>
-                        <a href="#" class="btn standard-button">START THE CONVERSATION YOURSELF</a>
+                        <a href="{% url 'index' %}" class="btn standard-button">START THE CONVERSATION YOURSELF</a>
                     </div>
                 </div>
             </div>
