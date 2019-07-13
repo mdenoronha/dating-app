@@ -443,21 +443,6 @@ $('.create-profile-form').submit(function() {
 
 
 if ($('#page-ref').data('page-ref') == "create_profile") {
-    // Using Google Places API, display autocomplete options for location
-    // Assistance from Google Maps API documentation
-    var placeSearch, autocomplete;
-    function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(
-            (document.getElementById('autocomplete')), { types: ['geocode'] })  
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-            var place = autocomplete.getPlace();
-            // Update hidden fields with selected location and coordinates
-            document.getElementById('autocomplete').value = place.name;
-            document.getElementById('id_citylat').value = place.geometry.location.lat().toFixed(6);
-            document.getElementById('id_citylong').value = place.geometry.location.lng().toFixed(6);
-        })  
-    }
-    
     // Google Maps API function to bias autocomplete to user's current location
     function geolocate() {
         if (navigator.geolocation) {
@@ -506,6 +491,7 @@ if ($('#page-ref').data('page-ref') == "create_profile") {
     }
     
     $(function() {
+        
         // Ensure correct date format
             var dateAndTimeAr = $('.standard-form input[name=birth_date]').val().split(' ');
             var dateAr = dateAndTimeAr[0].split('-')

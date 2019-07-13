@@ -56,6 +56,22 @@
 </section>
 
 {% endblock %} {% block js %}
+<script>
+    // Using Google Places API, display autocomplete options for location
+    // Assistance from Google Maps API documentation
+    var placeSearch, autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            (document.getElementById('autocomplete')), { types: ['geocode'] })  
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            // Update hidden fields with selected location and coordinates
+            document.getElementById('autocomplete').value = place.name;
+            document.getElementById('id_citylat').value = place.geometry.location.lat().toFixed(6);
+            document.getElementById('id_citylong').value = place.geometry.location.lng().toFixed(6);
+        })  
+    }
+</script>
 <!--Google maps and datepicker dependencies-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8CKdpcMMIDq0BZ7x7DMbH_71XpVH4HWo&libraries=places&callback=initAutocomplete" async defer></script>
