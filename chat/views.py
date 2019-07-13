@@ -167,7 +167,7 @@ def wink(request):
     except:
         data['message'] = 'Something went wrong. Wink not sent'
     finally:
-        data['message'] = 'Wink sent.'
+        data['message'] = 'Wink successfully sent.'
     return JsonResponse(data)
 
 """
@@ -193,7 +193,7 @@ def reject(request):
     except:
         data['message'] = 'Something went wrong. Profile not skipped.'
     finally:
-        data['message'] = 'Member skipped'
+        data['message'] = 'Member successfully skipped'
     return JsonResponse(data)
         
 # AJAX function to create a messages/conversation record(s)
