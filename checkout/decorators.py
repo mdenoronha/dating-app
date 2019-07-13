@@ -3,6 +3,7 @@ import stripe
 from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from profiles.models import Profile
 
 def premium_required(function):
     def wrap(request, *args, **kwargs):
@@ -15,10 +16,9 @@ def premium_required(function):
                 if sub.status == 'active' or sub.status == 'trialing' or sub.status == 'incomplete' or sub.status == 'past_due' or sub.status == 'canceled':
                     return function(request, *args, **kwargs)
             
-            current_user = User.objects.get(pk=request.user.id)
-            current_user.is_premium = False
-            current_user.save()
-            print(current_user.is_premium)
+            current_profile = Profile.objects.get(user_id=request.user.id)
+            current_profile.is_premium = False
+            current_profile.save()
             return redirect(reverse('subscribe'))
         else:
             if request.is_ajax():
@@ -27,8 +27,6 @@ def premium_required(function):
                 return JsonResponse(data)
             return redirect(reverse('subscribe'))
             
-    # wrap.__doc__ = function.__doc__
-    # wrap.__name__ = function.__name__
     return wrap
     
 

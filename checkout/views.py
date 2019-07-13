@@ -23,7 +23,6 @@ def make_user_premium(request):
 # Subscribe page, allowing users to create a Stripe subscription
 @login_required
 def subscribe(request):
-    
     plan_ids = {
         'plan_F5eyNlWXHig7YB': '6 Monthly',
         'plan_F5ey2nnZwy5v8Q': '3 Monthly',
