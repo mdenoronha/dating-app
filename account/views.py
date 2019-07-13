@@ -53,7 +53,6 @@ def account(request):
     if request.method == "POST" and 'account-change-submit' in request.POST:
         password_form = PasswordChangeForm(request.user)
         user_form = EditProfileForm(request.POST, instance=request.user, user=request.user)
-        
         if user_form.is_valid():
             active_subscriptions, customer, customer_id = return_subs()
             user = User.objects.get(pk=request.user.id)
