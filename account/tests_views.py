@@ -44,7 +44,7 @@ class TestViews(TestCase):
         self.assertEqual(page.status_code, 200)
         self.assertTemplateUsed(page, 'account.html')
         
-    # Test post to account page with user form  
+    # Test post to account page with password form  
     def test_post_account_page_password_form(self):
         self.client.login(username='foo', password='bar')
         current_user = User.objects.get(username='foo')
