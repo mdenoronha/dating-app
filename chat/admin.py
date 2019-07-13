@@ -17,7 +17,7 @@ class WinkAdmin(admin.ModelAdmin):
     
 class RejectAdmin(admin.ModelAdmin):
     model = Reject
-    list_display = ('sender', 'receiver',  'created_on', 'is_read')
+    list_display = ('sender', 'receiver',  'created_on')
 
 admin.site.register(Messages, MessageAdmin)
 admin.site.register(Winks, WinkAdmin)
