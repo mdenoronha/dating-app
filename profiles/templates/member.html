@@ -82,7 +82,7 @@
                         </tr>
                         <tr>
                             <td>Looking For:</td>
-                            <td class="standard-table-feature">{{member.profile.looking_for|title}}</td>
+                            <td class="standard-table-feature">{%if member.profile.looking_for == "BOTH" %}Men & Women{% else %}{{member.profile.looking_for|title}}{% endif %}</td>
                         </tr>
                     </table>
                 </div>

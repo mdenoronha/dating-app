@@ -7,7 +7,8 @@
         <h3>Register an Account</h3>
         <hr>
         <form class="standard-form" method="POST">
-          {% csrf_token %} {{ registration_form.as_p }}
+          {% csrf_token %} 
+          {{registration_form}}
           <button class="submit-wide submit-success" type="submit">Register</button>
         </form>
 
