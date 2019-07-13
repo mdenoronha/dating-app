@@ -114,9 +114,14 @@ function send_wink_grid_link(receiver_id) {
 // Account Page
 // ********
 
-// If any form has errors, show modal on refresh
-if ($("#edit-account-modal").find('.errorlist').length || $("#edit-password-modal").find('.errorlist').length) {
+// If account form has errors, show modal on refresh
+if ($("#edit-account-modal").find('.errorlist').length) {
     $('#edit-account-modal').modal('show')
+}
+
+// If password form has errors, show modal on refresh
+if ($("#edit-password-modal").find('.errorlist').length) {
+    $('#edit-password-modal').modal('show')
 }
 
 // Display cancel subscription modal with link to cancel sub URL
