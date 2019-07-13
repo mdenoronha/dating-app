@@ -47,6 +47,11 @@ body {
     color: #dc3545;
 }
 
+.helptext ul {
+    list-style: none;
+    padding: 0;
+}
+
 /*Nav*/
 
 .navbar {
