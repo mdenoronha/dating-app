@@ -38,7 +38,7 @@ class TestViews(TestCase):
         page = self.client.get('/accounts/logout/')
         self.assertRedirects(page, '/', status_code=302)
         
-    # Test logout page redirects to home
+    # Test delete redirects to preregister
     def test_delete_page(self):
         self.client.login(username='foo', password='bar')
         page = self.client.get('/accounts/delete/')
@@ -95,6 +95,8 @@ class TestViews(TestCase):
                                            'form-INITIAL_FORMS': 0 
                                         } )
         
+        profile = Profile.objects.get(bio='foo')
+        self.assertTrue(profile)
         self.assertRedirects(page, '/accounts/verification-message/', status_code=302)
     
     # Test login functionality
@@ -103,8 +105,6 @@ class TestViews(TestCase):
         response = self.client.post(reverse('login'), 
                                 { 'username':'foo', 
                                   'password':'bar' } )
-        
-        
         
         logged_in_user = auth.get_user(self.client)
         self.assertTrue(logged_in_user.is_authenticated())
