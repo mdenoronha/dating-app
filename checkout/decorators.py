@@ -11,13 +11,14 @@ def premium_required(function):
             customer_stripe_id = Subscription.objects.filter(user_id=request.user).first()
             customer = stripe.Customer.retrieve(customer_stripe_id.customer_id)
             for sub in customer.subscriptions:
-                    # If subscription is active or unpaid/cancelled but not yet inactive
+                # If subscription is active or unpaid/cancelled but not yet inactive
                 if sub.status == 'active' or sub.status == 'trialing' or sub.status == 'incomplete' or sub.status == 'past_due' or sub.status == 'canceled':
                     return function(request, *args, **kwargs)
             
             current_user = User.objects.get(pk=request.user.id)
             current_user.is_premium = False
             current_user.save()
+            print(current_user.is_premium)
             return redirect(reverse('subscribe'))
         else:
             if request.is_ajax():
