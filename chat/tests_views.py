@@ -229,9 +229,14 @@ class TestViews(TestCase):
         page = self.client.get(reverse('reject'), {
                                         'receiver_id': receiver_user.id}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         
-        reject_record = Reject.objects.filter(sender_id=current_user, receiver_id=receiver_user).exists()
-        self.assertTrue(reject_record)
-        self.assertEqual(page.status_code, 204)
+        response_content = page.content
+        if six.PY3:
+            response_content = str(response_content, encoding='utf8')
+        
+        self.assertJSONEqual(
+            response_content,
+            {'message' : 'Member successfully skipped'}
+        )
         
     # Test chat ajax returns JSON and creates conversation and message (conversation not yet exists)
     def test_ajax_message_no_conversation(self):
