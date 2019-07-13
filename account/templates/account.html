@@ -11,7 +11,7 @@
                         <h3 class="card-modal-title">Edit Password</h3>
                         <hr>
                         <p class="card-form-subtitle">Update your password</p>
-                        <form class="standard-form not-profile-page-message-form" method="POST">
+                        <form class="standard-form" method="POST">
                             {% csrf_token %} {{ password_form }}
                             <input type="submit" class="submit-success" name="password-change-submit" />
                         </form>
@@ -33,7 +33,7 @@
                         <h3 class="card-modal-title">Edit Account</h3>
                         <hr>
                         <p class="card-form-subtitle">Make changes to your account</p>
-                        <form class="standard-form not-profile-page-message-form" method="POST">
+                        <form class="standard-form" method="POST">
                             {% csrf_token %} {{ user_form }}
                             <input type="submit" class="submit-success" name="account-change-submit" />
                         </form>
