@@ -9,13 +9,25 @@ from dating_app import settings
 class UserLoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-    
+
+# This will definitely work
+class MyUserCreationForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(MyUserCreationForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].required = True
+
+
 class UserRegistrationForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'maxlength':'12'}))
     password1 = forms.CharField(label="Enter Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
     
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
+        
+        self.fields['email'].required = True
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
@@ -107,7 +119,7 @@ class ProfileForm(forms.ModelForm):
     location = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'id':'autocomplete'}), required=True)
     citylat = forms.CharField(widget=forms.HiddenInput, required=True)
     citylong = forms.CharField(widget=forms.HiddenInput, required=True)
-    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'bio-field'}), required=True)
+    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'bio-field', 'maxlength': '200'}), required=True)
     # Add custom validation, date must be over 18
     birth_date = forms.DateTimeField(input_formats=settings.DATE_INPUT_FORMATS)
     children = forms.ChoiceField(choices = CHILDREN_CHOICES, initial='', widget=forms.Select(), required=True)
