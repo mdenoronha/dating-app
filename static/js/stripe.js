@@ -22,6 +22,13 @@ $(function() {
 
             form.submit();
         } else {
+            $('.toast-container').html(
+                    '<div data-delay="4000" class="toast fade"><div class="toast-header"><strong class="mr-auto"><i class="fa fa-globe"></i> Attention</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body">' + response.error.message + '</div></div>'
+                )
+            $(".toast").toast('show', {
+                autohide: false,
+            });
+            
             $("#stripe-error-message").text(response.error.message);
             $("#credit-card-errors").show();
             $("#validate_card_btn").attr("disabled", false);
