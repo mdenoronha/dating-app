@@ -41,6 +41,12 @@ body {
     color: #dc3545;
 }
 
+.errorlist {
+    list-style: none;
+    padding: 0;
+    color: #dc3545;
+}
+
 /*Nav*/
 
 .navbar {
@@ -67,6 +73,11 @@ body {
 
 .nav-icon a {
     text-decoration: none;
+}
+
+.nav-item .new-engagement i,
+.nav-item .new-engagement p {
+    color: #acd8aa;
 }
 
 .navbar-toggler-icon i {
@@ -489,6 +500,12 @@ body {
 }
     
 .draggable-card.card {
+    display: inline-block; 
+    position: absolute; 
+    z-index: 1;
+    margin-left:-250px;
+    margin-right:-250px;
+    overflow: hidden;
     width: 40vw;
     max-width: 300px;
     border: 0;
@@ -597,11 +614,19 @@ left-quick-match-message p {}
     overflow-wrap: normal;
 }
 
-#droppable-right {
-    float: right;
+#droppable-left {
+    float: left;
     display: inline-block;
-    width: 5%;
-    height: 90%;
+    width:3%;
+    height:600px;
+    overflow: hidden;
+}
+
+#droppable-right {
+    float: right; 
+    display: inline-block;
+    width:3%;
+    height:600px;
     position: absolute;
     left: 98%;
     top: 0;
@@ -1662,6 +1687,10 @@ left-quick-match-message p {}
 
 .profile-form-container {
     width: 95%;
+}
+
+.profile-photo-container {
+    cursor: pointer;
 }
 
 .standard-form-submit {
