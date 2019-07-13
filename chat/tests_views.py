@@ -291,6 +291,7 @@ class TestViews(TestCase):
             {'message' : 'Message Successfully Sent'}
         )
         
+    # Test AJAX request reads all messages in conversation
     def test_ajax_read_messages(self):
         self.client.login(username='foo', password='bar')
         receiver_user = User.objects.get(username='foo3')
@@ -303,14 +304,17 @@ class TestViews(TestCase):
         conversation.participants.add(receiver_user.id)
         message = Messages(message_content="foo", is_read=False, receiver_id=current_user.id, sender_id=receiver_user.id, conversation_id=conversation.id)
         message.save()
-        
-        page = self.client.post(reverse('read_messages'), {
+
+        page = self.client.get(reverse('read_messages'), {
                                         'url_id': 1}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
                                         
         response_content = page.content
         if six.PY3:
             response_content = str(response_content, encoding='utf8')
         
+        message = Messages.objects.get(pk=message.id)
+        
+        self.assertEqual(message.is_read, True)
         self.assertJSONEqual(
             response_content,
             {'conversation' : False}
@@ -339,7 +343,7 @@ class TestViews(TestCase):
             {'redirect' : '/subscribe'}
         )
         
-    # Test ajax read view returns redirect directive (not premium)   
+    # Test ajax read view returns 204 response (user premium)   
     def test_ajax_read_view_premium(self):
         self.client.login(username='foo', password='bar')
         current_user = User.objects.get(username='foo')
