@@ -43,9 +43,9 @@ def search(request):
         
     # Filter based on height options 
     if min_height: 
-        qs = qs.filter(height__gt=min_height)
+        qs = qs.filter(height__gte=min_height)
     if max_height:
-        qs = qs.filter(height__lt=max_height)
+        qs = qs.filter(height__lte=max_height)
     
     """
     Filter results based on filter search form.
