@@ -1,1 +1,6 @@
 env.py
+.c9/
+__pycache__
+*.pyc
+.gitignore
+.coverage
