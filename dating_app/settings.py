@@ -24,9 +24,7 @@ if os.environ.get('DEVELOPMENT'):
 else:
     development = False
     
-# import env
 USE_TZ = True
-
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -102,6 +100,7 @@ WSGI_APPLICATION = 'dating_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+# Live uses Postgres db and local/testing uses SQLite
 if "DATABASE_URL" in os.environ:
     DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
 else:
@@ -182,8 +181,6 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# ** REPLACE os.envrion.get TO os.getenv WHEN env.py FILE IS ADDED **
 
 # Change to a different email address
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
