@@ -26,6 +26,7 @@ Verification staff can approve or reject profiles by following these steps:
 ![Under actions select the appropriate action and click Google](https://github.com/mdenoronha/dating-app/blob/master/media/instruction-images/verification-3.png?raw=true)
 5. Verifying Profile Images using the same process however select Profile images instead of Profile for step 2
 
+The projects makes use of mock data and images for members
 
 UX
 ---------------
