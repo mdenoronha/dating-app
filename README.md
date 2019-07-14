@@ -153,6 +153,7 @@ Technologies Used
 * datepicker.js is used for the edit profile date option
 * jQuery-ui is used for the draggable and droppable elements on the quick swipe section and user's profile photos
 * touch-punch.js is used to faciliate jQuery-ui on mobile
+* Fontawesome is used for icons
 
 Testing
 ---------------
@@ -211,12 +212,12 @@ Search page returns search.html and 200 response | Successful
 ### Manual Testing ###
 Test  | Status
 ------------- | -------------
-Register |
+**Register** |
 All fields are required | Successful
 Username is limited to 12 characters | Successful
 Password fields must match | Successful
 Submitting register form with valid values creates user and profile record | Successful
-Create Profile |
+**Create Profile** |
 All fields (except profile photos) are required | Successful
 Bio is limited to 200 characters | Successful
 Dropdown options display a dropdown as intended | Successful
@@ -230,7 +231,7 @@ Clicking submit creates a profile record with corresponding values | Successful
 Clicking submit adds inputted images to S3 bucket | Successful
 On returning to create profile to make edits, submitted edits change profile values | Successful
 On returning to create profile to make edits, deleting a profile photo removes Profile Image record | Successful
-Home | 
+**Home** | 
 Profiles shown are within users' sexuality prefernces | Successful
 Closest profiles displays profiles in distance order | Successful
 Active recently displays profiles within most recent activity | Successful
@@ -244,7 +245,7 @@ Submitting message when not premium redirects user to subscribe | Successful
 Submitting message when premium creates message record | Successful
 After reciving an engagement, if it is not read the menu option's styling is changed | Successful
 Distance displayed reflects distance between profile's submitted long and lat (through Google Maps API) | Successful
-Verification |
+**Verification** |
 On all displays of a users profile image which isn't approved (exc their own profile), a placeholder alternative is shown | Successful
 On members page profile bio and personal details are not shown until they are approved | Successful
 On admin page, a user with correct permissions can select multiple profiles to approve | Successful
@@ -256,31 +257,31 @@ On profile rejection, an email is sent to the user | Successful
 On profile image approval, an email is sent to the user | Successful
 On profile image rejection, an email is sent to the user | Successful
 After updating a profile, the user's profile and profile images are set to 'to be approved' | Successful
-Member Profile |
+**Member Profile** |
 Member profile displays profile record data accordingly | Successful
 Clicking wink on profile page creates a wink record | Successful
 Submitting message when not premium redirects user to subscribe | Successful
 Submitting message when premium creates message record | Successful
 When viewing own profile, chat and wink are disabled | Successful
 When viewing own profile, edit profile button is visible | Successful
-Winks |
+**Winks** |
 If no winks are received, winks page indicates as such | Successful
 If winks are received, winks page displays all winks | Successful
 Winks previously not seen are given different styling | Successful
 If a wink has been sent to a user, another wink cannot be sent unless they have viewed the last wink | Successful
 If a wink has not been read, the styling indicates as such | Successful
-Views |
+**Views** |
 Viewing views page redirects user to subscribe (not premium) | Successful
 If no views are received, views page indicates as such | Successful
 If views are received, views page displays all views| Successful
 If a view has been sent to a user, another view cannot be sent unless they have viewed the last view | Successful
 If a view has not been read, the styling indicates as such | Successful
-Chat home |
+**Chat home** |
 Viewing chat home page redirects user to subscribe (not premium) | Successful
 Viewing chat home with no messages received indicates as such | Successful
 Viewing chat home with messages received displays all conversations | Successful
 All conversations with received unread messages have different styling | Successful
-Chat |
+**Chat** |
 Chat page lists all messages in corresponding conversation | Successful
 Messages received and messages sent have different styling to distinguish them | Successful
 Received messages that are unread have different styling | Successful
@@ -288,7 +289,7 @@ Submitting the message creates a message record and updates the conversation | S
 Messages received whilst viewing the conversation page produce a 'Message received' alert | Successful
 The options dropdown lists other engagement options on click | Successful
 Selecting send wink creates a wink record to the corresponding user | Successful
-Account | 
+**Account** | 
 Account page displays user details | Successful
 Selecting an edit button opens the corresponding edit account form | Successful
 Submitting the edit email/username form edits the user's account | Successful
@@ -304,14 +305,14 @@ All subscriptions past expiration date are not shown | Successful
 Subscription info displays user's submitted credit card information | Successful
 Selecting cancel cancels subscription in Stripe | Successful
 Selecting reactivate reactivates subscription in Stripe | Successful
-Subscribe |
+**Subscribe** |
 Selecting a plan updates the total | Successful
 Submitting incorrect payment information displays relevant message | Successful
 Submitting payment form correctly creates order and subscription record | Successful
 Submitting payment form correctly creates Stripe customer and subscription (no customer already) | Successful
 Submitting payment form correctly creates Stripe subscription (customer already) | Successful
 Accessing premium features while profile is premium but subscriptions are inactive downgrades the user | Successful
-Search |
+**Search** |
 All search results are filtered to exclude contrasting sexuality preferences | Successful
 Non-bisexual users do not see the gender option in search | Successful
 Select a search option shows the corresponding dropdown | Successful
@@ -326,31 +327,37 @@ Selecting distance option filters result based on selected options | Successful
 
 Deployment
 ---------------
-Project has been deployed to Heroku and is accessible [here](http://recipe-app-m4.herokuapp.com/).
+Project has been deployed to Heroku and is accessible [here](https://dating-app-mvd.herokuapp.com/).
 The process for deployment was as follows:
-* Clicked New and and Create New app on Heroku
+* Accessed the Heroku platform and clicked Create New App
 * Add an app name, location and click Add App
-* Log into Heroku via the terminal using $ heroku login
-* All instances of '= 0' in SQL statements need to be changed to '= false' for Heroku
 * Create a new git repository using $ git init
-* Connect to Heroku app using $ heroku git:remote -a recipe_app
+* Add all files to git using $ git add <file-name>
+* Commit all files to git using $ git commit -m <custom-message>
+* In Github, create a new repository and follow instructions to push to created repository
+* In Heroku, access Deploy panel
+* Under Deployment Method select Github 
+* If not done so already connect Github account to Heroku
+* Select Github repository and click Connect
 * Within the terminal created requirements.txt file with dependencies
-* Create Procfile to inform app.py is to be run
-* Update app's PORT and IP to correspond with Heroku
-* Add files to git using $ git add .
-* Commit files to git using $ git commit -m "Initial commit"
-* Push to Heroku using $ git push heroku master
+* Create Procfile with the following text 'web: gunicorn dating_app.wsgi:application'
+* In Heroku under Settings add the app's secret key
+* Add, commit any changes and push files to Github
 
 Credits
 ---------------
-* Assistance from [here](https://stackoverflow.com/questions/13620051/heroku-push-of-django-app-gets-no-module-named-psycopg2-extensions) for psycopg2-binary in requirements.txt
-* Assistance from [Flask documentation](http://flask.pocoo.org/docs/1.0/patterns/fileuploads/) for file upload verification
-* Assistance from [here](https://kite.com/python/docs/sqlalchemy.engine.result.ResultProxy) on working with ResultProxy 
-* Assistance from [here](https://stackoverflow.com/questions/19884900/how-to-pass-dictionary-from-jinja2-using-python-to-javascript) on passing dict from Python to JS
-* Assistance from CI tutor on save_profile_picture function to add image to S3 bucket
-* Homepage background photo provided by Canva
-* Social icons provided by Canva
-* Vegetarian Photo by Anh Nguyen on Unsplash
-* Vegan Photo by Anna Pelzer on Unsplash
-* Gluten free Photo by Wesual Click on Unsplash
-* Added recipe images and information provided by [Tesco Recipes](https://realfood.tesco.com/recipes.html)
+
+* Assistance from [here](https://stackoverflow.com/questions/27472663/how-to-use-djangos-assertjsonequal-to-verify-response-of-view-returning-jsonres) for setting JSON responses
+* Assistance from Django docs on [pagination](https://docs.djangoproject.com/en/1.11/topics/pagination/)
+* Assistance from [here](https://stackoverflow.com/questions/8000022/django-template-how-to-look-up-a-dictionary-value-with-a-variable) on writing a custom template filter to accessing key and value in loops
+* Assistance from [Strip docs](https://stripe.com/docs/api/customers/create) for Stripe functionality
+* Assistance from [here](https://stackoverflow.com/questions/5056327/define-and-insert-age-in-django-template) on outputting ages
+* Assistance from [here](https://stackoverflow.com/questions/2673647/enforce-unique-upload-file-names-using-django) on creating unique file names
+* Assistance from [here](https://stackoverflow.com/questions/19703975/django-sort-by-distance) on using long/lat distance formula and extending sqlite's query capabilities
+* Assistance from [here](https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django) on using FormSet to upload multiple images
+* Assistance from [here](https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content) on Bootstrap's modal
+* Assistance from [here](https://stackoverflow.com/questions/8376525/get-value-of-a-string-after-a-slash-in-javascript) on accessing elements in URL
+* Assistance from [here](https://stackoverflow.com/questions/210717/using-jquery-to-center-a-div-on-the-screen) on using jQuery to centre an element 
+* Assistance form [here](https://ctrlq.org/code/19616-detect-touch-screen-javascript) on determining if a touch screen is being used
+* Assistance from [here](https://stackoverflow.com/questions/5603745/jquery-draggable-revert-is-not-pixel-perfect) on addressing jQueryUI's draggable revery bug
+* Profile and background images provided by [Unsplash](https://unsplash.com/)
