@@ -15,11 +15,15 @@ from django.db.backends.signals import connection_created
 from django.dispatch import receiver
 import os
 
-# Only necessary for local and testing sqlite databases
+
+"""
+Only necessary for local and testing sqlite databases
+As SQLite does not support math functions, the following function adds the
+capability for it to do so
+"""
 if "DEVELOPMENT" in os.environ or "TESTING" in os.environ:
     @receiver(connection_created)
     def extend_sqlite(connection=None, **kwargs):
-        # sqlite doesn't natively support math functions, so add them
         cf = connection.connection.create_function
         cf('acos', 1, math.acos)
         cf('cos', 1, math.cos)
@@ -43,8 +47,6 @@ class LocationManager(models.Manager):
             (citylat, citylong, citylat)
         )
     
-        # qs = Profile.objects.all().annotate(distance=distance_raw_sql).order_by('distance')
-        # Better way for this?
         if max_distance is not None:
             return self.annotate(distance=distance_raw_sql).filter(distance__lt=max_distance)
         else:
@@ -52,7 +54,6 @@ class LocationManager(models.Manager):
 
 
 class Profile(models.Model):
-    # Limit username 11 chars
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, default='', blank=False)
     HAIR_COLOUR = (
@@ -120,8 +121,7 @@ class Profile(models.Model):
     GENDER = (
         ("MALE", "Male"),
         ("FEMALE", "Female"))
-    
-    
+
     gender = models.CharField(choices=GENDER, default="MALE", max_length=6)
     hair_length = models.CharField(choices=HAIR_LENGTH, default="LONG", blank=False, max_length=100)
     ethnicity = models.CharField(choices=ETHNICITY, default="WHITE", blank=False, max_length=100)
@@ -141,11 +141,11 @@ class Profile(models.Model):
     
     objects = LocationManager()
     
-    # https://stackoverflow.com/questions/5056327/define-and-insert-age-in-django-template
+    # Assistance from https://stackoverflow.com/questions/5056327/define-and-insert-age-in-django-template
     def age(self):
         return int((datetime.date.today() - self.birth_date).days / 365.25  )
 
-# https://stackoverflow.com/questions/2673647/enforce-unique-upload-file-names-using-django
+# Assistance from https://stackoverflow.com/questions/2673647/enforce-unique-upload-file-names-using-django
 def image_filename(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
