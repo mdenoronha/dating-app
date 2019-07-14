@@ -3,7 +3,7 @@ import django_filters
 from django import forms
 from django_filters.filters import MultipleChoiceFilter, RangeFilter, NumericRangeFilter
 from django_filters.widgets import RangeWidget
-
+# Filter for bisexual users
 class ProfileFilter(django_filters.FilterSet):
     hair_colour = MultipleChoiceFilter(choices=Profile.HAIR_COLOUR, label="", widget=forms.SelectMultiple(attrs={'title': 'Hair Colour ▾'}))
     body_type = MultipleChoiceFilter(choices=Profile.BODY_TYPE, label="", widget=forms.SelectMultiple(attrs={'title': 'Body Type ▾'}))
@@ -18,7 +18,7 @@ class ProfileFilter(django_filters.FilterSet):
         # add age
         fields = ['hair_colour', 'body_type', 'hair_length', 'ethnicity', 'relationship_status', 'gender' ]
 
-            
+# Filter not for bisexual users
 class GenderlessProfileFilter(django_filters.FilterSet):
     hair_colour = MultipleChoiceFilter(choices=Profile.HAIR_COLOUR, label="", widget=forms.SelectMultiple(attrs={'title': 'Hair Colour ▾'}))
     body_type = MultipleChoiceFilter(choices=Profile.BODY_TYPE, label="", widget=forms.SelectMultiple(attrs={'title': 'Body Type ▾'}))
@@ -30,5 +30,4 @@ class GenderlessProfileFilter(django_filters.FilterSet):
     
     class Meta:
         model = Profile
-        # add age
         fields = ['hair_colour', 'body_type', 'hair_length', 'ethnicity', 'relationship_status', 'education' ]
