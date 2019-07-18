@@ -352,7 +352,7 @@ Credits
 * Assistance from Django docs on [pagination](https://docs.djangoproject.com/en/1.11/topics/pagination/)
 * Assistance from [here](https://stackoverflow.com/questions/26029862/django-ajax-call-not-working-in-chrome-working-in-firefox?rq=1) with using CSRF token on AJAX request on Firefox
 * Assistance from [here](https://stackoverflow.com/questions/8000022/django-template-how-to-look-up-a-dictionary-value-with-a-variable) on writing a custom template filter to accessing key and value in loops
-* Assistance from [Strip docs](https://stripe.com/docs/api/customers/create) for Stripe functionality
+* Assistance from [Stripe docs](https://stripe.com/docs/api/customers/create) for Stripe functionality
 * Assistance from [here](https://stackoverflow.com/questions/5056327/define-and-insert-age-in-django-template) on outputting ages
 * Assistance from [here](https://stackoverflow.com/questions/2673647/enforce-unique-upload-file-names-using-django) on creating unique file names
 * Assistance from [here](https://stackoverflow.com/questions/19703975/django-sort-by-distance) on using long/lat distance formula and extending sqlite's query capabilities
