@@ -5,7 +5,7 @@ Dating Site
 
 A milestone project displaying capabilities in HTML, CSS, Javascript, Python, the Django framework.</br>
 The project is a website which allows users to create accounts, edit profiles and search and engage with other users.</br>
-The project makes use of Bootstrap framwork for front end styling and functionality.</br>
+The project makes use of Bootstrap framework for front end styling and functionality.</br>
 
 The project can be found [here](https://dating-app-mvd.herokuapp.com/)
 
@@ -105,7 +105,7 @@ Features
 * Messaging allows for custom text to be shown to another user
 * The chat home displays all conversation a user currently has, with conversations with new messages (not sent by them) highlighted accordingly
 * The specific conversation page displays all messages between themselves and another user, with new messages (not sent by them) highlighted accordingly
-* A new message alert is displayed when a user recieves a message whilst in a conversation with that member
+* A new message alert is displayed when a user receives a message whilst in a conversation with that member
 ![Navigate to Profile](https://github.com/mdenoronha/dating-app/blob/master/media/instruction-images/new-message.png?raw=true)
 * From a specific conversation, users are able to view or wink at the member they are in discussion with
 
@@ -119,7 +119,7 @@ Features
 
 *Search*
 * The search page lists all personal features as search options. Users are able to select attributes such as hair length, sexuality, distance, etc. to filter profiles
-* Similarly to viewing members, members with contradticting sexuality preferences won't be shown
+* Similarly to viewing members, members with contradicting sexuality preferences won't be shown
 * Users are able to reset their search criteria at any time using the Reset button
 
 *Account*
@@ -134,26 +134,26 @@ Features
 ### Features Left to Implement ###
 * The site makes use of a reject record for the quick swipe feature, this can be expanded to allow users to 'block' certain members
 * The check for new messages is not realtime and is instead an AJAX request running periodically. Under larger use this would need replacing with a realtime solution
-* Users are currently not able to delete engagmeent records, this can be implemented
-* Only three sexuality prefrences and two gender options are currently available, this can be expanded to accomadate more users
+* Users are currently not able to delete engagement records, this can be implemented
+* Only three sexuality preferences and two gender options are currently available, this can be expanded to accommodate more users
 * If a user's subscription has ended, the user is still premium until they try to complete a premium action - then they are downgraded. Ideally this would update on subscription end date.
 
 Technologies Used
 ---------------
 * Python was used extensively in the creation of the app
 * The Django framework was used in creation of the app
-* the django-filters package was used to faciliate the search functionality
-* The Stripe platform and stripe.js is used to faciliate the subscription feature
+* the django-filters package was used to facilitate the search functionality
+* The Stripe platform and stripe.js is used to facilitate the subscription feature
 * Heroku was used for public hosting the application
 * Heroku Postgres was used as the SQL database management system
 * AWS S3 was used for data storage of profile photos
-* boto3 was used to faciliate the connection to the S3 bucket
+* boto3 was used to facilitate the connection to the S3 bucket
 * jQuery was used extensively to aid front end functionality
 * Bootstrap was used extensively for front end styling
 * Popper.js and bootstrap-select are used to support Bootstrap's dropdown feature
 * datepicker.js is used for the edit profile date option
 * jQuery-ui is used for the draggable and droppable elements on the quick swipe section and user's profile photos
-* touch-punch.js is used to faciliate jQuery-ui on mobile
+* touch-punch.js is used to facilitate jQuery-ui on mobile
 * Fontawesome is used for icons
 
 Testing
@@ -171,7 +171,7 @@ Submitting password form changes user's password | Successful
 Selecting cancel cancels subscription and redirects to account | Successful
 Selecting reactivate reactivates subscription and redirects to account | Successful
 **Chat and User Interaction** |
-Chat conversation page returns chat.html and 200 respons (when conditions are met) | Successful
+Chat conversation page returns chat.html and 200 response (when conditions are met) | Successful
 Submitting a message creates a message record and redirect to chat | Successful
 Chat home returns chat_home.html and 200 response (when no conversations are created) | Successful
 Chat home returns chat_home.html and 200 response (with message received) | Successful
@@ -233,7 +233,7 @@ Clicking submit adds inputted images to S3 bucket | Successful
 On returning to create profile to make edits, submitted edits change profile values | Successful
 On returning to create profile to make edits, deleting a profile photo removes Profile Image record | Successful
 **Home** | 
-Profiles shown are within users' sexuality prefernces | Successful
+Profiles shown are within users' sexuality preferences | Successful
 Closest profiles displays profiles in distance order | Successful
 Active recently displays profiles within most recent activity | Successful
 Newcomers displays profiles in register order | Successful
@@ -244,7 +244,7 @@ Clicking wink on profile creates a wink record | Successful
 Clicking message on profile opens message modal | Successful
 Submitting message when not premium redirects user to subscribe | Successful
 Submitting message when premium creates message record | Successful
-After reciving an engagement, if it is not read the menu option's styling is changed | Successful
+After receiving an engagement, if it is not read the menu option's styling is changed | Successful
 Distance displayed reflects distance between profile's submitted long and lat (through Google Maps API) | Successful
 **Verification** |
 On all displays of a users profile image which isn't approved (exc their own profile), a placeholder alternative is shown | Successful
