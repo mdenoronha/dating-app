@@ -17,7 +17,7 @@ ikp3db==1.1.4
 isort==4.3.20
 itsdangerous==1.1.0
 jedi==0.11.1
-Jinja2==2.10.1
+Jinja2==2.11.3
 jmespath==0.9.4
 lazy-object-proxy==1.4.1
 MarkupSafe==1.1.1
