@@ -195,3 +195,7 @@ AUTHENTICATION_BACKENDS = [
     
 STRIPE_PUBLISHABLE = os.environ.get('stripe_publishable')
 STRIPE_SECRET = os.environ.get('stripe_key')
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
